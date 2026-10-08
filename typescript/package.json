@@ -1,0 +1,59 @@
+{
+  "name": "eslint-config-nicolaskeita",
+  "version": "0.1.0",
+  "description": "Shared TypeScript ESLint rules and project structure checks",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NicolasKeita/my_linter_and_formatter.git",
+    "directory": "typescript"
+  },
+  "keywords": [
+    "eslint",
+    "eslint-config",
+    "typescript",
+    "lint",
+    "flat-config"
+  ],
+  "type": "module",
+  "exports": {
+    ".": "./index.js",
+    "./plugin": "./plugin.js",
+    "./structure": "./structure.js"
+  },
+  "bin": {
+    "nk-lint-structure": "./bin/lint-structure.js"
+  },
+  "files": [
+    "index.js",
+    "plugin.js",
+    "structure.js",
+    "rules/",
+    "bin/",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "lint": "eslint .",
+    "format": "eslint . --fix",
+    "test": "node --test",
+    "prepublishOnly": "npm test"
+  },
+  "dependencies": {
+    "@eslint/js": "^10.0.1",
+    "@stylistic/eslint-plugin": "^5.10.0",
+    "franc": "^6.2.0",
+    "typescript-eslint": "^8.67.0"
+  },
+  "peerDependencies": {
+    "eslint": "^10.0.0",
+    "typescript": ">=4.8.4 <6.1.0"
+  },
+  "devDependencies": {
+    "eslint": "^10.8.1",
+    "typescript": "~6.0.0"
+  },
+  "engines": {
+    "node": "^20.19.0 || ^22.13.0 || >=24"
+  }
+}
