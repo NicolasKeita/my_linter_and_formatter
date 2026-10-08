@@ -1,8 +1,8 @@
 # My Linter and Formatter
 
-Ce dépôt contient deux outils indépendants : un [linter et formatter C++](cpp/formatter_and_linter/README.md), écrits en Python, et une [configuration ESLint pour JavaScript et TypeScript](typescript/README.md), accompagnée d'une commande de contrôle des dossiers.
+Ce dépôt contient des outils indépendants pour quatre familles de langages : un [linter et formatter C++](cpp/formatter_and_linter/README.md), une [configuration ESLint pour JavaScript et TypeScript](typescript/README.md), un [outil Python](python/README.md) et un [outil C#](csharp/README.md). Chaque dossier décrit son installation, ses commandes et les règles adaptées au langage.
 
-Le tableau décrit les règles et transformations **activées par les points d'entrée de ce dépôt**. `L` signifie qu'une anomalie est signalée par le linter, `F` qu'une correction est faite par le formatter, et `—` que la version ne possède pas cette règle. Dans la colonne TypeScript, les règles de style marquées `L + F` produisent un avertissement avec ESLint et peuvent être corrigées par `eslint --fix`. Côté C++, les mentions `.cpp` désignent la branche utilisée pour les fichiers autres que `.cppm` : un `.hpp` fourni explicitement suit aussi cette branche.
+Le tableau ci-dessous détaille les règles et transformations **activées par les outils C++ et JavaScript/TypeScript**. `L` signifie qu'une anomalie est signalée par le linter, `F` qu'une correction est faite par le formatter, et `—` que la version ne possède pas cette règle. Dans la colonne TypeScript, les règles de style marquées `L + F` produisent un avertissement avec ESLint et peuvent être corrigées par `eslint --fix`. Côté C++, les mentions `.cpp` désignent la branche utilisée pour les fichiers autres que `.cppm` : un `.hpp` fourni explicitement suit aussi cette branche.
 
 | Catégorie | Règle ou transformation | C++ | JavaScript / TypeScript |
 | --- | --- | --- | --- |
@@ -60,3 +60,14 @@ Les contrôles C++ de **structure** sont lancés avec `--check` ou `-r`, depuis 
 Le formatter C++ s'utilise avec `python formatter_and_linter.py -i fichier.cpp` depuis `cpp` (sans `-i`, il écrit `output.cpp`). Le renommage indiqué dans le tableau n'est pas une validation générale des noms : un nom déjà en camelCase peut rester inchangé. `--check` formate le code **en mémoire** avant de lancer le linter : il ne signale donc pas à lui seul un fichier dont le seul écart est le formatage.
 
 Côté JavaScript et TypeScript, `eslint <dossier>` signale les règles et `eslint <dossier> --fix` applique les corrections disponibles. Les ensembles `recommended` viennent des dépendances ESLint et peuvent évoluer avec leurs versions ; les autres lignes du tableau correspondent aux règles explicitement configurées ici. Les détails d'installation et d'utilisation se trouvent dans les README [C++](cpp/formatter_and_linter/README.md) et [TypeScript](typescript/README.md).
+
+## Versions Python et C#
+
+Les deux versions reprennent les contrôles généraux du C++ (taille du code, nombre de paramètres, commentaires et structure des dossiers), avec des seuils et des exceptions adaptés à chaque langage. Leurs `check` vérifient aussi le formatage **sans modifier les fichiers** ; leurs commandes `format` écrivent les corrections disponibles.
+
+| Langage | Installation et commandes principales | Règles principales |
+| --- | --- | --- |
+| [Python](python/README.md) | `python -m pip install -e ./python`, puis `python -m nk_python check <chemin>` ou `python -m nk_python format <chemin>` | Ruff et contrôles AST/tokenize : 120 caractères et 120 lignes par fichier, 40 lignes par fonction, 5 paramètres, placement des commentaires, 8 fichiers Python directs par dossier. La détection de langue des commentaires est optionnelle. |
+| [C#](csharp/README.md) | `dotnet build csharp/NkLint.csproj`, puis `dotnet run --project csharp/NkLint.csproj -- check <projet.csproj>`. Les sous-commandes `init` et `format` configurent et corrigent le projet. | Roslyn et `dotnet format` : 120 caractères et 400 lignes par fichier, 40 lignes par corps de fonction, 5 paramètres, déclarations et commentaires, 10 fichiers C# directs par dossier. SDK .NET 10 requis. |
+
+Les règles de modules C++20, de renommage vers PascalCase et de fichier `main.cpp` ne sont pas transposées. Les règles et exceptions exactes figurent dans les README [Python](python/README.md) et [C#](csharp/README.md).

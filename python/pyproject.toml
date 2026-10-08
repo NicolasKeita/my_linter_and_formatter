@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nk-python-style"
+version = "0.1.0"
+description = "Python formatter and linter following the repository's conventions"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = ["ruff>=0.16,<1"]
+
+[project.optional-dependencies]
+comments = ["lingua-language-detector>=2.2,<3"]
+
+[project.scripts]
+nk-python = "nk_python.cli:main"
+
+[tool.setuptools.package-data]
+nk_python = ["ruff.toml"]
