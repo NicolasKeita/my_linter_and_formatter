@@ -17,7 +17,6 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from formatter.prototype_spacing import clean_code
 
-
 RAW_INPUT = (
     "namespace sim::test::sil {\n"
     "\n"

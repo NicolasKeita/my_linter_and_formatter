@@ -7,13 +7,12 @@ directories that hold too many files and should be split.
 """
 
 import os
-from typing import Dict, List, Tuple
 
 MAX_FILES_PER_DIRECTORY = 8
 SOURCE_EXTENSIONS = ('.cpp', '.cppm')
 
 
-def count_source_files_per_directory(directories: List[str]) -> Dict[str, int]:
+def count_source_files_per_directory(directories: list[str]) -> dict[str, int]:
     counts = {}
     for directory in directories:
         for root, _, files in os.walk(directory):
@@ -23,7 +22,10 @@ def count_source_files_per_directory(directories: List[str]) -> Dict[str, int]:
     return counts
 
 
-def check_directory_file_counts(directories: List[str], max_files: int = MAX_FILES_PER_DIRECTORY) -> List[Tuple[str, int]]:
+def check_directory_file_counts(
+    directories: list[str],
+    max_files: int = MAX_FILES_PER_DIRECTORY,
+) -> list[tuple[str, int]]:
     counts = count_source_files_per_directory(directories)
     return sorted(
         (directory, count) for directory, count in counts.items() if count > max_files

@@ -16,7 +16,6 @@ parameters, template arguments and braced default values are handled
 correctly.
 """
 
-from typing import List, Tuple
 
 from linter.cppm_inline_function_checks import (
     _Block,
@@ -108,15 +107,15 @@ def _count_parameters(header: str) -> int:
 def _scan_for_parameter_count(
     sanitized: str,
     max_params: int,
-) -> List[Tuple[str, int, int]]:
+) -> list[tuple[str, int, int]]:
     """
     Scan sanitised code for function definitions whose parameter count
     exceeds max_params. Returns a list of (name, start_line, param_count)
     tuples sorted by line number.
     """
     line_starts = _compute_line_starts(sanitized)
-    blocks: List[_Block] = []
-    violations: List[Tuple[str, int, int]] = []
+    blocks: list[_Block] = []
+    violations: list[tuple[str, int, int]] = []
     segment_start = 0
     paren_depth = 0
     index = 0
@@ -164,7 +163,7 @@ def _scan_for_parameter_count(
 def check_function_parameter_count(
     code: str,
     max_params: int = MAX_FUNCTION_PARAMETERS,
-) -> List[Tuple[str, int, int]]:
+) -> list[tuple[str, int, int]]:
     """
     Report functions whose parameter count exceeds max_params.
 

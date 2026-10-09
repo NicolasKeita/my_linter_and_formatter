@@ -7,20 +7,19 @@ module declaration or function prototype.
 """
 
 import re
-from typing import List, Tuple
 
 from shared.regex_patterns import USING_REGEX
 
 from formatter.prototype_detection import (
-    is_import_or_include_or_module,
     is_function_prototype,
     is_function_prototype_start,
+    is_import_or_include_or_module,
 )
 
 
 def reorder_using_after_prototypes(code: str) -> str:
     lines = code.splitlines()
-    brace_depths: List[int] = []
+    brace_depths: list[int] = []
     current_depth = 0
     for line in lines:
         brace_depths.append(current_depth)
@@ -32,14 +31,13 @@ def reorder_using_after_prototypes(code: str) -> str:
                 if current_depth < 0:
                     current_depth = 0
 
-    top_level_usings: List[Tuple[int, str]] = []
-    top_level_prototype_end_lines: List[int] = []
+    top_level_usings: list[tuple[int, str]] = []
+    top_level_prototype_end_lines: list[int] = []
     last_import_include_module_pos: int = -1
 
     i = 0
     while i < len(lines):
         line = lines[i]
-        stripped = line.strip()
 
         if brace_depths[i] == 0:
             if is_import_or_include_or_module(line):
@@ -94,7 +92,7 @@ def reorder_using_after_prototypes(code: str) -> str:
         insertion_pos = last_prototype_pos
 
     using_indices = {pos for pos, _ in top_level_usings}
-    new_lines: List[str] = []
+    new_lines: list[str] = []
     usings_inserted = False
 
     for i, line in enumerate(lines):

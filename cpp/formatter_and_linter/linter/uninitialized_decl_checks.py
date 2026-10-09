@@ -10,9 +10,8 @@ reported, and any interleaved instruction cancels the detection.
 """
 
 import re
-from typing import List, Optional, Tuple
 
-from linter.style_checks import _mask_strings_and_comments, _NON_DECLARATION_KEYWORD_RE
+from linter.style_checks import _NON_DECLARATION_KEYWORD_RE, _mask_strings_and_comments
 
 UNINITIALIZED_DECL_MESSAGE = (
     "Variable '{name}' déclarée puis initialisée par assignation membre par membre. "
@@ -48,7 +47,7 @@ def format_uninitialized_decl_message(variable_name: str) -> str:
     return UNINITIALIZED_DECL_MESSAGE.format(name=variable_name)
 
 
-def _parse_uninitialized_declaration(stripped_masked: str) -> Optional[str]:
+def _parse_uninitialized_declaration(stripped_masked: str) -> str | None:
     """
     Return the declared variable name when the masked statement is a simple
     declaration without initialization ('Type var;'), or None otherwise.
@@ -72,7 +71,7 @@ def _parse_uninitialized_declaration(stripped_masked: str) -> Optional[str]:
     return match.group('name')
 
 
-def check_uninitialized_declarations(code: str) -> List[Tuple[int, str]]:
+def check_uninitialized_declarations(code: str) -> list[tuple[int, str]]:
     """
     Report declarations without initialization whose first following
     executable statement (blank lines and comments ignored) assigns a member
@@ -81,9 +80,9 @@ def check_uninitialized_declarations(code: str) -> List[Tuple[int, str]]:
     detection and the scan continues from that line.
     """
     lines = code.splitlines()
-    violations: List[Tuple[int, str]] = []
+    violations: list[tuple[int, str]] = []
     in_block_comment = False
-    pending_name: Optional[str] = None
+    pending_name: str | None = None
     pending_line = 0
 
     for line_index, raw_line in enumerate(lines):

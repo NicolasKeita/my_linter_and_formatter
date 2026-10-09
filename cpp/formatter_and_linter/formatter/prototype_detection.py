@@ -9,14 +9,13 @@ as includes/modules/imports or function prototypes.
 import re
 
 from shared.regex_patterns import (
+    IMPORT_REGEX,
     MODULE_DECL_REGEX,
     MODULE_PARTITION_REGEX,
-    IMPORT_REGEX,
 )
 
 
 def is_import_or_include_or_module(line: str) -> bool:
-    stripped = line.strip()
     if re.match(r'^\s*#\s*include\s+', line):
         return True
     if re.match(MODULE_DECL_REGEX, line) or re.match(MODULE_PARTITION_REGEX, line):

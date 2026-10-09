@@ -20,7 +20,6 @@ run directly as a script:
 
 import re
 import sys
-from typing import List
 
 NON_BREAKING_SPACE_CHARS = ("\xa0", "\u202f", "\u2007")
 
@@ -35,7 +34,7 @@ DELETE_DEFAULT_REGEX = re.compile(r"\)\s*=\s*(delete|default)\s*;")
 FUNCTION_CALL_REGEX = re.compile(r"\w\s*\(")
 
 
-def _normalize_characters(lines: List[str]) -> List[str]:
+def _normalize_characters(lines: list[str]) -> list[str]:
     cleaned = []
     for line in lines:
         for char in NON_BREAKING_SPACE_CHARS:
@@ -44,7 +43,7 @@ def _normalize_characters(lines: List[str]) -> List[str]:
     return cleaned
 
 
-def _strip_comments(lines: List[str]) -> List[str]:
+def _strip_comments(lines: list[str]) -> list[str]:
     code_lines = []
     in_block_comment = False
 
@@ -155,7 +154,7 @@ def _looks_like_prototype_start(code: str) -> bool:
     return _is_prototype_candidate(code)
 
 
-def _apply_braces(code: str, scope_stack: List[str]) -> None:
+def _apply_braces(code: str, scope_stack: list[str]) -> None:
     prefix_chars = []
 
     for char in code:
@@ -174,7 +173,7 @@ def _apply_braces(code: str, scope_stack: List[str]) -> None:
             prefix_chars.append(char)
 
 
-def _multiline_signature_ends_as_prototype(stripped: List[str], start: int) -> bool:
+def _multiline_signature_ends_as_prototype(stripped: list[str], start: int) -> bool:
     balance = 0
 
     for index in range(start, len(stripped)):
@@ -194,10 +193,10 @@ def _multiline_signature_ends_as_prototype(stripped: List[str], start: int) -> b
     return False
 
 
-def collapse_prototype_blank_lines(lines: List[str]) -> List[str]:
+def collapse_prototype_blank_lines(lines: list[str]) -> list[str]:
     stripped = _strip_comments(lines)
-    output: List[str] = []
-    scope_stack: List[str] = []
+    output: list[str] = []
+    scope_stack: list[str] = []
     pending_blanks = 0
     in_multiline_prototype = False
     multiline_balance = 0
@@ -275,7 +274,7 @@ def main() -> None:
         sys.exit(1)
 
     for file_path in file_paths:
-        with open(file_path, "r", encoding="utf-8") as handle:
+        with open(file_path, encoding="utf-8") as handle:
             content = handle.read()
 
         cleaned = clean_code(content)

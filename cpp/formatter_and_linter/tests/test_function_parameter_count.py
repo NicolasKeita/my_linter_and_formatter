@@ -75,6 +75,7 @@ class TestFunctionParameterCount(unittest.TestCase):
 
     def test_nested_template_comma_is_not_counted(self):
         code = 'void foo(std::array<std::vector<int>, 3> a, int b) { return; }'
+        self.assertEqual(check_code(code), [])
 
     def test_template_six_params_is_reported(self):
         code = 'void foo(std::map<int, int> a, int b, int c, int d, int e, int f) { return; }'

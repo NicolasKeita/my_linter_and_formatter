@@ -10,10 +10,9 @@ parsing for the formatter application.
 import glob
 import os
 import sys
-from typing import Tuple, List
 
 
-def find_source_files(directory: str, include_hpp: bool = True, include_cppm: bool = False) -> List[str]:
+def find_source_files(directory: str, include_hpp: bool = True, include_cppm: bool = False) -> list[str]:
     """
     Find source files in a directory recursively.
 
@@ -48,7 +47,7 @@ def read_input_file(filepath: str) -> str:
         SystemExit: If the file cannot be read
     """
     try:
-        with open(filepath, 'r', encoding='utf-8') as f:
+        with open(filepath, encoding='utf-8') as f:
             return f.read()
     except FileNotFoundError:
         print(f"Error: File '{filepath}' does not exist.", file=sys.stderr)
@@ -74,13 +73,12 @@ def write_output_file(filepath: str, content: str) -> None:
             f.write(content)
             if not content.endswith('\n'):
                 f.write('\n')
-        #print(f"Formatted file written to: {filepath}")
     except Exception as e:
         print(f"Error writing file: {e}", file=sys.stderr)
         sys.exit(1)
 
 
-def parse_arguments() -> Tuple[bool, bool, bool, List[str]]:
+def parse_arguments() -> tuple[bool, bool, bool, list[str]]:
     """
     Parse command-line arguments.
 

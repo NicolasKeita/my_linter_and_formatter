@@ -6,8 +6,6 @@ Provides functions for detecting, removing, and restoring comments in C++ code.
 """
 
 import re
-from typing import Tuple, List, Set
-
 
 COMMENT_PLACEHOLDER = "___COMMENT_{}___"
 
@@ -35,10 +33,10 @@ def _raw_string_prefix_start(code: str, quote_index: int) -> int:
     return r_index
 
 
-def scan_string_and_comment_ranges(code: str) -> Tuple[List[Tuple[int, int]], List[Tuple[int, int]]]:
+def scan_string_and_comment_ranges(code: str) -> tuple[list[tuple[int, int]], list[tuple[int, int]]]:
     length = len(code)
-    string_ranges: List[Tuple[int, int]] = []
-    comment_ranges: List[Tuple[int, int]] = []
+    string_ranges: list[tuple[int, int]] = []
+    comment_ranges: list[tuple[int, int]] = []
     index = 0
     while index < length:
         char = code[index]
@@ -104,11 +102,11 @@ def scan_string_and_comment_ranges(code: str) -> Tuple[List[Tuple[int, int]], Li
     return string_ranges, comment_ranges
 
 
-def remove_comments(code: str) -> Tuple[str, List[str]]:
+def remove_comments(code: str) -> tuple[str, list[str]]:
     comments = []
     string_ranges, comment_ranges = scan_string_and_comment_ranges(code)
     comment_ranges = sorted(comment_ranges)
-    parts: List[str] = []
+    parts: list[str] = []
     cursor = 0
     for start, end in comment_ranges:
         parts.append(code[cursor:start])
@@ -119,13 +117,13 @@ def remove_comments(code: str) -> Tuple[str, List[str]]:
     return ''.join(parts), comments
 
 
-def restore_comments(code: str, comments: List[str]) -> str:
+def restore_comments(code: str, comments: list[str]) -> str:
     for i, comment in enumerate(comments):
         code = code.replace(COMMENT_PLACEHOLDER.format(i), comment)
     return code
 
 
-def detect_comments_and_functions(code: str) -> Tuple[List[Tuple[int, str]], Set[int], Set[int]]:
+def detect_comments_and_functions(code: str) -> tuple[list[tuple[int, str]], set[int], set[int]]:
     comments = []
     function_lines = set()
     declaration_lines = set()
@@ -139,18 +137,19 @@ def detect_comments_and_functions(code: str) -> Tuple[List[Tuple[int, str]], Set
         r'(?:\s*:\s*[^{;}]+?)?'
         r'\s*(?:\{|$)'
     )
-    attribute_specifier = r'(?:[ \t]*\[\[[^\]]*\]\])*[ \t]*'
+    attribute_specifier = r"(?:[ \t]*\[\[[^\]]*\]\])*[ \t]*"
+    qualifier_prefix = r"^[ \t]*(?:static\s+|inline\s+|virtual\s+|explicit\s+|constexpr\s+|const\s+)*"
+    plain_signature = scoped_name + r"\s*\([^)]*\)" + function_suffix
+    pointer_signature = r"(?:" + template_type + r"\s*[*&]\s+)+" + plain_signature
+    optional_pointer_signature = r"(?:" + template_type + r"\s*[*&]?\s+)+" + plain_signature
+    qualified_signature = r"\w+\s*::\s*\w+\s*\([^)]*\)" + function_suffix
+    operator_signature = r"\w+\s*::\s*operator\s*=\s*\([^)]*\)" + function_suffix
     function_patterns = [
-        r'^[ \t]*(?:static\s+|inline\s+|virtual\s+|explicit\s+|constexpr\s+|const\s+)*'
-        + attribute_specifier + template_type + r'\s+' + scoped_name + r'\s*\([^)]*\)' + function_suffix,
-        r'^[ \t]*(?:static\s+|inline\s+|virtual\s+|explicit\s+|constexpr\s+|const\s+)*'
-        + attribute_specifier + r'(?:' + template_type + r'\s*[*&]\s+)+' + scoped_name + r'\s*\([^)]*\)' + function_suffix,
-        r'^[ \t]*(?:static\s+|inline\s+|virtual\s+|explicit\s+|constexpr\s+|const\s+)*'
-        + attribute_specifier + r'(?:' + template_type + r'\s*[*&]?\s+)+' + scoped_name + r'\s*\([^)]*\)' + function_suffix,
-        r'^[ \t]*(?:static\s+|inline\s+|virtual\s+|explicit\s+|constexpr\s+|const\s+)*'
-        + attribute_specifier + r'\w+\s*::\s*\w+\s*\([^)]*\)' + function_suffix,
-        r'^[ \t]*(?:static\s+|inline\s+|virtual\s+|explicit\s+|constexpr\s+|const\s+)*'
-        + attribute_specifier + r'\w+\s*::\s*operator\s*=\s*\([^)]*\)' + function_suffix,
+        qualifier_prefix + attribute_specifier + template_type + r"\s+" + plain_signature,
+        qualifier_prefix + attribute_specifier + pointer_signature,
+        qualifier_prefix + attribute_specifier + optional_pointer_signature,
+        qualifier_prefix + attribute_specifier + qualified_signature,
+        qualifier_prefix + attribute_specifier + operator_signature,
     ]
 
     declaration_pattern = re.compile(
@@ -161,11 +160,14 @@ def detect_comments_and_functions(code: str) -> Tuple[List[Tuple[int, str]], Set
         re.MULTILINE,
     )
     type_declaration_pattern = re.compile(r'^[ \t]*(?:struct|class|enum|union)[ \t]+\w+', re.MULTILINE)
-    alias_declaration_pattern = re.compile(r'^[ \t]*using[ \t]+[\w:]+(?:\s*<(?:[^<>]|<(?:[^<>]|<[^<>]*>)*>)*>)?[ \t]*=', re.MULTILINE)
+    alias_declaration_pattern = re.compile(
+        r"^[ \t]*using[ \t]+[\w:]+(?:\s*<(?:[^<>]|<(?:[^<>]|<[^<>]*>)*>)*>)?[ \t]*=",
+        re.MULTILINE,
+    )
     excluded_declaration_pattern = re.compile(r'^[ \t]*(?:import[ \t]|export[ \t]|module[ \t])')
 
-    string_ranges: List[Tuple[int, int]] = []
-    comment_ranges: List[Tuple[int, int]] = []
+    string_ranges: list[tuple[int, int]] = []
+    comment_ranges: list[tuple[int, int]] = []
     scanned_strings, scanned_comments = scan_string_and_comment_ranges(code)
     string_ranges = list(scanned_strings)
     comment_ranges = list(scanned_comments)
@@ -250,7 +252,7 @@ def _line_at(code: str, pos: int) -> str:
     return code[line_start:line_end]
 
 
-def _find_function_body_lines(masked_code: str, match_starts: List[int]) -> Set[int]:
+def _find_function_body_lines(masked_code: str, match_starts: list[int]) -> set[int]:
     body_lines = set()
 
     for start in match_starts:
@@ -279,10 +281,10 @@ def _find_function_body_lines(masked_code: str, match_starts: List[int]) -> Set[
 
 
 def check_comment_placement(
-    comments: List[Tuple[int, str]],
-    function_lines: Set[int],
-    declaration_lines: Set[int],
-) -> List[Tuple[int, str]]:
+    comments: list[tuple[int, str]],
+    function_lines: set[int],
+    declaration_lines: set[int],
+) -> list[tuple[int, str]]:
     invalid_comments = []
     anchor_lines = function_lines | declaration_lines
 

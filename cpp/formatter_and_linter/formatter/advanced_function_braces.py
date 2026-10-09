@@ -6,17 +6,16 @@ Alternative brace placement pass that also joins multi-line function
 signatures onto a single line before putting the brace on its own line.
 """
 
-from typing import List
 
 from shared.brace_utils import (
-    find_brace_positions,
     extract_function_name,
+    find_brace_positions,
 )
 
 
 def format_function_braces_advanced(code: str) -> str:
     lines = code.splitlines()
-    result_lines: List[str] = []
+    result_lines: list[str] = []
     i = 0
 
     while i < len(lines):
@@ -38,7 +37,7 @@ def format_function_braces_advanced(code: str) -> str:
                     next_stripped = lines[j].strip()
                     if next_stripped.startswith('{'):
                         func_lines = lines[i:j]
-                        func_decl = ' '.join(l.strip() for l in func_lines)
+                        func_decl = ' '.join(func_line.strip() for func_line in func_lines)
                         result_lines.append(func_decl.rstrip())
                         result_lines.append('{')
                         after_brace = lines[j].strip()[1:].lstrip()

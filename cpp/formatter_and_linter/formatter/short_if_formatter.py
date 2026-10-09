@@ -17,6 +17,27 @@ from formatter.if_brace_formatter import (
 )
 
 
+def _leading_indent(line: str) -> str:
+    indent_match = re.match(r"^(\s*)", line)
+    return indent_match.group(1) if indent_match else ""
+
+
+def _expand_single_line_if(line: str, closing_paren_pos: int) -> list[str] | None:
+    """Expand 'if (cond) statement;' into a braced block, or None when no expansion applies."""
+    after_condition = line[closing_paren_pos + 1 :].strip()
+    if not after_condition or after_condition.startswith("{"):
+        return None
+    if_part = line[: closing_paren_pos + 1]
+    statement = after_condition.rstrip(";").strip()
+    leading_whitespace = _leading_indent(line)
+    inner_indent = leading_whitespace + "    "
+    return [
+        f"{if_part} {{",
+        f"{inner_indent}{statement};",
+        f"{leading_whitespace}}}",
+    ]
+
+
 def format_short_if_statements(code: str) -> str:
     """
     Format if statements to ensure they are not on a single line.
@@ -33,43 +54,32 @@ def format_short_if_statements(code: str) -> str:
     formatted_lines = []
 
     for line in lines:
-        # Check if line contains an if statement
-        if_match = re.search(r'^\s*if\s*\(', line)
+        if_match = re.search(r"^\s*if\s*\(", line)
 
         if if_match:
-            # Find the matching closing parenthesis for the condition
-            opening_paren_pos = if_match.end() - 1  # Position of opening (
+            opening_paren_pos = if_match.end() - 1
             closing_paren_pos = find_matching_paren(line, opening_paren_pos)
 
             if closing_paren_pos != -1:
-                # Get the content after the condition's closing parenthesis
-                after_condition = line[closing_paren_pos + 1:].strip()
-
-                # Only format if there's code after the condition AND no opening brace
-                # (condition followed by statement on same line)
-                if after_condition and not after_condition.startswith('{'):
-                    # This is a single-line if with statement - needs formatting
-                    if_part = line[:closing_paren_pos + 1]
-                    statement = after_condition.rstrip(';').strip()
-
-                    # Preserve original indentation (extract leading whitespace from the line)
-                    indent_match = re.match(r'^(\s*)', line)
-                    leading_whitespace = indent_match.group(1) if indent_match else ''
-                    inner_indent = leading_whitespace + '    '
-
-                    # Format as multi-line if statement with proper indentation
-                    formatted_lines.append(f"{if_part} {{")
-                    formatted_lines.append(f"{inner_indent}{statement};")
-                    formatted_lines.append(f"{leading_whitespace}}}")
+                expanded = _expand_single_line_if(line, closing_paren_pos)
+                if expanded is not None:
+                    formatted_lines.extend(expanded)
                 else:
-                    # No statement on same line, or already has braces - keep as is
                     formatted_lines.append(line)
             else:
                 formatted_lines.append(line)
         else:
             formatted_lines.append(line)
 
-    return '\n'.join(formatted_lines)
+    return "\n".join(formatted_lines)
+
+
+def _without_braces(code: str) -> str:
+    return format_short_if_statements(code)
+
+
+def _with_braces(code: str) -> str:
+    return format_short_if_statements_with_braces(code)
 
 
 def format_if_statements(code: str) -> str:
@@ -82,13 +92,7 @@ def format_if_statements(code: str) -> str:
     Returns:
         The formatted code with all if statements properly formatted
     """
-    # First pass: handle if statements without braces
-    formatted_code = format_short_if_statements(code)
-
-    # Second pass: handle if statements with braces on single line
-    formatted_code = format_short_if_statements_with_braces(formatted_code)
-
-    return formatted_code
+    return _with_braces(_without_braces(code))
 
 
 __all__ = [
@@ -100,7 +104,6 @@ __all__ = [
 
 
 if __name__ == "__main__":
-    # Test the formatter with sample code
     test_code = """#include <iostream>
 
 int main() {

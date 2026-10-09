@@ -14,10 +14,9 @@ reported line number is the one where the declaration starts.
 """
 
 import re
-from typing import List, Optional, Tuple
 
-from linter.style_checks import _mask_strings_and_comments, _NON_DECLARATION_KEYWORD_RE
 from linter.multiple_var_decl_checks import _has_top_level_declaration_comma
+from linter.style_checks import _NON_DECLARATION_KEYWORD_RE, _mask_strings_and_comments
 
 RETURN_ONLY_VAR_MESSAGE = (
     "Variable '{name}' déclarée uniquement pour être retournée immédiatement. "
@@ -63,7 +62,7 @@ def _is_blank_or_comment(stripped_masked: str) -> bool:
     return not stripped_masked or stripped_masked.startswith('//') or stripped_masked.startswith('/*')
 
 
-def _top_level_semicolon_index(stripped_masked: str) -> Optional[int]:
+def _top_level_semicolon_index(stripped_masked: str) -> int | None:
     """
     Return the index of the first top-level ';' (outside parentheses and
     outside the braced initializer) in a masked line, or None when absent.
@@ -124,7 +123,7 @@ def _is_single_complete_declaration(stripped_masked: str) -> bool:
 
 
 
-def _parse_initialized_declaration(stripped_masked: str) -> Optional[str]:
+def _parse_initialized_declaration(stripped_masked: str) -> str | None:
     """
     Return the declared variable name when the masked statement starts a
     local variable declaration with initialization (braced, parenthesized or
@@ -160,10 +159,10 @@ def _declaration_continues_on_line(stripped_masked: str) -> bool:
 
 
 def _find_declaration_end(
-    lines: List[str],
+    lines: list[str],
     start_index: int,
     in_block_comment: bool,
-) -> Tuple[Optional[int], bool]:
+) -> tuple[int | None, bool]:
     """
     Starting at start_index (a line that begins an initialized declaration),
     scan forward until the declaration terminates (top-level ';' outside the
@@ -197,7 +196,7 @@ def _find_declaration_end(
 
 
 
-def check_return_only_variable(code: str) -> List[Tuple[int, str]]:
+def check_return_only_variable(code: str) -> list[tuple[int, str]]:
     """
     Report local variables declared/initialized and then immediately returned
     via 'return var;' as their first following executable statement (blank
@@ -211,9 +210,9 @@ def check_return_only_variable(code: str) -> List[Tuple[int, str]]:
     statement appears.
     """
     lines = code.splitlines()
-    violations: List[Tuple[int, str]] = []
+    violations: list[tuple[int, str]] = []
     in_block_comment = False
-    pending_name: Optional[str] = None
+    pending_name: str | None = None
     pending_line = 0
 
     line_index = 0

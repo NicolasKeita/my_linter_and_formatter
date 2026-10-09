@@ -30,7 +30,7 @@ The pass only processes module interface files: every other extension
 """
 
 import re
-from typing import List, NamedTuple, Optional
+from typing import NamedTuple
 
 from shared.declaration_parse import (
     DeclarationParts,
@@ -54,7 +54,7 @@ class _BlockItem(NamedTuple):
     """One buffered block entry: a parsed declaration or a neutral line
     (comment) kept in source order until the block is emitted."""
 
-    declaration: Optional[DeclarationParts]
+    declaration: DeclarationParts | None
     raw_line: str
 
 
@@ -71,8 +71,8 @@ class _ScanState:
 
     def __init__(self) -> None:
         self.depth = 0
-        self.class_stack: List[int] = []
-        self.pending_header_depth: Optional[int] = None
+        self.class_stack: list[int] = []
+        self.pending_header_depth: int | None = None
         self.in_block_comment = False
 
     def in_class_body(self) -> bool:
@@ -113,14 +113,14 @@ class _ScanState:
                 self.pending_header_depth = None
 
 
-def _flush_block(block: List[_BlockItem], output: List[str], max_line_length: int) -> None:
+def _flush_block(block: list[_BlockItem], output: list[str], max_line_length: int) -> None:
     """Emit the pending block in source order, aligning the member names when
     every rebuilt line stays within max_line_length, or verbatim otherwise."""
     if not block:
         return
     declarations = [item.declaration for item in block if item.declaration is not None]
     keep_original = not declarations
-    aligned_lines: List[str] = []
+    aligned_lines: list[str] = []
     if declarations:
         target_column = max(len(declaration.type_part) for declaration in declarations) + 1
         for declaration in declarations:
@@ -152,8 +152,8 @@ def align_member_variables(code: str, max_line_length: int = MAX_LINE_LENGTH) ->
         return code
     lines = code.splitlines()
     state = _ScanState()
-    output: List[str] = []
-    block: List[_BlockItem] = []
+    output: list[str] = []
+    block: list[_BlockItem] = []
 
     for line in lines:
         was_in_block_comment = state.in_block_comment

@@ -7,8 +7,6 @@ lambdas, initializer lists, and control structures.
 """
 
 import re
-from typing import List, Tuple, Optional
-
 
 CONTROL_KEYWORDS = frozenset({
     'if', 'else', 'for', 'while', 'do', 'switch', 'catch',
@@ -58,7 +56,7 @@ def _find_first_outer_paren(text: str) -> int:
     return -1
 
 
-def extract_function_name(line: str) -> Optional[str]:
+def extract_function_name(line: str) -> str | None:
     stripped = line.strip()
     paren_pos = _find_first_outer_paren(stripped)
     if paren_pos == -1:
@@ -81,7 +79,7 @@ def extract_function_name(line: str) -> Optional[str]:
     return func_name
 
 
-def find_brace_positions(line: str) -> List[Tuple[int, str]]:
+def find_brace_positions(line: str) -> list[tuple[int, str]]:
     positions = []
     in_string = False
     string_char = None

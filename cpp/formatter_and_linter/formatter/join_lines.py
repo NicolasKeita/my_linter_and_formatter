@@ -50,7 +50,6 @@ statement, joined back onto one line, would exceed max_length.
 """
 
 import re
-from typing import List
 
 from shared.brace_utils import CONTROL_KEYWORDS
 from shared.function_analysis import has_stream_operators
@@ -61,7 +60,10 @@ _TYPE_HEADER = re.compile(r"^\s*(?:namespace|class|struct|union|enum)\b")
 _OPEN_BRACE_HEADER = re.compile(r"(?:\)|\]|else|do|try)\s*\{$")
 _ENUM_START = re.compile(r"^\s*enum\b")
 
-_FUNC_DEF_START = re.compile(r"^\s*(?:(?:static|inline|virtual|explicit|constexpr|const)\s+)*[\w:<>]+(?:\s*[*&])*\s+([\w:<>]+)\s*\(")
+_FUNC_DEF_START = re.compile(
+    r"^\s*(?:(?:static|inline|virtual|explicit|constexpr|const)\s+)*"
+    r"[\w:<>]+(?:\s*[*&])*\s+([\w:<>]+)\s*\("
+)
 _QUALIFIED_SIG_START = re.compile(r"^\s*[\w:<>,]+::~?[\w:]+\s*\(")
 _ACCESS_SPECIFIER = re.compile(r"^\s*(?:public|private|protected)\s*:\s*$")
 _CASE_LABEL = re.compile(r"^\s*(?:case\b.*|default)\s*:\s*\{?\s*$")
@@ -115,7 +117,7 @@ def _has_line_comment(line: str) -> bool:
     return False
 
 
-def _block_comment_mask(lines: List[str]) -> List[bool]:
+def _block_comment_mask(lines: list[str]) -> list[bool]:
     mask = []
     in_block = False
     for line in lines:
@@ -158,7 +160,7 @@ def _block_comment_mask(lines: List[str]) -> List[bool]:
     return mask
 
 
-def _signature_mask(lines: List[str]) -> List[bool]:
+def _signature_mask(lines: list[str]) -> list[bool]:
     """
     Return a mask marking every line belonging to a multi-line function
     signature (definition or prototype). Such lines are never joined, so the
@@ -234,7 +236,7 @@ def _ends_logical_chain(line: str) -> bool:
     return line.rstrip().endswith(("&&", "||"))
 
 
-def _logical_chain_mask(lines: List[str]) -> List[bool]:
+def _logical_chain_mask(lines: list[str]) -> list[bool]:
     """
     Mark every line belonging to a '&&' / '||' chain that holds more than one
     operator. A single operator may be joined back onto one line; a
@@ -273,7 +275,7 @@ def _logical_chain_mask(lines: List[str]) -> List[bool]:
     return mask
 
 
-def _enum_mask(lines: List[str]) -> List[bool]:
+def _enum_mask(lines: list[str]) -> list[bool]:
     """
     Mark every line of an enum declaration, from the 'enum' keyword up to the
     closing '};', so those lines are never joined.
@@ -308,7 +310,7 @@ def _enum_mask(lines: List[str]) -> List[bool]:
     return mask
 
 
-def _init_list_mask(lines: List[str]) -> List[bool]:
+def _init_list_mask(lines: list[str]) -> list[bool]:
     """
     Mark every line of a constructor member initializer list (the lines
     starting with ':' or ',' that follow a constructor signature ending with
@@ -351,11 +353,11 @@ def _is_statement_continuation(line_a: str, line_b: str) -> bool:
 
 
 def _oversized_statement_mask(
-    lines: List[str],
+    lines: list[str],
     max_length: int,
-    protected_base: List[bool],
-    stream_mask: List[bool],
-) -> List[bool]:
+    protected_base: list[bool],
+    stream_mask: list[bool],
+) -> list[bool]:
     """
     Mark every line of a multi-line statement whose fully-joined length exceeds
     max_length (e.g. a std::array '{{ ... }}' block or a long call). Such
@@ -438,7 +440,7 @@ def _can_join_line(line_n: str, line_next: str, n_protected: bool, m_protected: 
     return True
 
 
-def _join_lines_pass(lines: List[str], max_length: int) -> List[str]:
+def _join_lines_pass(lines: list[str], max_length: int) -> list[str]:
     block_mask = _block_comment_mask(lines)
     signature_mask = _signature_mask(lines)
     logical_mask = _logical_chain_mask(lines)
@@ -450,7 +452,7 @@ def _join_lines_pass(lines: List[str], max_length: int) -> List[str]:
     ]
     stream_mask = [has_stream_operators(line) for line in lines]
     oversized_mask = _oversized_statement_mask(lines, max_length, protected_base_mask, stream_mask)
-    result: List[str] = []
+    result: list[str] = []
     i = 0
     total = len(lines)
     while i < total:

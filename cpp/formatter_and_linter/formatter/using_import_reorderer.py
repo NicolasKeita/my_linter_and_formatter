@@ -7,24 +7,22 @@ the module declaration.
 """
 
 import re
-from typing import List
 
 from shared.regex_patterns import (
+    IMPORT_REGEX,
     MODULE_DECL_REGEX,
     MODULE_PARTITION_REGEX,
-    IMPORT_REGEX,
     USING_REGEX,
 )
 
 
 def reorder_using_after_import(code: str) -> str:
     lines = code.splitlines()
-    new_lines: List[str] = []
+    new_lines: list[str] = []
     i = 0
 
     while i < len(lines):
         line = lines[i]
-        stripped = line.strip()
 
         if re.match(MODULE_DECL_REGEX, line) or re.match(MODULE_PARTITION_REGEX, line):
             new_lines.append(line)
@@ -38,9 +36,9 @@ def reorder_using_after_import(code: str) -> str:
              re.match(IMPORT_REGEX, new_lines[-1]) or
              re.match(USING_REGEX, new_lines[-1]))):
 
-            imports_list: List[str] = []
-            usings: List[str] = []
-            trailing_blank_lines: List[str] = []
+            imports_list: list[str] = []
+            usings: list[str] = []
+            trailing_blank_lines: list[str] = []
 
             while i < len(lines):
                 current_line = lines[i]

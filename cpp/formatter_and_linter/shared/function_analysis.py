@@ -6,10 +6,8 @@ Provides functions for detecting function definition context, finding function
 starts, and checking multiline function signatures.
 """
 
-from typing import List, Optional
 
 from shared.brace_utils import (
-    CONTROL_KEYWORDS,
     extract_function_name,
     is_control_structure,
 )
@@ -50,7 +48,13 @@ def has_stream_operators(line: str) -> bool:
 
 
 
-def is_function_definition_context(lines: List[str], line_idx: int, brace_line: str, paren_depth: int, angle_depth: int) -> bool:
+def is_function_definition_context(
+    lines: list[str],
+    line_idx: int,
+    brace_line: str,
+    paren_depth: int,
+    angle_depth: int,
+) -> bool:
     if paren_depth != 0 or angle_depth != 0:
         return False
     if is_control_structure(brace_line):
@@ -61,7 +65,7 @@ def is_function_definition_context(lines: List[str], line_idx: int, brace_line: 
     return True
 
 
-def check_multiline_function_signature(lines: List[str], line_idx: int) -> bool:
+def check_multiline_function_signature(lines: list[str], line_idx: int) -> bool:
     paren_depth = 0
     for i in range(line_idx - 1, -1, -1):
         line = lines[i].strip()
@@ -122,7 +126,7 @@ def strip_trailing_qualifiers(line: str) -> str:
     return stripped
 
 
-def find_function_start_for_brace(lines: List[str], line_idx: int) -> Optional[int]:
+def find_function_start_for_brace(lines: list[str], line_idx: int) -> int | None:
     for i in range(line_idx - 1, -1, -1):
         line = lines[i].strip()
         if not line or line.startswith('//'):

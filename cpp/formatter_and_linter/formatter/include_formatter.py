@@ -7,12 +7,11 @@ and proper spacing.
 """
 
 import re
-from typing import List, Set, Tuple
 
-from shared.regex_patterns import INCLUDE_REGEX, FUNC_REGEX
+from shared.regex_patterns import FUNC_REGEX, INCLUDE_REGEX
 
 
-def extract_includes(code_lines: List[str]) -> Tuple[List[str], List[str]]:
+def extract_includes(code_lines: list[str]) -> tuple[list[str], list[str]]:
     include_lines = []
     other_lines = []
     for line in code_lines:
@@ -23,7 +22,7 @@ def extract_includes(code_lines: List[str]) -> Tuple[List[str], List[str]]:
     return include_lines, other_lines
 
 
-def remove_duplicate_includes(includes: List[str]) -> List[str]:
+def remove_duplicate_includes(includes: list[str]) -> list[str]:
     seen = set()
     unique = []
     for inc in includes:
@@ -34,7 +33,7 @@ def remove_duplicate_includes(includes: List[str]) -> List[str]:
     return unique
 
 
-def separate_system_local(includes: List[str]) -> Tuple[List[str], List[str]]:
+def separate_system_local(includes: list[str]) -> tuple[list[str], list[str]]:
     windows_h_include = None
     system_includes = []
     local_includes = []
@@ -55,7 +54,7 @@ def separate_system_local(includes: List[str]) -> Tuple[List[str], List[str]]:
     return system_includes, local_includes
 
 
-def ensure_single_blank_lines(lines: List[str]) -> List[str]:
+def ensure_single_blank_lines(lines: list[str]) -> list[str]:
     new_lines = []
     prev_blank = False
     last_was_func_or_comment = False
@@ -90,7 +89,7 @@ def ensure_single_blank_lines(lines: List[str]) -> List[str]:
     return new_lines
 
 
-def remove_blank_lines_between_includes(lines: List[str]) -> List[str]:
+def remove_blank_lines_between_includes(lines: list[str]) -> list[str]:
     first_include_index = -1
     last_include_index = -1
 
@@ -125,7 +124,7 @@ def remove_blank_lines_between_includes(lines: List[str]) -> List[str]:
     return result
 
 
-def _blank_line_touches_preprocessor(lines: List[str], blank_index: int) -> bool:
+def _blank_line_touches_preprocessor(lines: list[str], blank_index: int) -> bool:
     previous = ''
     for j in range(blank_index - 1, -1, -1):
         if lines[j].strip():
@@ -142,7 +141,7 @@ def _blank_line_touches_preprocessor(lines: List[str], blank_index: int) -> bool
     return bool(starts_with_hash.match(previous) or starts_with_hash.match(following))
 
 
-def format_include_group(include_lines: List[str]) -> List[str]:
+def format_include_group(include_lines: list[str]) -> list[str]:
     include_lines = remove_duplicate_includes(include_lines)
     system_includes, local_includes = separate_system_local(include_lines)
     local_includes.sort()
@@ -157,9 +156,9 @@ def format_includes(code: str) -> str:
     lines = code.splitlines()
     lines = remove_blank_lines_between_includes(lines)
 
-    new_lines: List[str] = []
-    pending_group: List[str] = []
-    seen_contents: Set[str] = set()
+    new_lines: list[str] = []
+    pending_group: list[str] = []
+    seen_contents: set[str] = set()
 
     def flush_pending_group() -> None:
         if pending_group:

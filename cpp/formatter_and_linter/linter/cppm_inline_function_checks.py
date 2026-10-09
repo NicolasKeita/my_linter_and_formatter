@@ -31,7 +31,7 @@ import bisect
 import re
 from enum import Enum, auto
 from pathlib import Path
-from typing import List, NamedTuple, Tuple
+from typing import NamedTuple
 
 MAX_CPPM_INLINE_FUNCTION_BODY_LINES = 1
 
@@ -115,7 +115,7 @@ def _raw_string_prefix_length(code: str, quote_index: int) -> int:
     return 1
 
 
-def _enter_literal(code: str, chars: List[str], quote_index: int) -> Tuple[int, _SanitizeState, str]:
+def _enter_literal(code: str, chars: list[str], quote_index: int) -> tuple[int, _SanitizeState, str]:
     prefix_length = _raw_string_prefix_length(code, quote_index)
     if prefix_length == 0:
         chars[quote_index] = ' '
@@ -212,18 +212,18 @@ def _sanitize_code(code: str) -> str:
 
 
 
-def _compute_line_starts(code: str) -> List[int]:
+def _compute_line_starts(code: str) -> list[int]:
     starts = [0]
     for match in re.finditer('\n', code):
         starts.append(match.end())
     return starts
 
 
-def _line_of_position(line_starts: List[int], position: int) -> int:
+def _line_of_position(line_starts: list[int], position: int) -> int:
     return bisect.bisect_right(line_starts, position) - 1
 
 
-def _split_header(header: str) -> Tuple[str, int]:
+def _split_header(header: str) -> tuple[str, int]:
     offset = 0
     while True:
         label_match = _ACCESS_LABEL_PATTERN.match(header, offset)
@@ -247,7 +247,7 @@ def _find_parameter_list_paren(header: str) -> int:
     return -1
 
 
-def _classify_header(header: str) -> Tuple[_BlockKind, str]:
+def _classify_header(header: str) -> tuple[_BlockKind, str]:
     normalized = ' '.join(header.split())
     if not normalized or normalized.startswith('#'):
         return _BlockKind.OTHER, ''
@@ -287,7 +287,7 @@ def _is_braced_initializer(code: str, segment_start: int, brace_index: int) -> b
 
 def _count_effective_lines(
     sanitized: str,
-    line_starts: List[int],
+    line_starts: list[int],
     open_pos: int,
     close_pos: int
 ) -> int:
@@ -315,10 +315,10 @@ def _count_effective_lines(
     return effective_lines
 
 
-def _scan_sanitized_code(sanitized: str, max_body_lines: int) -> List[Tuple[str, int, int]]:
+def _scan_sanitized_code(sanitized: str, max_body_lines: int) -> list[tuple[str, int, int]]:
     line_starts = _compute_line_starts(sanitized)
-    blocks: List[_Block] = []
-    violations: List[Tuple[str, int, int]] = []
+    blocks: list[_Block] = []
+    violations: list[tuple[str, int, int]] = []
     segment_start = 0
     paren_depth = 0
     index = 0
@@ -362,7 +362,7 @@ def _scan_sanitized_code(sanitized: str, max_body_lines: int) -> List[Tuple[str,
 def check_cppm_inline_function_bodies(
     code: str,
     max_body_lines: int = MAX_CPPM_INLINE_FUNCTION_BODY_LINES
-) -> List[Tuple[str, int, int]]:
+) -> list[tuple[str, int, int]]:
     sanitized = _sanitize_code(code)
     return _scan_sanitized_code(sanitized, max_body_lines)
 

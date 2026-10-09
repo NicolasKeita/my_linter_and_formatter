@@ -7,19 +7,18 @@ spacing around module declarations and import blocks.
 """
 
 import re
-from typing import List
 
+from shared.import_utils import sort_imports
 from shared.regex_patterns import (
+    IMPORT_REGEX,
     MODULE_DECL_REGEX,
     MODULE_PARTITION_REGEX,
-    IMPORT_REGEX,
 )
-from shared.import_utils import sort_imports
 
 
 def format_import_order(code: str) -> str:
     lines = code.splitlines()
-    new_lines: List[str] = []
+    new_lines: list[str] = []
     i = 0
 
     while i < len(lines):
@@ -40,7 +39,7 @@ def format_import_order(code: str) -> str:
 
             system_imports, local_imports = sort_imports(imports)
 
-            formatted_imports: List[str] = []
+            formatted_imports: list[str] = []
             formatted_imports.extend(system_imports)
             if system_imports and local_imports:
                 formatted_imports.append('')
@@ -57,12 +56,11 @@ def format_import_order(code: str) -> str:
 
 def format_module_import_spacing(code: str) -> str:
     lines = code.splitlines()
-    new_lines: List[str] = []
+    new_lines: list[str] = []
     i = 0
 
     while i < len(lines):
         line = lines[i]
-        stripped = line.strip()
 
         if re.match(MODULE_DECL_REGEX, line) or re.match(MODULE_PARTITION_REGEX, line):
             new_lines.append(line)

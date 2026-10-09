@@ -40,14 +40,21 @@ def test_reference_example_is_split_one_field_per_line():
     assert split_long_designated_initializations(code) == _expected_scenario_block()
 
 
+def _short_config_line():
+    return (
+        "    const SilConfig                             config{"
+        ".duration_s = 32.0, .trace_level = SilLogLevel::Trace};\n"
+    )
+
+
 def test_table_alignment_of_neighbors_is_preserved():
     code = (
-        "    const SilConfig                             config{.duration_s = 32.0, .trace_level = SilLogLevel::Trace};\n"
+        _short_config_line()
         + _long_scenario_line()
         + "    const std::expected<SilRunOutput, SilError> outcome = run_traced(config, scenario);\n"
     )
     expected = (
-        "    const SilConfig                             config{.duration_s = 32.0, .trace_level = SilLogLevel::Trace};\n"
+        _short_config_line()
         + _expected_scenario_block()
         + "    const std::expected<SilRunOutput, SilError> outcome = run_traced(config, scenario);\n"
     )
@@ -60,13 +67,21 @@ def test_short_line_is_untouched():
 
 
 def test_plain_braced_list_without_designated_init_is_untouched():
-    code = "    const std::array<std::int32_t, 12> values{" + "1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28" + "};\n"
+    numbers = (
+        "1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, "
+        "21, 22, 23, 24, 25, 26, 27, 28"
+    )
+    code = "    const std::array<std::int32_t, 12> values{" + numbers + "};\n"
     assert len(code.rstrip()) > 120
     assert split_long_designated_initializations(code) == code
 
 
 def test_call_argument_brace_is_untouched():
-    code = "    const auto result = run_mission(controller, aircraft, {.a = 1, .b = 2, .c = 3, .d = 4, .e = 5, .f = 6, .g = 7, .h = 8, .i = 9});\n"
+    args = (
+        "controller, aircraft, {.a = 1, .b = 2, .c = 3, .d = 4, "
+        ".e = 5, .f = 6, .g = 7, .h = 8, .i = 9}"
+    )
+    code = "    const auto result = run_mission(" + args + ");\n"
     assert len(code.rstrip()) > 120
     assert split_long_designated_initializations(code) == code
 
@@ -116,7 +131,9 @@ def test_designated_with_brace_value_is_split():
 
 
 def test_class_and_enum_declarations_are_untouched():
-    code = "    enum class VeryLongEnumNameForTestingTheBehaviour{FirstValue = 1, SecondValue = 2, ThirdValue = 3, FourthValue = 4, FifthValue = 5, SixthValue = 6};\n"
+    values = "FirstValue = 1, SecondValue = 2, ThirdValue = 3, FourthValue = 4, FifthValue = 5, SixthValue = 6"
+    prefix = "    enum class VeryLongEnumNameForTestingTheBehaviour{"
+    code = prefix + values + "};\n"
     assert len(code.rstrip()) > 120
     assert split_long_designated_initializations(code) == code
 

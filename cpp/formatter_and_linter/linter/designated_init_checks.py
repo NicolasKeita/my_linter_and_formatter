@@ -20,9 +20,8 @@ declared variable.
 """
 
 import re
-from typing import List, Optional, Tuple
 
-from linter.style_checks import _mask_strings_and_comments, _NON_DECLARATION_KEYWORD_RE
+from linter.style_checks import _NON_DECLARATION_KEYWORD_RE, _mask_strings_and_comments
 
 _DESIGNATED_INIT_MESSAGE = (
     "Warning [C++20-designated-init]: Préférez l'initialisation désignée "
@@ -57,7 +56,7 @@ _ASSIGN_OP_RE = r'\s*(?<![<>=!+\-*/%&|^])=(?!=)\s*'
 def format_designated_init_message(
     type_name: str,
     variable_name: str,
-    field_chains: List[str],
+    field_chains: list[str],
 ) -> str:
     """
     Render the warning message for an empty-brace initialization followed by
@@ -76,7 +75,7 @@ def _is_blank_or_comment(stripped_masked: str) -> bool:
     return not stripped_masked or stripped_masked.startswith('//') or stripped_masked.startswith('/*')
 
 
-def _find_top_level_semicolon(stripped_masked: str) -> Optional[int]:
+def _find_top_level_semicolon(stripped_masked: str) -> int | None:
     """
     Return the index of the first top-level ';' (outside parentheses and
     braced initializers) in a masked line, or None when absent.
@@ -105,7 +104,7 @@ def _find_top_level_semicolon(stripped_masked: str) -> Optional[int]:
     return None
 
 
-def _parse_empty_brace_declaration(stripped_masked: str) -> Optional[Tuple[str, str]]:
+def _parse_empty_brace_declaration(stripped_masked: str) -> tuple[str, str] | None:
     """
     Return (type, variable_name) when the masked statement is a single
     declaration with an empty-brace value initialization ('Type var{};'),
@@ -129,7 +128,7 @@ def _parse_empty_brace_declaration(stripped_masked: str) -> Optional[Tuple[str, 
 def _parse_member_assignment(
     stripped_masked: str,
     variable_name: str,
-) -> Optional[Tuple[str, str]]:
+) -> tuple[str, str] | None:
     """
     Return (field_chain, rhs) when the masked, stripped line is a single
     plain assignment statement on a member of variable_name ('var.member = x;'
@@ -174,7 +173,7 @@ def _references_variable(text: str, variable_name: str) -> bool:
 
 def check_designated_init_candidates(
     code: str,
-) -> List[Tuple[int, str, str, List[str]]]:
+) -> list[tuple[int, str, str, list[str]]]:
     """
     Report empty-brace declarations whose first following executable statement
     (blank lines and comments ignored) assigns a member of the declared
@@ -189,7 +188,7 @@ def check_designated_init_candidates(
     already collected are reported and the scan resumes after that statement.
     """
     lines = code.splitlines()
-    violations: List[Tuple[int, str, str, List[str]]] = []
+    violations: list[tuple[int, str, str, list[str]]] = []
     in_block_comment = False
     line_index = 0
 
@@ -208,7 +207,7 @@ def check_designated_init_candidates(
 
         type_name, variable_name = declaration
         declaration_line = line_index + 1
-        field_chains: List[str] = []
+        field_chains: list[str] = []
 
         scan_index = line_index + 1
         while scan_index < len(lines):

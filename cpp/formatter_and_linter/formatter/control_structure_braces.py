@@ -7,8 +7,6 @@ switch, catch, do, try) are placed on the same line as their header.
 """
 
 import re
-from typing import List, Optional
-
 
 CONTROL_HEADER_PATTERN = re.compile(r'^\s*(?:if|else|for|while|switch|catch|do|try)\b')
 
@@ -34,25 +32,25 @@ def format_control_structure_braces(code: str) -> str:
                 target_idx = _last_content_line_before(lines, i)
 
                 if target_idx is not None and target_idx >= start_idx:
-                    # Join the brace onto the last header line, keeping any
-                    # trailing line-comment after the brace
                     code_part, comment = _split_trailing_comment(lines[target_idx])
-                    if comment is not None:
-                        lines[target_idx] = code_part + ' { ' + comment
-                    else:
-                        lines[target_idx] = code_part + ' {'
-
-                    # Drop the now merged standalone '{' line
+                    lines[target_idx] = _join_brace_with_comment(code_part, comment)
                     emit[i] = False
                     i += 1
                     continue
 
         i += 1
 
-    return '\n'.join(line for keep, line in zip(emit, lines) if keep)
+    return '\n'.join(line for keep, line in zip(emit, lines, strict=False) if keep)
 
 
-def _find_statement_start_backward(lines: List[str], brace_idx: int) -> Optional[int]:
+def _join_brace_with_comment(code_part: str, comment: str | None) -> str:
+    """Merge a standalone '{' onto its header line, preserving any trailing comment."""
+    if comment is not None:
+        return code_part + " { " + comment
+    return code_part + " {"
+
+
+def _find_statement_start_backward(lines: list[str], brace_idx: int) -> int | None:
     """
     Walk backward from the standalone '{' at brace_idx to find the first line
     of the statement owning that brace. Returns the line index, or None when
@@ -78,7 +76,7 @@ def _find_statement_start_backward(lines: List[str], brace_idx: int) -> Optional
     return None
 
 
-def _last_content_line_before(lines: List[str], brace_idx: int) -> Optional[int]:
+def _last_content_line_before(lines: list[str], brace_idx: int) -> int | None:
     """Return the index of the last non-blank, non-comment line before brace_idx."""
     j = brace_idx - 1
 
@@ -93,7 +91,7 @@ def _last_content_line_before(lines: List[str], brace_idx: int) -> Optional[int]
     return None
 
 
-def _split_trailing_comment(line: str) -> tuple[str, Optional[str]]:
+def _split_trailing_comment(line: str) -> tuple[str, str | None]:
     """
     Split a line into (code, comment) where comment is a trailing '//' comment
     (string literals are respected), or None when the line has no comment.

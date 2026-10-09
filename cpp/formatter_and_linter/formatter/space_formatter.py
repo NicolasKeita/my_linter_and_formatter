@@ -5,13 +5,12 @@ Spacing utilities for the C++ code formatter.
 Manages blank line separation between functions and other code elements.
 """
 
-from typing import List
-
-from shared.regex_patterns import FUNC_REGEX
 import re
 
+from shared.regex_patterns import FUNC_REGEX
 
-def ensure_single_blank_lines(lines: List[str]) -> List[str]:
+
+def ensure_single_blank_lines(lines: list[str]) -> list[str]:
     new_lines = []
     prev_blank = False
 

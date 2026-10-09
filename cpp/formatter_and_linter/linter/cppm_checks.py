@@ -7,7 +7,6 @@ implementations belong in .cpp files.
 """
 
 import re
-from typing import List, Tuple
 
 MAX_CPPM_INLINE_BODY_LINES = 1
 
@@ -21,7 +20,7 @@ CPPM_FUNCTION_SIGNATURE_PATTERN = re.compile(
 CONTROL_KEYWORDS = {"if", "for", "while", "switch", "catch"}
 
 
-def _build_line_depths(lines: List[str]) -> List[int]:
+def _build_line_depths(lines: list[str]) -> list[int]:
     depths = []
     current_depth = 0
     for line in lines:
@@ -33,7 +32,7 @@ def _build_line_depths(lines: List[str]) -> List[int]:
     return depths
 
 
-def _count_significant_body_lines(lines: List[str], open_line: int, end_line: int) -> int:
+def _count_significant_body_lines(lines: list[str], open_line: int, end_line: int) -> int:
     significant_lines = 0
     for line_idx in range(open_line, end_line + 1):
         body_line = lines[line_idx]
@@ -59,7 +58,7 @@ def _count_significant_body_lines(lines: List[str], open_line: int, end_line: in
 def check_cppm_interface_implementations(
     code: str,
     max_body_lines: int = MAX_CPPM_INLINE_BODY_LINES
-) -> List[Tuple[str, int, int]]:
+) -> list[tuple[str, int, int]]:
     lines = code.splitlines()
     has_class_declaration = any(re.search(r'^\s*(?:export\s+)?class\s+\w+', line) for line in lines)
     if not has_class_declaration:

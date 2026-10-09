@@ -43,7 +43,7 @@ one line; it is applied to non module-interface files, matching the other
 local-declaration passes.
 """
 
-from typing import List, NamedTuple, Optional, Tuple
+from typing import NamedTuple
 
 from shared.brace_utils import brace_delta
 from shared.declaration_parse import (
@@ -52,6 +52,7 @@ from shared.declaration_parse import (
     parse_declaration,
     split_trailing_comment,
 )
+
 from formatter.declaration_blank_line_formatter import is_function_open_brace
 
 
@@ -67,11 +68,11 @@ class StatementBlock(NamedTuple):
 
     parts: DeclarationParts
     tail: str
-    continuation: Tuple[str, ...]
+    continuation: tuple[str, ...]
     original_line: str
 
 
-def _parse_local_declaration(line: str) -> Optional[DeclarationParts]:
+def _parse_local_declaration(line: str) -> DeclarationParts | None:
     """Parse a single function-body line as a local variable declaration.
 
     Trailing line comments are split off first (and re-attached by the caller)
@@ -85,7 +86,7 @@ def _parse_local_declaration(line: str) -> Optional[DeclarationParts]:
     return parse_declaration(code_part, comment, line, allow_paren_init=True)
 
 
-def _parse_statement_start(line: str) -> Optional[Tuple[DeclarationParts, str]]:
+def _parse_statement_start(line: str) -> tuple[DeclarationParts, str] | None:
     """Parse the first line of a multi-line declaration statement.
 
     The line must end with an opened brace or parenthesis initializer
@@ -114,10 +115,10 @@ def _parse_statement_start(line: str) -> Optional[Tuple[DeclarationParts, str]]:
 
 
 def _collect_statement(
-    lines: List[str],
+    lines: list[str],
     start: int,
     brace_depth: int,
-) -> Tuple[Optional[StatementBlock], int, int]:
+) -> tuple[StatementBlock | None, int, int]:
     """Collect one full statement (possibly spanning several lines) starting
     at ``lines[start]`` while the enclosing function body sits at
     ``brace_depth``.
@@ -144,7 +145,7 @@ def _collect_statement(
     if statement_start is None:
         return None, start, brace_depth
     parts, tail = statement_start
-    continuation: List[str] = []
+    continuation: list[str] = []
     i = start + 1
     while i < n:
         current = lines[i]
@@ -158,7 +159,7 @@ def _collect_statement(
     return None, i, depth
 
 
-def _flush_block(block: List[StatementBlock], result: List[str]) -> None:
+def _flush_block(block: list[StatementBlock], result: list[str]) -> None:
     """Emit the collected first-block statements: aligned on one column when
     the block has at least two of them, otherwise verbatim and untouched."""
     if len(block) < 2:
@@ -184,7 +185,7 @@ def _flush_block(block: List[StatementBlock], result: List[str]) -> None:
     block.clear()
 
 
-def _copy_until_close(lines: List[str], start: int, result: List[str], brace_depth: int) -> int:
+def _copy_until_close(lines: list[str], start: int, result: list[str], brace_depth: int) -> int:
     """Copy lines verbatim from ``start`` until the function's closing brace
     brings ``brace_depth`` back to zero. Returns the index past that brace."""
     n = len(lines)
@@ -199,13 +200,13 @@ def _copy_until_close(lines: List[str], start: int, result: List[str], brace_dep
     return i
 
 
-def _process_first_block(lines: List[str], start: int, result: List[str]) -> int:
+def _process_first_block(lines: list[str], start: int, result: list[str]) -> int:
     """Align the first contiguous declaration block of the function body whose
     first line is ``lines[start]``. Returns the index to resume scanning at."""
     n = len(lines)
     i = start
     brace_depth = 1
-    block: List[StatementBlock] = []
+    block: list[StatementBlock] = []
 
     while i < n:
         line = lines[i]
@@ -249,7 +250,7 @@ def align_first_declaration_blocks(code: str) -> str:
     if not code:
         return code
     lines = code.splitlines()
-    result: List[str] = []
+    result: list[str] = []
     n = len(lines)
     i = 0
     while i < n:

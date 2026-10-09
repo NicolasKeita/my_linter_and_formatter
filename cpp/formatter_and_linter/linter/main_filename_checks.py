@@ -10,7 +10,6 @@ cannot be verified and the check is skipped.
 
 import os
 import re
-from typing import List
 
 from linter.style_checks import _mask_strings_and_comments
 
@@ -19,14 +18,14 @@ MAIN_FILENAME_MESSAGE = "[MAIN_FILENAME] A file defining main() must be named 'm
 _MAIN_FUNCTION_DEFINITION_RE = re.compile(r'^[A-Za-z_][\w:<>,&*\s]*?[\s*&]main\s*\(')
 
 
-def _defines_main_function(code: str) -> List[int]:
+def _defines_main_function(code: str) -> list[int]:
     """
     Return the 1-based line numbers of main() function definitions in the
     file. Strings and comments are masked before matching, and preprocessor
     lines are skipped, so only real definitions are reported.
     """
     lines = code.splitlines()
-    main_lines: List[int] = []
+    main_lines: list[int] = []
     in_block_comment = False
 
     for line_index, raw_line in enumerate(lines):
@@ -40,7 +39,7 @@ def _defines_main_function(code: str) -> List[int]:
     return main_lines
 
 
-def check_main_function_filename(code: str, file_path: str) -> List[int]:
+def check_main_function_filename(code: str, file_path: str) -> list[int]:
     """
     Report the lines defining a main() function when the file is not named
     exactly 'main.cpp'. Returns an empty list when the filename is correct,

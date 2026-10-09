@@ -21,8 +21,7 @@ untouched.
 """
 
 import re
-from typing import NamedTuple, Optional, Tuple
-
+from typing import NamedTuple
 
 IDENTIFIER_REGEX = re.compile(r"[A-Za-z_]\w*")
 
@@ -125,7 +124,7 @@ def mask_literals(line: str) -> str:
     return "".join(chars)
 
 
-def split_trailing_comment(line: str, in_block_comment: bool) -> Tuple[str, str, bool]:
+def split_trailing_comment(line: str, in_block_comment: bool) -> tuple[str, str, bool]:
     """Split a raw line into (code, trailing comment, new block-comment state).
 
     Line comments ('// ...') end the code part. Block comments are kept
@@ -184,7 +183,7 @@ def split_trailing_comment(line: str, in_block_comment: bool) -> Tuple[str, str,
     return line[:code_end], "", in_block_comment
 
 
-def find_declaration_split(body: str, allow_paren_init: bool = False) -> Optional[int]:
+def find_declaration_split(body: str, allow_paren_init: bool = False) -> int | None:
     """Locate the first top-level '=' or '{' separating 'type name' from its
     initializer.
 
@@ -273,7 +272,7 @@ def parse_declaration(
     comment: str,
     original_line: str,
     allow_paren_init: bool = False,
-) -> Optional[DeclarationParts]:
+) -> DeclarationParts | None:
     """Parse one 'Type name = init;' / 'Type name{init};' / 'Type name(args);'
     declaration line.
 

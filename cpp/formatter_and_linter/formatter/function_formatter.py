@@ -11,16 +11,31 @@ multi-line signatures, parameter alignment and spacing.
 
 import re
 
-from formatter.parameter_parser import parse_parameter, extract_parameters
+from formatter.multiline_function_formatter import format_multiline_function_params
 from formatter.parameter_formatter import (
     PARAM_NAME_SEPARATOR_WIDTH,
     calculate_alignment,
     calculate_indentation,
     format_parameters_list,
-    should_format_function,
     format_single_function,
+    should_format_function,
 )
-from formatter.multiline_function_formatter import format_multiline_function_params
+from formatter.parameter_parser import extract_parameters, parse_parameter
+
+
+def _single_line_function_pattern() -> str:
+    """Build the anchored single-line function-definition pattern.
+
+    Parameters cannot cross ';' or braces, so preprocessor directives
+    such as '#if defined(_WIN32)' are never consumed as part of a signature.
+    """
+    return (
+        r"^([ \t]*)"
+        r"((?:(?:static|inline|virtual|explicit|constexpr|const)\s+)*[\w:]+(?:\s*[*&])*)"
+        r"\s+(\w+)\s*\(([^;{}]*?)\)\s*"
+        r"((?:const\b\s*|noexcept\b(?:\s*\([^()]*\))?\s*|override\b\s*|final\b\s*)*)"
+        r"\{"
+    )
 
 
 def format_function_params(code: str) -> str:
@@ -33,24 +48,9 @@ def format_function_params(code: str) -> str:
     Returns:
         The formatted code
     """
-    # First handle single-line function definitions.
-    # The match is anchored to the start of a line and parameters cannot
-    # cross ';' or braces, so preprocessor directives (e.g. '#if defined(_WIN32)')
-    # are never consumed as part of a signature.
-    pattern = (
-        r'^([ \t]*)'
-        r'((?:(?:static|inline|virtual|explicit|constexpr|const)\s+)*[\w:]+(?:\s*[*&])*)'
-        r'\s+(\w+)\s*\(([^;{}]*?)\)\s*'
-        r'((?:const\b\s*|noexcept\b(?:\s*\([^()]*\))?\s*|override\b\s*|final\b\s*)*)'
-        r'\{'
-    )
-
+    pattern = _single_line_function_pattern()
     formatted = re.sub(pattern, format_single_function, code, flags=re.MULTILINE)
-
-    # Then handle multi-line function definitions
-    formatted = format_multiline_function_params(formatted)
-
-    return formatted
+    return format_multiline_function_params(formatted)
 
 
 __all__ = [

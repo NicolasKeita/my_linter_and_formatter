@@ -19,7 +19,6 @@ exceeds the threshold a warning suggests splitting it into sub-modules.
 
 import os
 import re
-from typing import Dict, List, Optional, Tuple
 
 from linter.style_checks import _mask_strings_and_comments
 
@@ -54,11 +53,11 @@ def format_module_too_large_message(
 
 
 def _read_file_text(file_path: str) -> str:
-    with open(file_path, "r", encoding="utf-8", errors="replace") as handle:
+    with open(file_path, encoding="utf-8", errors="replace") as handle:
         return handle.read()
 
 
-def _extract_module_declaration_name(content: str) -> Optional[str]:
+def _extract_module_declaration_name(content: str) -> str | None:
     in_block_comment = False
     for line in content.splitlines():
         masked_line, in_block_comment = _mask_strings_and_comments(line, in_block_comment)
@@ -68,7 +67,7 @@ def _extract_module_declaration_name(content: str) -> Optional[str]:
     return None
 
 
-def _resolve_group_segments(file_path: str, file_name: str) -> List[str]:
+def _resolve_group_segments(file_path: str, file_name: str) -> list[str]:
     module_name = _extract_module_declaration_name(_read_file_text(file_path))
     if module_name:
         return [module_name]
@@ -79,8 +78,8 @@ def _resolve_group_segments(file_path: str, file_name: str) -> List[str]:
     return [stem]
 
 
-def _build_group_tree(directories: List[str]) -> Dict[str, Dict]:
-    tree: Dict[str, Dict] = {"count": 0, "children": {}}
+def _build_group_tree(directories: list[str]) -> dict[str, dict]:
+    tree: dict[str, dict] = {"count": 0, "children": {}}
     for directory in directories:
         for root, _, files in os.walk(directory):
             for file_name in sorted(files):
@@ -95,24 +94,24 @@ def _build_group_tree(directories: List[str]) -> Dict[str, Dict]:
     return tree
 
 
-def _subtree_implementation_count(node: Dict) -> int:
+def _subtree_implementation_count(node: dict) -> int:
     total = node["count"]
     for child in node["children"].values():
         total += _subtree_implementation_count(child)
     return total
 
 
-def _make_suggestion_label(label: str, children: Dict[str, Dict]) -> str:
+def _make_suggestion_label(label: str, children: dict[str, dict]) -> str:
     if children:
         return label + "::" + min(children)
     return label + "::" + SUB_MODULE_PLACEHOLDER
 
 
 def _collect_exceeding_groups(
-    node: Dict,
-    segments: List[str],
+    node: dict,
+    segments: list[str],
     max_files: int,
-    violations: List[Tuple[str, int, str]],
+    violations: list[tuple[str, int, str]],
 ) -> None:
     total = _subtree_implementation_count(node)
     if total > max_files and not any(
@@ -132,15 +131,15 @@ def _collect_exceeding_groups(
 
 
 def check_module_implementation_counts(
-    directories: List[str],
+    directories: list[str],
     max_files: int = MAX_IMPLEMENTATION_FILES_PER_MODULE,
-) -> List[Tuple[str, int, str]]:
+) -> list[tuple[str, int, str]]:
     """
     Report groups holding more than max_files implementation (.cpp) files as
     (label, implementation_count, suggestion_label) tuples sorted by label.
     """
     tree = _build_group_tree(directories)
-    violations: List[Tuple[str, int, str]] = []
+    violations: list[tuple[str, int, str]] = []
     for key, node in tree["children"].items():
         _collect_exceeding_groups(node, [key], max_files, violations)
     return sorted(violations)

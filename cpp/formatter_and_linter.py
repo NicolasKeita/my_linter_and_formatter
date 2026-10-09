@@ -5,37 +5,74 @@ C++ Code Formatter & Linter
 Entry point for the formatter_and_linter package.
 """
 
-import sys
-import os
-import io
-import shutil
-import threading
 import contextlib
+import io
+import os
+import shutil
+import sys
+import threading
 from typing import NoReturn
 
-
-# Add the package directory to Python path
-package_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "formatter_and_linter")
+PACKAGE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "formatter_and_linter")
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, package_dir)
+sys.path.insert(0, PACKAGE_DIR)
 
-# Import modules from the package
-import formatter.file_handler as file_handler
-import shared.comment_utils as comment_utils
-import formatter.function_formatter as function_formatter
-import formatter.include_formatter as include_formatter
-import formatter.comment_function_formatter as comment_function_formatter
-import linter.linter as linter
-import formatter.short_if_formatter as short_if_formatter
-import formatter.brace_formatter as brace_formatter
-import formatter.module_formatter as module_formatter
-import formatter.prototype_spacing as prototype_spacing
-import formatter.initialization_block_formatter as initialization_block_formatter
-import formatter.member_alignment_formatter as member_alignment_formatter
-import formatter.declaration_blank_line_formatter as declaration_blank_line_formatter
-import formatter.local_variable_alignment_formatter as local_variable_alignment_formatter
-import formatter.designated_init_split_formatter as designated_init_split_formatter
-from formatter.join_lines import join_lines
+
+def _load_modules():
+    import formatter.brace_formatter
+    import formatter.comment_function_formatter
+    import formatter.declaration_blank_line_formatter
+    import formatter.designated_init_split_formatter
+    import formatter.file_handler
+    import formatter.function_formatter
+    import formatter.include_formatter
+    import formatter.initialization_block_formatter
+    import formatter.local_variable_alignment_formatter
+    import formatter.member_alignment_formatter
+    import formatter.module_formatter
+    import formatter.prototype_spacing
+    import formatter.short_if_formatter
+    import linter.linter
+    import shared.comment_utils
+    from formatter.join_lines import join_lines as join_lines_fn
+
+    return {
+        "brace_formatter": formatter.brace_formatter,
+        "comment_function_formatter": formatter.comment_function_formatter,
+        "declaration_blank_line_formatter": formatter.declaration_blank_line_formatter,
+        "designated_init_split_formatter": formatter.designated_init_split_formatter,
+        "file_handler": formatter.file_handler,
+        "function_formatter": formatter.function_formatter,
+        "include_formatter": formatter.include_formatter,
+        "initialization_block_formatter": formatter.initialization_block_formatter,
+        "local_variable_alignment_formatter": formatter.local_variable_alignment_formatter,
+        "member_alignment_formatter": formatter.member_alignment_formatter,
+        "module_formatter": formatter.module_formatter,
+        "prototype_spacing": formatter.prototype_spacing,
+        "short_if_formatter": formatter.short_if_formatter,
+        "linter": linter.linter,
+        "comment_utils": shared.comment_utils,
+        "join_lines": join_lines_fn,
+    }
+
+
+_MODULES = _load_modules()
+brace_formatter = _MODULES["brace_formatter"]
+comment_function_formatter = _MODULES["comment_function_formatter"]
+declaration_blank_line_formatter = _MODULES["declaration_blank_line_formatter"]
+designated_init_split_formatter = _MODULES["designated_init_split_formatter"]
+file_handler = _MODULES["file_handler"]
+function_formatter = _MODULES["function_formatter"]
+include_formatter = _MODULES["include_formatter"]
+initialization_block_formatter = _MODULES["initialization_block_formatter"]
+local_variable_alignment_formatter = _MODULES["local_variable_alignment_formatter"]
+member_alignment_formatter = _MODULES["member_alignment_formatter"]
+module_formatter = _MODULES["module_formatter"]
+prototype_spacing = _MODULES["prototype_spacing"]
+short_if_formatter = _MODULES["short_if_formatter"]
+linter = _MODULES["linter"]
+comment_utils = _MODULES["comment_utils"]
+join_lines = _MODULES["join_lines"]
 
 
 class ProgressBar:
@@ -188,7 +225,7 @@ def to_pascal_case(name: str) -> str:
     if any(c.isupper() for c in name[1:]):
         result = ""
         capitalize_next = False
-        for i, char in enumerate(name):
+        for char in name:
             if char == '_':
                 capitalize_next = True
             else:
@@ -205,7 +242,7 @@ def to_pascal_case(name: str) -> str:
 
 
 def rename_files_to_pascal_case(directory: str) -> None:
-    for root, dirs, files in os.walk(directory):
+    for root, _dirs, files in os.walk(directory):
         for file in files:
             if file.endswith(('.cpp', '.hpp', '.h')):
                 name, ext = os.path.splitext(file)
@@ -330,11 +367,22 @@ def main() -> NoReturn:
             sys.exit(1)
         print(f"Found {len(input_files)} .cpp/.cppm files in Src/, Tests/ and apps/...")
     elif not input_files:
-        print("Usage: python formatter_and_linter.py [-i] [-r/--recursive] <input_file.cpp> ...", file=sys.stderr)
+        print(
+            "Usage: python formatter_and_linter.py [-i] [-r/--recursive] <input_file.cpp> ...",
+            file=sys.stderr,
+        )
         print("       python formatter_and_linter.py --check", file=sys.stderr)
         print("  -i, --in-place    : Modify the file in place (otherwise create output.cpp)", file=sys.stderr)
-        print("  -r, --recursive   : Process all .cpp/.cppm files in Src/, Tests/ and apps/ recursively", file=sys.stderr)
-        print("  --check           : Check all files in Src/, Tests/ and apps/ and CMakeLists.txt without modifying", file=sys.stderr)
+        print(
+            "  -r, --recursive   : Process all .cpp/.cppm files "
+            "in Src/, Tests/ and apps/ recursively",
+            file=sys.stderr,
+        )
+        print(
+            "  --check           : Check all files in Src/, Tests/ and apps/ "
+            "and CMakeLists.txt without modifying",
+            file=sys.stderr,
+        )
         sys.exit(1)
 
     has_any_long_lines = False

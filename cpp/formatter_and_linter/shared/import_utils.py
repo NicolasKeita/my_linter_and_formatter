@@ -7,7 +7,6 @@ extract module names, sort hierarchically, and deduplicate imports.
 """
 
 import re
-from typing import List, Tuple
 
 from shared.regex_patterns import IMPORT_MODULE_EXTRACT_REGEX
 
@@ -34,13 +33,13 @@ def extract_import_module(import_line: str) -> str:
     return ""
 
 
-def _hierarchical_sort_key(module_name: str) -> List[str]:
+def _hierarchical_sort_key(module_name: str) -> list[str]:
     if module_name.startswith('<') and module_name.endswith('>'):
         return [module_name.casefold()]
     return [segment.casefold() for segment in module_name.split('.')]
 
 
-def sort_imports(imports: List[str]) -> Tuple[List[str], List[str]]:
+def sort_imports(imports: list[str]) -> tuple[list[str], list[str]]:
     seen_modules = set()
     system_imports = []
     local_imports = []

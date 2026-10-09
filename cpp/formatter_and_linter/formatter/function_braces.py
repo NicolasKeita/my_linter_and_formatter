@@ -5,14 +5,13 @@ Function Brace Formatter
 Ensures opening curly braces of function definitions are placed on a new line.
 """
 
-from typing import List
 
 from shared.brace_utils import (
-    find_brace_positions,
-    is_lambda_capture,
-    is_initializer_list,
     extract_function_name,
+    find_brace_positions,
     is_constructor_initializer_continuation,
+    is_initializer_list,
+    is_lambda_capture,
 )
 from shared.function_analysis import (
     find_function_start_for_brace,
@@ -21,7 +20,7 @@ from shared.function_analysis import (
 
 def format_function_braces(code: str) -> str:
     lines = code.splitlines()
-    result_lines: List[str] = []
+    result_lines: list[str] = []
     brace_depth = 0
     paren_depth = 0
     angle_depth = 0

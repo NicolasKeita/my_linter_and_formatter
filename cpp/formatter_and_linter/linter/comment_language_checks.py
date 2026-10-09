@@ -15,7 +15,6 @@ built lazily to keep memory usage low.
 """
 
 import re
-from typing import List, Tuple
 
 try:
     from lingua import Language, LanguageDetectorBuilder
@@ -62,13 +61,13 @@ def _get_detector():
     return _detector
 
 
-def _get_string_ranges(code: str) -> List[Tuple[int, int]]:
+def _get_string_ranges(code: str) -> list[tuple[int, int]]:
     from shared.comment_utils import scan_string_and_comment_ranges
     string_ranges, _ = scan_string_and_comment_ranges(code)
     return list(string_ranges)
 
 
-def _is_in_range(pos: int, ranges: List[Tuple[int, int]]) -> bool:
+def _is_in_range(pos: int, ranges: list[tuple[int, int]]) -> bool:
     return any(start <= pos < end for start, end in ranges)
 
 
@@ -82,27 +81,27 @@ def _clean_multiline_text(raw_text: str) -> str:
     return ' '.join(lines)
 
 
-def extract_comment_texts(code: str) -> List[Tuple[int, str]]:
+def extract_comment_texts(code: str) -> list[tuple[int, str]]:
     from shared.comment_utils import scan_string_and_comment_ranges
     comments = []
     string_ranges, comment_ranges = scan_string_and_comment_ranges(code)
 
     block_comment_ranges = []
-    for start, end in comment_ranges:
+    for start, block_end in comment_ranges:
         if code[start:start + 2] != '/*':
             continue
         line_num = code[:start].count('\n') + 1
-        text = _clean_multiline_text(code[start:end][2:-2])
+        text = _clean_multiline_text(code[start:block_end][2:-2])
         if text:
             comments.append((line_num, text))
-        block_comment_ranges.append((start, end))
+        block_comment_ranges.append((start, block_end))
 
     def is_in_string_or_block(pos: int) -> bool:
         if _is_in_range(pos, string_ranges):
             return True
         return _is_in_range(pos, block_comment_ranges)
 
-    for start, end in comment_ranges:
+    for start, _end in comment_ranges:
         if code[start:start + 2] != '//':
             continue
         if is_in_string_or_block(start):
@@ -148,7 +147,7 @@ def _compute_confidences(cleaned_text: str):
     return detector.compute_language_confidence_values(cleaned_text)
 
 
-def _evaluate_confidence(cleaned_text: str, word_count: int) -> Tuple[bool, str]:
+def _evaluate_confidence(cleaned_text: str, word_count: int) -> tuple[bool, str]:
     confidences = _compute_confidences(cleaned_text)
     if not confidences:
         return True, ""
@@ -182,7 +181,7 @@ def check_comment_language(comment_text: str) -> bool:
     return is_valid
 
 
-def check_code_comments_language(code: str) -> List[Tuple[int, str]]:
+def check_code_comments_language(code: str) -> list[tuple[int, str]]:
     if not LINGUA_AVAILABLE:
         return []
 

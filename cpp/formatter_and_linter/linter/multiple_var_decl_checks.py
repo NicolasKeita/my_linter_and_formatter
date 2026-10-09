@@ -8,16 +8,15 @@ brackets, function call parentheses or braced initializers are ignored.
 """
 
 import re
-from typing import List, Tuple
 
-from linter.style_checks import _mask_strings_and_comments, _NON_DECLARATION_KEYWORD_RE
+from linter.style_checks import _NON_DECLARATION_KEYWORD_RE, _mask_strings_and_comments
 
 MULTIPLE_VAR_DECL_MESSAGE = "[MULTIPLE_VAR_DECL] Declare only one variable per line."
 
 _DECLARED_IDENTIFIER_RE = re.compile(r'\s*[&*]*\s*[A-Za-z_]\w*\s*(?:=|;|,|\(|\[|\{|$)')
 
 
-def _scan_line_for_top_level_comma(line: str, initial_paren_depth: int = 0) -> Tuple[bool, int]:
+def _scan_line_for_top_level_comma(line: str, initial_paren_depth: int = 0) -> tuple[bool, int]:
     """
     Check whether a masked code line contains a comma at declaration level
     (outside parentheses, template angle brackets and braced initializers)
@@ -70,7 +69,7 @@ def _has_top_level_declaration_comma(line: str, initial_paren_depth: int = 0) ->
     return has_top_level_comma
 
 
-def check_multiple_var_declarations(code: str) -> List[int]:
+def check_multiple_var_declarations(code: str) -> list[int]:
     """
     Report lines declaring several variables separated by top-level commas.
 
@@ -81,7 +80,7 @@ def check_multiple_var_declarations(code: str) -> List[int]:
     are never mistaken for top-level declarations.
     """
     lines = code.splitlines()
-    violations: List[int] = []
+    violations: list[int] = []
     in_block_comment = False
     paren_depth = 0
 

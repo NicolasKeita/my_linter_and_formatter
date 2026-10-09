@@ -26,23 +26,22 @@ removes the blank lines *between* the declarations.
 """
 
 import re
-from typing import List
 
 from shared.brace_utils import (
     brace_delta,
-    find_brace_positions,
-    is_lambda_capture,
-    is_initializer_list,
     extract_function_name,
+    find_brace_positions,
+    is_initializer_list,
+    is_lambda_capture,
 )
 from shared.function_analysis import find_function_start_for_brace
-from formatter.initialization_block_formatter import DECLARATION_PATTERN
 
+from formatter.initialization_block_formatter import DECLARATION_PATTERN
 
 _CONTROL_BLOCK_RE = re.compile(r'\b(class|struct|enum|namespace|do|else|try)\b')
 
 
-def _prev_nonempty(lines: List[str], idx: int) -> str:
+def _prev_nonempty(lines: list[str], idx: int) -> str:
     j = idx - 1
     while j >= 0:
         stripped = lines[j].strip()
@@ -52,7 +51,7 @@ def _prev_nonempty(lines: List[str], idx: int) -> str:
     return ''
 
 
-def is_function_open_brace(line: str, lines: List[str], idx: int) -> bool:
+def is_function_open_brace(line: str, lines: list[str], idx: int) -> bool:
     """
     Return True when ``line`` carries the opening brace of a function
     definition (same-line brace or a lone ``{`` preceded by a signature).
@@ -88,7 +87,7 @@ def _statement_end(stripped: str, depth: int) -> bool:
     return depth <= 1 and (stripped.endswith(';') or stripped.endswith('}'))
 
 
-def _process_declaration_zone(lines: List[str], start: int, result: List[str]) -> int:
+def _process_declaration_zone(lines: list[str], start: int, result: list[str]) -> int:
     """
     Walk the leading declaration zone of a function body starting at ``start``,
     appending to ``result`` and returning the index at which normal scanning
@@ -97,7 +96,7 @@ def _process_declaration_zone(lines: List[str], start: int, result: List[str]) -
     n = len(lines)
     i = start
     brace_depth = 1
-    pending: List[str] = []
+    pending: list[str] = []
     has_seen_declaration = False
 
     while i < n:
@@ -164,7 +163,7 @@ def remove_blank_lines_between_declarations(code: str) -> str:
     beginning of every C++ function body found in ``code``.
     """
     lines = code.splitlines()
-    result: List[str] = []
+    result: list[str] = []
     i = 0
     n = len(lines)
 

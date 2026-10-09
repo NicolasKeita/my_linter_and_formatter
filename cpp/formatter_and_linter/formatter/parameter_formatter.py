@@ -6,14 +6,14 @@ Alignment computation, indentation calculation and parameter list rendering
 for C++ function declarations/definitions.
 """
 
-from typing import List, Tuple, Match
+from re import Match
 
 from formatter.parameter_parser import extract_parameters
 
 PARAM_NAME_SEPARATOR_WIDTH = 1
 
 
-def calculate_alignment(parsed_params: List[Tuple[str, str]]) -> Tuple[int, int]:
+def calculate_alignment(parsed_params: list[tuple[str, str]]) -> tuple[int, int]:
     """
     Calculate the maximum lengths for type and name alignment.
 
@@ -44,16 +44,31 @@ def calculate_indentation(prefix: str, func_name: str, max_type_len: int, leadin
     Returns:
         The indentation string
     """
-    # Calculate the position where the first parameter's type starts
-    # This is: prefix + space + function name + opening parenthesis
     first_param_type_start = len(leading_indent) + len(prefix) + 1 + len(func_name) + 1
-
-    # The indentation for subsequent lines should align with the start of the first parameter's type
     return ' ' * first_param_type_start
 
 
+def _first_param_line(ptype: str, pname: str, max_type_len: int) -> str:
+    """Render the first parameter, which stays on the function-name line."""
+    formatted_type = ptype.ljust(max_type_len)
+    separator = " " * PARAM_NAME_SEPARATOR_WIDTH
+    return f"({formatted_type}{separator}{pname},"
+
+
+def _middle_param_line(ptype: str, pname: str, indent: str, max_type_len: int) -> str:
+    formatted_type = ptype.ljust(max_type_len)
+    separator = " " * PARAM_NAME_SEPARATOR_WIDTH
+    return f"{indent}{formatted_type}{separator}{pname},"
+
+
+def _last_param_line(ptype: str, pname: str, indent: str, max_type_len: int) -> str:
+    formatted_type = ptype.ljust(max_type_len)
+    separator = " " * PARAM_NAME_SEPARATOR_WIDTH
+    return f"{indent}{formatted_type}{separator}{pname})"
+
+
 def format_parameters_list(
-    parsed_params: List[Tuple[str, str]],
+    parsed_params: list[tuple[str, str]],
     indent: str,
     max_type_len: int
 ) -> str:
@@ -71,18 +86,12 @@ def format_parameters_list(
     lines = []
 
     for i, (ptype, pname) in enumerate(parsed_params):
-        formatted_type = ptype.ljust(max_type_len)
-        separator = ' ' * PARAM_NAME_SEPARATOR_WIDTH
-
         if i == 0:
-            # First parameter stays on the same line as function name
-            line = f"({formatted_type}{separator}{pname},"
+            line = _first_param_line(ptype, pname, max_type_len)
         elif i < len(parsed_params) - 1:
-            # Middle parameters
-            line = f"{indent}{formatted_type}{separator}{pname},"
+            line = _middle_param_line(ptype, pname, indent, max_type_len)
         else:
-            # Last parameter
-            line = f"{indent}{formatted_type}{separator}{pname})"
+            line = _last_param_line(ptype, pname, indent, max_type_len)
 
         lines.append(line)
 
@@ -141,7 +150,5 @@ def format_single_function(match: Match[str]) -> str:
     formatted_params = format_parameters_list(parsed_params, indent, max_type_len)
 
     const_part = f" {signature_suffix}" if signature_suffix else ""
-    result = f"{leading_indent}{full_prefix} {func_name}{formatted_params}{const_part}\n{{"
-
-    return result
+    return f"{leading_indent}{full_prefix} {func_name}{formatted_params}{const_part}\n{{"
 

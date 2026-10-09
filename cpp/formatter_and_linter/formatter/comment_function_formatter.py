@@ -7,9 +7,12 @@ while other code elements maintain proper separation.
 """
 
 import re
-from typing import List
 
 from shared.regex_patterns import FUNC_REGEX
+
+
+def _is_comment_line(text: str) -> bool:
+    return text.startswith("//") or text.startswith("/*") or text.endswith("*/")
 
 
 def format_comment_function_spacing(code: str) -> str:
@@ -17,7 +20,7 @@ def format_comment_function_spacing(code: str) -> str:
     new_lines = []
     prev_blank = False
 
-    for i, line in enumerate(lines):
+    for line in lines:
         stripped = line.strip()
 
         if stripped == '':
@@ -36,7 +39,7 @@ def format_comment_function_spacing(code: str) -> str:
             else:
                 last_line = None
 
-            if last_line is not None and (last_line.startswith('//') or last_line.startswith('/*') or last_line.endswith('*/')):
+            if last_line is not None and _is_comment_line(last_line):
                 while new_lines and new_lines[-1].strip() == '':
                     new_lines.pop()
             else:

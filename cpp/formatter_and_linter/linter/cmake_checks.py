@@ -7,13 +7,12 @@ exceed the maximum line count and should be split into smaller CMake files.
 """
 
 import os
-from typing import List, Tuple
 
 MAX_CMAKELISTS_LINES = 300
 CMAKELISTS_FILENAME = "CMakeLists.txt"
 
 
-def find_cmake_files(directories: List[str]) -> List[str]:
+def find_cmake_files(directories: list[str]) -> list[str]:
     cmake_files = set()
     if os.path.isfile(CMAKELISTS_FILENAME):
         cmake_files.add(CMAKELISTS_FILENAME)
@@ -25,15 +24,15 @@ def find_cmake_files(directories: List[str]) -> List[str]:
 
 
 def count_file_lines(file_path: str) -> int:
-    with open(file_path, "r", encoding="utf-8", errors="replace") as handle:
+    with open(file_path, encoding="utf-8", errors="replace") as handle:
         return sum(1 for _ in handle)
 
 
 def check_cmake_file_lengths(
-    directories: List[str],
+    directories: list[str],
     max_lines: int = MAX_CMAKELISTS_LINES,
-) -> List[Tuple[str, int]]:
-    violations: List[Tuple[str, int]] = []
+) -> list[tuple[str, int]]:
+    violations: list[tuple[str, int]] = []
     for file_path in find_cmake_files(directories):
         line_count = count_file_lines(file_path)
         if line_count > max_lines:

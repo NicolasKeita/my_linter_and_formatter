@@ -7,7 +7,6 @@ function length.
 """
 
 import re
-from typing import List, Optional, Tuple
 
 from shared.brace_utils import extract_function_name
 from shared.function_analysis import strip_trailing_qualifiers
@@ -17,7 +16,7 @@ MAX_FILE_LENGTH = 120
 MAX_SIGNATURE_SCAN_LINES = 50
 
 
-def check_line_length(code: str, max_length: int = 120) -> List[Tuple[int, int]]:
+def check_line_length(code: str, max_length: int = 120) -> list[tuple[int, int]]:
     lines = code.splitlines()
     long_lines = []
     for i, line in enumerate(lines, 1):
@@ -98,10 +97,10 @@ def _is_declaration_line(masked_stripped: str) -> bool:
 
 
 def _scan_body_for_declaration_block(
-    lines: List[str],
+    lines: list[str],
     brace_line_index: int,
     in_block_comment: bool,
-) -> Optional[int]:
+) -> int | None:
     """
     Scan the function body starting after the opening brace at brace_line_index.
     Return the 0-based line index of the last declaration in the first block
@@ -149,7 +148,7 @@ def _scan_body_for_declaration_block(
     return group_end - 1
 
 
-def check_blank_line_after_initialization(code: str) -> List[Tuple[str, int, int]]:
+def check_blank_line_after_initialization(code: str) -> list[tuple[str, int, int]]:
     """
     Detect functions where the first block of local variable declarations is not
     separated from the following statements by a blank line.
@@ -158,7 +157,7 @@ def check_blank_line_after_initialization(code: str) -> List[Tuple[str, int, int
     tuples (1-based line numbers).
     """
     lines = code.splitlines()
-    violations: List[Tuple[str, int, int]] = []
+    violations: list[tuple[str, int, int]] = []
     in_block_comment = False
     paren_depth = 0
     scope_depth = 0
@@ -193,18 +192,18 @@ def check_blank_line_after_initialization(code: str) -> List[Tuple[str, int, int
 
 
 
-def check_file_length(code: str, max_lines: int = MAX_FILE_LENGTH) -> Tuple[bool, int]:
+def check_file_length(code: str, max_lines: int = MAX_FILE_LENGTH) -> tuple[bool, int]:
     line_count = len(code.splitlines())
     return (line_count > max_lines, line_count)
 
 
-def _mask_strings_and_comments(line: str, in_block_comment: bool) -> Tuple[str, bool]:
+def _mask_strings_and_comments(line: str, in_block_comment: bool) -> tuple[str, bool]:
     """
     Replace string literals, character literals and comments with spaces so
     brace and parenthesis tracking only sees code characters. Returns the
     masked line and the updated block-comment state for multi-line comments.
     """
-    masked: List[str] = []
+    masked: list[str] = []
     i = 0
     length = len(line)
 
@@ -252,7 +251,7 @@ def _mask_strings_and_comments(line: str, in_block_comment: bool) -> Tuple[str, 
     return ''.join(masked), in_block_comment
 
 
-def _find_matching_paren(text: str) -> Optional[int]:
+def _find_matching_paren(text: str) -> int | None:
     """
     Return the index of the opening parenthesis matching the closing
     parenthesis at the end of the text, or None when unbalanced.
@@ -269,7 +268,11 @@ def _find_matching_paren(text: str) -> Optional[int]:
     return None
 
 
-def _classify_signature(signature_parts: List[str], start_line: Optional[int], line_idx: int) -> Tuple[str, Optional[Tuple[str, int]]]:
+def _classify_signature(
+    signature_parts: list[str],
+    start_line: int | None,
+    line_idx: int,
+) -> tuple[str, tuple[str, int] | None]:
     """
     Classify the accumulated signature text as 'found' (function definition,
     result carries the name and start line), 'invalid' (balanced parentheses
@@ -291,7 +294,7 @@ def _classify_signature(signature_parts: List[str], start_line: Optional[int], l
     return ('found', (func_name, start_line if start_line is not None else line_idx))
 
 
-def _find_function_opening(lines: List[str], line_idx: int, head: str) -> Optional[Tuple[str, int]]:
+def _find_function_opening(lines: list[str], line_idx: int, head: str) -> tuple[str, int] | None:
     """
     Determine whether the opening brace at line_idx belongs to a function
     definition, scanning backwards across the (possibly multi-line) signature.
@@ -300,8 +303,8 @@ def _find_function_opening(lines: List[str], line_idx: int, head: str) -> Option
     name and the signature start line, or None when the brace does not open a
     function body (control structure, namespace, class, scope block, ...).
     """
-    signature_parts: List[str] = []
-    start_line: Optional[int] = None
+    signature_parts: list[str] = []
+    start_line: int | None = None
 
     stripped_head = head.strip()
     if stripped_head:
@@ -339,7 +342,7 @@ def _find_function_opening(lines: List[str], line_idx: int, head: str) -> Option
     return None
 
 
-def check_function_length(code: str, max_lines: int = MAX_FUNCTION_LENGTH) -> List[Tuple[str, int, int]]:
+def check_function_length(code: str, max_lines: int = MAX_FUNCTION_LENGTH) -> list[tuple[str, int, int]]:
     """
     Report functions longer than max_lines as (name, start_line, line_count)
     tuples. Function signatures spanning several lines are supported: each
@@ -349,11 +352,11 @@ def check_function_length(code: str, max_lines: int = MAX_FUNCTION_LENGTH) -> Li
     brace line.
     """
     lines = code.splitlines()
-    long_functions: List[Tuple[str, int, int]] = []
+    long_functions: list[tuple[str, int, int]] = []
     in_block_comment = False
     paren_depth = 0
     scope_depth = 0
-    open_functions: List[Tuple[int, str, int]] = []
+    open_functions: list[tuple[int, str, int]] = []
 
     for line_index, raw_line in enumerate(lines):
         masked_line, in_block_comment = _mask_strings_and_comments(raw_line, in_block_comment)

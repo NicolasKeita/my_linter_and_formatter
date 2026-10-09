@@ -21,7 +21,6 @@ implementation files (.cpp):
 
 import os
 import re
-from typing import Dict, List, Optional, Tuple
 
 INTERFACE_EXTENSION = ".cppm"
 IMPLEMENTATION_EXTENSION = ".cpp"
@@ -29,7 +28,7 @@ IMPLEMENTATION_EXTENSION = ".cpp"
 _MODULE_DECLARATION_PATTERN = re.compile(r"^\s*module\s+([A-Za-z_]\w*)\s*;")
 
 
-def _declared_module(file_path: str) -> Optional[str]:
+def _declared_module(file_path: str) -> str | None:
     """
     Return the name declared by a 'module <Name>;' unit in the file, or None.
 
@@ -37,7 +36,7 @@ def _declared_module(file_path: str) -> Optional[str]:
     header description is not mistaken for a module declaration.
     """
     try:
-        with open(file_path, "r", encoding="utf-8", errors="replace") as handle:
+        with open(file_path, encoding="utf-8", errors="replace") as handle:
             in_block_comment = False
             for line in handle:
                 stripped = line
@@ -66,7 +65,7 @@ def _declared_module(file_path: str) -> Optional[str]:
     return None
 
 
-def _declared_modules(directory: str, files: List[str]) -> Dict[str, Optional[str]]:
+def _declared_modules(directory: str, files: list[str]) -> dict[str, str | None]:
     return {
         file: _declared_module(os.path.join(directory, file))
         for file in files
@@ -75,10 +74,10 @@ def _declared_modules(directory: str, files: List[str]) -> Dict[str, Optional[st
 
 
 def _find_implementation_files(
-    files: List[str],
+    files: list[str],
     module_name: str,
-    declared: Dict[str, Optional[str]],
-) -> List[str]:
+    declared: dict[str, str | None],
+) -> list[str]:
     candidates = []
     base_name = module_name + IMPLEMENTATION_EXTENSION
     for file in files:
@@ -99,7 +98,7 @@ def _suggest_hyphenated_name(module_name: str, file_name: str) -> str:
     return module_name + "-" + file_name[:-len(IMPLEMENTATION_EXTENSION)] + IMPLEMENTATION_EXTENSION
 
 
-def check_module_filename_convention(directories: List[str]) -> List[Tuple[str, str]]:
+def check_module_filename_convention(directories: list[str]) -> list[tuple[str, str]]:
     """
     Validate module interface / implementation filename consistency.
 

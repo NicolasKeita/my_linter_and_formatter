@@ -11,7 +11,7 @@ import unittest
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from linter.multiple_var_decl_checks import check_multiple_var_declarations, MULTIPLE_VAR_DECL_MESSAGE
+from linter.multiple_var_decl_checks import MULTIPLE_VAR_DECL_MESSAGE, check_multiple_var_declarations
 
 
 def check_code(code: str):
@@ -56,14 +56,19 @@ class TestMultipleVarDeclarations(unittest.TestCase):
         self.assertEqual(check_code(code), [])
 
     def test_multiline_function_call_continuation_is_not_a_violation(self):
+        receiver = "    const ReceiveResult result = ctx.transport.receiveActuator("
+        call_args = "*ctx.clock, sequence, ctx.sim_ts_us,"
+        first_line = receiver + call_args
+        continuation = "sensor_send_wall, ctx.next_deadline_us,"
+        closing = "ctx.actuator_cmd, diag, ctx.this_rtt_us);"
         code = [
-            'FlightCore::Transport::ActuatorDiagnostics diag{};',
-            'if (delivery.delivered) {',
-            '    const ReceiveResult result = ctx.transport.receiveActuator(*ctx.clock, sequence, ctx.sim_ts_us,',
-            '                                                                 sensor_send_wall, ctx.next_deadline_us,',
-            '                                                                 ctx.actuator_cmd, diag, ctx.this_rtt_us);',
-            '    ctx.this_received = (result == ReceiveResult::Ok);',
-            '}',
+            "FlightCore::Transport::ActuatorDiagnostics diag{};",
+            "if (delivery.delivered) {",
+            first_line,
+            "                                                                 " + continuation,
+            "                                                                 " + closing,
+            "    ctx.this_received = (result == ReceiveResult::Ok);",
+            "}",
         ]
         self.assertEqual(check_code(code), [])
 

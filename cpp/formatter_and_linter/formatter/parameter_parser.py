@@ -7,10 +7,19 @@ individual (type, name) tuples.
 """
 
 import re
-from typing import List, Optional, Tuple
+
+MAYBE_UNUSED_PATTERN = r"^(.*?\[\[maybe_unused\]\].*?)\s+(\w+)$"
+PLAIN_PARAM_PATTERN = r"^(.+?)\s+(\w+)$"
 
 
-def parse_parameter(param: str) -> Optional[Tuple[str, str]]:
+def _split_type_and_name(param: str, pattern: str) -> tuple[str, str] | None:
+    type_match = re.match(pattern, param)
+    if type_match:
+        return (type_match.group(1).strip(), type_match.group(2).strip())
+    return None
+
+
+def parse_parameter(param: str) -> tuple[str, str] | None:
     """
     Parse a single parameter string into type and name.
 
@@ -22,27 +31,15 @@ def parse_parameter(param: str) -> Optional[Tuple[str, str]]:
     """
     param = param.strip()
 
-    # Handle [[maybe_unused]] attribute - treat it as part of the type
-    if '[[maybe_unused]]' in param:
-        # Extract the full type including [[maybe_unused]]
-        type_match = re.match(r'^(.*?\[\[maybe_unused\]\].*?)\s+(\w+)$', param)
-        if type_match:
-            param_type = type_match.group(1).strip()
-            param_name = type_match.group(2).strip()
-            return (param_type, param_name)
+    if "[[maybe_unused]]" in param:
+        found = _split_type_and_name(param, MAYBE_UNUSED_PATTERN)
+        if found is not None:
+            return found
 
-    # Normal parameter parsing
-    param_match = re.match(r'^(.+?)\s+(\w+)$', param)
-
-    if param_match:
-        param_type = param_match.group(1).strip()
-        param_name = param_match.group(2).strip()
-        return (param_type, param_name)
-
-    return None
+    return _split_type_and_name(param, PLAIN_PARAM_PATTERN)
 
 
-def extract_parameters(params_str: str) -> Optional[List[Tuple[str, str]]]:
+def extract_parameters(params_str: str) -> list[tuple[str, str]] | None:
     """
     Extract and parse all parameters from a parameter string.
 

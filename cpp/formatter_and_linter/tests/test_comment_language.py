@@ -14,12 +14,12 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from linter.comment_language_checks import (
     CONFIDENCE_MARGIN,
+    LINGUA_AVAILABLE,
     MIN_SIGNIFICANT_WORDS,
     SHORT_TEXT_MARGIN,
     SHORT_TEXT_MAX_WORDS,
-    LINGUA_AVAILABLE,
-    check_comment_language,
     check_code_comments_language,
+    check_comment_language,
 )
 
 

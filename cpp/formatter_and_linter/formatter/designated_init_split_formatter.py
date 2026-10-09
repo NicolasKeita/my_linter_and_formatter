@@ -27,7 +27,6 @@ split are left untouched, which makes the pass idempotent.
 """
 
 import re
-from typing import List, Optional, Tuple
 
 MAX_LINE_LENGTH = 120
 FIELD_INDENT = 4
@@ -76,7 +75,7 @@ def _name_column_before(line: str, open_index: int) -> int:
     return start
 
 
-def _find_initializer(line: str) -> Optional[Tuple[int, int, int, int]]:
+def _find_initializer(line: str) -> tuple[int, int, int, int] | None:
     """
     Locate the outermost braced initializer of a single-line statement.
 
@@ -84,8 +83,8 @@ def _find_initializer(line: str) -> Optional[Tuple[int, int, int, int]]:
     line has the shape '<prefix><name>{...};' (a trailing line comment after
     the semicolon is allowed), otherwise None.
     """
-    stack: List[Tuple[str, int]] = []
-    last_brace_pair: Optional[Tuple[int, int]] = None
+    stack: list[tuple[str, int]] = []
+    last_brace_pair: tuple[int, int] | None = None
     in_string = False
     string_char = ""
     in_line_comment = False
@@ -133,13 +132,13 @@ def _find_initializer(line: str) -> Optional[Tuple[int, int, int, int]]:
     return (open_index, close_index, name_column, semicolon_index)
 
 
-def _split_top_level_commas(text: str) -> List[str]:
+def _split_top_level_commas(text: str) -> list[str]:
     """
     Split ``text`` on its top-level commas only; commas nested inside
     parentheses, brackets, braces or angle brackets are preserved.
     """
-    segments: List[str] = []
-    current: List[str] = []
+    segments: list[str] = []
+    current: list[str] = []
     depth = 0
     in_string = False
     string_char = ""
@@ -184,12 +183,12 @@ def _split_top_level_commas(text: str) -> List[str]:
     return segments
 
 
-def _has_designated_initializer(segments: List[str]) -> bool:
+def _has_designated_initializer(segments: list[str]) -> bool:
     """Tell whether any top-level segment starts with a designated field."""
     return any(_DESIGNATED_FIELD.match(segment) for segment in segments)
 
 
-def _split_statement_line(line: str) -> List[str]:
+def _split_statement_line(line: str) -> list[str]:
     """
     Split one over-long designated-initializer declaration line into several
     lines, or return the line unchanged when it is not splittable.
@@ -224,7 +223,7 @@ def split_long_designated_initializations(code: str, max_length: int = MAX_LINE_
     if not code:
         return code
     lines = code.split("\n")
-    result: List[str] = []
+    result: list[str] = []
     for line in lines:
         if len(line.rstrip()) > max_length:
             result.extend(_split_statement_line(line))
