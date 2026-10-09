@@ -2,6 +2,7 @@
 
 import argparse
 import importlib.util
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -70,7 +71,7 @@ def _run_ruff(command: str, files: list[Path], *options: str) -> int:
                 "--config",
                 str(RUFF_CONFIG),
                 *options,
-                *(str(path) for path in batch),
+                *(os.path.relpath(path) for path in batch),
             ],
             check=False,
         )

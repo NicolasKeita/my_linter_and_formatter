@@ -1,3 +1,4 @@
+import os
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -10,4 +11,4 @@ class Issue:
     message: str
 
     def __str__(self) -> str:
-        return f"{self.path}:{self.line}: {self.code} {self.message}"
+        return f"{os.path.relpath(self.path)}:{self.line}: {self.code} {self.message}"

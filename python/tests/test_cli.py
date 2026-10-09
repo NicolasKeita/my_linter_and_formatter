@@ -6,6 +6,31 @@ from pathlib import Path
 
 
 class CliTests(unittest.TestCase):
+    def test_check_reports_relative_paths_without_source_excerpts(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            folder = root / "src"
+            folder.mkdir()
+            path = folder / "sample.py"
+            source = "import os\n\nvalue=1  # inline comment\n"
+            path.write_text(source, encoding="utf-8")
+            check = subprocess.run(
+                [sys.executable, "-m", "nk_python", "check", str(folder)],
+                cwd=root,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            output = check.stdout + check.stderr
+            self.assertEqual(check.returncode, 1, output)
+            self.assertIn(f"{Path('src') / 'sample.py'}:1:8: F401", output)
+            self.assertIn(f"{Path('src') / 'sample.py'}:3: PY005", output)
+            self.assertIn("sample.py", output)
+            self.assertNotIn(str(root), output)
+            self.assertNotIn("import os", output)
+            self.assertNotIn("inline comment", output)
+            self.assertEqual(path.read_text(encoding="utf-8"), source)
+
     def test_check_is_read_only_and_format_fixes_layout(self):
         with tempfile.TemporaryDirectory() as temp:
             path = Path(temp) / "sample.py"

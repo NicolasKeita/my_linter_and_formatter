@@ -1,6 +1,7 @@
 line-length = 120
 indent-width = 4
 target-version = "py310"
+output-format = "concise"
 extend-exclude = [".git", ".venv", "venv", "__pycache__", "build", "dist", "node_modules"]
 
 [lint]
