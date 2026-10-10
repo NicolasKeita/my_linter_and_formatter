@@ -12,7 +12,7 @@ expression, or a return of a different identifier cancels the detection.
 import os
 import sys
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 from linter.style.return_only_var_checks import (
     check_return_only_variable,

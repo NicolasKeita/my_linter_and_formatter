@@ -1,0 +1,98 @@
+﻿
+cpp\formatter_and_linter\formatter\braces\advanced_function_braces.py:16: PY003 Function 'format_function_braces_advanced' has 56 lines 
+(max 40).
+cpp\formatter_and_linter\formatter\braces\function_braces.py:21: PY003 Function 'format_function_braces' has 87 lines (max 40).
+cpp\formatter_and_linter\formatter\declarations\declaration_blank_line_formatter.py:90: PY003 Function '_process_declaration_zone' has 68 
+lines (max 40).
+cpp\formatter_and_linter\formatter\declarations\declaration_blank_line_formatter.py:121: PY002 File has 186 lines (max 120).
+cpp\formatter_and_linter\formatter\declarations\designated_init_split_formatter.py:78: PY003 Function '_find_initializer' has 55 lines 
+(max 40).
+cpp\formatter_and_linter\formatter\declarations\designated_init_split_formatter.py:121: PY002 File has 236 lines (max 120).
+cpp\formatter_and_linter\formatter\declarations\designated_init_split_formatter.py:135: PY003 Function '_split_top_level_commas' has 49 
+lines (max 40).
+cpp\formatter_and_linter\formatter\declarations\initialization_block_formatter.py:72: PY003 Function 'format_initialization_blocks' has 92 
+lines (max 40).
+cpp\formatter_and_linter\formatter\declarations\initialization_block_formatter.py:121: PY002 File has 165 lines (max 120).
+cpp\formatter_and_linter\formatter\declarations\local_variable_alignment_formatter.py:117: PY003 Function '_collect_statement' has 43 
+lines (max 40).
+cpp\formatter_and_linter\formatter\declarations\local_variable_alignment_formatter.py:121: PY002 File has 267 lines (max 120).
+cpp\formatter_and_linter\formatter\declarations\local_variable_alignment_formatter.py:203: PY003 Function '_process_first_block' has 42 
+lines (max 40).
+cpp\formatter_and_linter\formatter\declarations\member_alignment_formatter.py:121: PY002 File has 217 lines (max 120).
+cpp\formatter_and_linter\formatter\declarations\member_alignment_formatter.py:149: PY003 Function 'align_member_variables' has 51 lines 
+(max 40).
+cpp\formatter_and_linter\formatter\module\using_import_reorderer.py:19: PY003 Function 'reorder_using_after_import' has 53 lines (max 40).
+cpp\formatter_and_linter\formatter\module\using_prototype_reorderer.py:20: PY003 Function 'reorder_using_after_prototypes' has 90 lines 
+(max 40).
+cpp\formatter_and_linter\formatter\params\multiline_function_formatter.py:105: PY003 Function 'format_multiline_function_params' has 68 
+lines (max 40).
+cpp\formatter_and_linter\formatter\params\multiline_function_formatter.py:121: PY002 File has 172 lines (max 120).
+cpp\formatter_and_linter\formatter\params\parameter_formatter.py:121: PY002 File has 154 lines (max 120).
+cpp\formatter_and_linter\formatter\params\parameter_parser.py:42: PY003 Function 'extract_parameters' has 48 lines (max 40).
+cpp\formatter_and_linter\formatter\spacing\comment_function_formatter.py:18: PY003 Function 'format_comment_function_spacing' has 41 lines 
+(max 40).
+cpp\formatter_and_linter\formatter\spacing\import_spacing.py:57: PY003 Function 'format_module_import_spacing' has 55 lines (max 40).
+cpp\formatter_and_linter\formatter\spacing\include_formatter.py:121: PY002 File has 185 lines (max 120).
+cpp\formatter_and_linter\formatter\spacing\prototype_spacing.py:46: PY003 Function '_strip_comments' has 63 lines (max 40).
+cpp\formatter_and_linter\formatter\spacing\prototype_spacing.py:121: PY002 File has 292 lines (max 120).
+cpp\formatter_and_linter\formatter\spacing\prototype_spacing.py:196: PY003 Function 'collapse_prototype_blank_lines' has 57 lines (max 40).
+cpp\formatter_and_linter\linter\core\comment_language_checks.py:121: PY002 File has 209 lines (max 120).
+cpp\formatter_and_linter\linter\core\linter.py:84: PY003 Function 'lint_code' has 81 lines (max 40).
+cpp\formatter_and_linter\linter\core\linter.py:121: PY002 File has 221 lines (max 120).
+cpp\formatter_and_linter\linter\core\reporting.py:121: PY002 File has 219 lines (max 120).
+cpp\formatter_and_linter\linter\module\cppm_checks.py:58: PY003 Function 'check_cppm_interface_implementations' has 75 lines (max 40).
+cpp\formatter_and_linter\linter\module\cppm_checks.py:121: PY002 File has 132 lines (max 120).
+cpp\formatter_and_linter\linter\module\cppm_inline_function_checks.py:121: PY002 File has 394 lines (max 120).
+cpp\formatter_and_linter\linter\module\cppm_inline_function_checks.py:135: PY003 Function '_sanitize_code' has 77 lines (max 40).
+cpp\formatter_and_linter\linter\module\cppm_inline_function_checks.py:318: PY003 Function '_scan_sanitized_code' has 42 lines (max 40).
+cpp\formatter_and_linter\linter\module\module_filename_checks.py:101: PY003 Function 'check_module_filename_convention' has 41 lines (max 
+40).
+cpp\formatter_and_linter\linter\module\module_filename_checks.py:121: PY002 File has 141 lines (max 120).
+cpp\formatter_and_linter\linter\module\module_size_checks.py:121: PY002 File has 145 lines (max 120).
+cpp\formatter_and_linter\linter\style\designated_init_checks.py:121: PY002 File has 241 lines (max 120).
+cpp\formatter_and_linter\linter\style\designated_init_checks.py:174: PY003 Function 'check_designated_init_candidates' has 68 lines (max 
+40).
+cpp\formatter_and_linter\linter\style\function_parameter_count_checks.py:37: PY003 Function '_count_parameters' has 68 lines (max 40).
+cpp\formatter_and_linter\linter\style\function_parameter_count_checks.py:107: PY003 Function '_scan_for_parameter_count' has 54 lines (max 
+40).
+cpp\formatter_and_linter\linter\style\function_parameter_count_checks.py:121: PY002 File has 190 lines (max 120).
+cpp\formatter_and_linter\linter\style\multiple_var_decl_checks.py:19: PY003 Function '_scan_line_for_top_level_comma' has 41 lines (max 
+40).
+cpp\formatter_and_linter\linter\style\return_only_var_checks.py:121: PY002 File has 273 lines (max 120).
+cpp\formatter_and_linter\linter\style\return_only_var_checks.py:199: PY003 Function 'check_return_only_variable' has 73 lines (max 40).
+cpp\formatter_and_linter\linter\style\style_checks.py:99: PY003 Function '_scan_body_for_declaration_block' has 50 lines (max 40).
+cpp\formatter_and_linter\linter\style\style_checks.py:121: PY002 File has 387 lines (max 120).
+cpp\formatter_and_linter\linter\style\style_checks.py:151: PY003 Function 'check_blank_line_after_initialization' has 41 lines (max 40).
+cpp\formatter_and_linter\linter\style\style_checks.py:200: PY003 Function '_mask_strings_and_comments' has 52 lines (max 40).
+cpp\formatter_and_linter\linter\style\style_checks.py:297: PY003 Function '_find_function_opening' has 46 lines (max 40).
+cpp\formatter_and_linter\linter\style\style_checks.py:345: PY003 Function 'check_function_length' has 43 lines (max 40).
+cpp\formatter_and_linter\linter\style\uninitialized_decl_checks.py:74: PY003 Function 'check_uninitialized_declarations' has 41 lines (max 
+40).
+cpp\formatter_and_linter\tests:1: PY008 Directory has 23 Python files (max 8).
+cpp\formatter_and_linter\tests\test_blank_line_after_initialization.py:121: PY002 File has 342 lines (max 120).
+cpp\formatter_and_linter\tests\test_blank_lines_between_declarations.py:24: PY003 Function 'test_prompt_example_same_line_brace' has 41 
+lines (max 40).
+cpp\formatter_and_linter\tests\test_blank_lines_between_declarations.py:121: PY002 File has 462 lines (max 120).
+cpp\formatter_and_linter\tests\test_comment_function_formatter.py:121: PY002 File has 203 lines (max 120).
+cpp\formatter_and_linter\tests\test_comment_placement.py:121: PY002 File has 203 lines (max 120).
+cpp\formatter_and_linter\tests\test_cppm_inline_function_checks.py:121: PY002 File has 395 lines (max 120).
+cpp\formatter_and_linter\tests\test_designated_init.py:121: PY002 File has 402 lines (max 120).
+cpp\formatter_and_linter\tests\test_designated_init_split.py:121: PY002 File has 159 lines (max 120).
+cpp\formatter_and_linter\tests\test_function_parameter_count.py:121: PY002 File has 259 lines (max 120).
+cpp\formatter_and_linter\tests\test_join_lines.py:121: PY002 File has 666 lines (max 120).
+cpp\formatter_and_linter\tests\test_local_variable_alignment.py:28: PY003 Function 'test_prompt_example_is_aligned' has 42 lines (max 40).
+cpp\formatter_and_linter\tests\test_local_variable_alignment.py:121: PY002 File has 494 lines (max 120).
+cpp\formatter_and_linter\tests\test_local_variable_alignment.py:298: PY003 Function 'test_multiline_brace_init_stays_in_same_group' has 53 
+lines (max 40).
+cpp\formatter_and_linter\tests\test_main_filename_checks.py:121: PY002 File has 121 lines (max 120).
+cpp\formatter_and_linter\tests\test_member_alignment.py:121: PY002 File has 403 lines (max 120).
+cpp\formatter_and_linter\tests\test_module_filename_checks.py:121: PY002 File has 163 lines (max 120).
+cpp\formatter_and_linter\tests\test_module_size_checks.py:121: PY002 File has 197 lines (max 120).
+cpp\formatter_and_linter\tests\test_multiple_var_decl.py:121: PY002 File has 130 lines (max 120).
+cpp\formatter_and_linter\tests\test_prototype_spacing.py:121: PY002 File has 170 lines (max 120).
+cpp\formatter_and_linter\tests\test_return_only_var.py:121: PY002 File has 314 lines (max 120).
+cpp\formatter_and_linter\tests\test_style_checks.py:121: PY002 File has 126 lines (max 120).
+cpp\formatter_and_linter\tests\test_uninitialized_decl.py:121: PY002 File has 268 lines (max 120).
+cpp\formatter_and_linter.py:121: PY002 File has 299 lines (max 120).
+
+
