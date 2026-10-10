@@ -15,6 +15,20 @@ MULTIPLE_VAR_DECL_MESSAGE = "[MULTIPLE_VAR_DECL] Declare only one variable per l
 
 _DECLARED_IDENTIFIER_RE = re.compile(r'\s*[&*]*\s*[A-Za-z_]\w*\s*(?:=|;|,|\(|\[|\{|$)')
 
+_OPEN_DEPTH_INDEX = {'(': 0, '<': 1, '{': 2}
+_CLOSE_DEPTH_INDEX = {')': 0, '>': 1, '}': 2}
+
+
+def _apply_depth_change(char: str, depths: list[int]) -> None:
+    """Open or close one nesting level of ``char`` in ``depths``
+    (parentheses at index 0, angle brackets at 1, braces at 2)."""
+    if char in _OPEN_DEPTH_INDEX:
+        depths[_OPEN_DEPTH_INDEX[char]] += 1
+    elif char in _CLOSE_DEPTH_INDEX:
+        slot = _CLOSE_DEPTH_INDEX[char]
+        if depths[slot] > 0:
+            depths[slot] -= 1
+
 
 def _scan_line_for_top_level_comma(line: str, initial_paren_depth: int = 0) -> tuple[bool, int]:
     """
@@ -28,35 +42,19 @@ def _scan_line_for_top_level_comma(line: str, initial_paren_depth: int = 0) -> t
     and the parenthesis depth reached at end of line, so callers can carry
     it over to continuation lines.
     """
-    paren_depth = initial_paren_depth
-    angle_depth = 0
-    brace_depth = 0
+    depths = [initial_paren_depth, 0, 0]
     length = len(line)
     i = 0
 
     while i < length:
         char = line[i]
-        if char == '(':
-            paren_depth += 1
-        elif char == ')':
-            if paren_depth > 0:
-                paren_depth -= 1
-        elif char == '<':
-            angle_depth += 1
-        elif char == '>':
-            if angle_depth > 0:
-                angle_depth -= 1
-        elif char == '{':
-            brace_depth += 1
-        elif char == '}':
-            if brace_depth > 0:
-                brace_depth -= 1
-        elif char == ',' and paren_depth == 0 and angle_depth == 0 and brace_depth == 0:
+        _apply_depth_change(char, depths)
+        if char == ',' and not any(depths):
             if _DECLARED_IDENTIFIER_RE.match(line[i + 1:]):
-                return True, paren_depth
+                return True, depths[0]
         i += 1
 
-    return False, paren_depth
+    return False, depths[0]
 
 
 def _has_top_level_declaration_comma(line: str, initial_paren_depth: int = 0) -> bool:

@@ -71,6 +71,12 @@ def _parse_uninitialized_declaration(stripped_masked: str) -> str | None:
     return match.group('name')
 
 
+def _matches_pending_assignment(stripped: str, pending_name: str | None) -> bool:
+    """Tell whether the line assigns a member of the pending variable."""
+    member_match = _MEMBER_ASSIGNMENT_RE.match(stripped)
+    return member_match is not None and member_match.group('name') == pending_name
+
+
 def check_uninitialized_declarations(code: str) -> list[tuple[int, str]]:
     """
     Report declarations without initialization whose first following
@@ -98,8 +104,7 @@ def check_uninitialized_declarations(code: str) -> list[tuple[int, str]]:
                 pending_line = line_index + 1
             continue
 
-        member_match = _MEMBER_ASSIGNMENT_RE.match(stripped)
-        if member_match is not None and member_match.group('name') == pending_name:
+        if _matches_pending_assignment(stripped, pending_name):
             violations.append((pending_line, pending_name))
             pending_name = None
             continue
