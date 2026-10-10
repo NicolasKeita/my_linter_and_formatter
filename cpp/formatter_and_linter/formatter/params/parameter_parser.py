@@ -39,6 +39,35 @@ def parse_parameter(param: str) -> tuple[str, str] | None:
     return _split_type_and_name(param, PLAIN_PARAM_PATTERN)
 
 
+def _split_parameters(params_str: str) -> list[str]:
+    """Split a parameter string on its top-level commas; commas nested inside
+    angle brackets or square brackets are preserved."""
+    params = []
+    current_param = ""
+    bracket_depth = 0
+    square_depth = 0
+
+    for char in params_str:
+        if char == '<':
+            bracket_depth += 1
+        elif char == '>':
+            bracket_depth -= 1
+        elif char == '[':
+            square_depth += 1
+        elif char == ']':
+            square_depth -= 1
+        elif char == ',' and bracket_depth == 0 and square_depth == 0:
+            if current_param.strip():
+                params.append(current_param.strip())
+            current_param = ""
+            continue
+        current_param += char
+
+    if current_param.strip():
+        params.append(current_param.strip())
+    return params
+
+
 def extract_parameters(params_str: str) -> list[tuple[str, str]] | None:
     """
     Extract and parse all parameters from a parameter string.
@@ -50,40 +79,11 @@ def extract_parameters(params_str: str) -> list[tuple[str, str]] | None:
         A list of (type, name) tuples if all parameters parse successfully,
         None if any parameter fails to parse
     """
-    params = []
-    current_param = ""
-    bracket_depth = 0
-    square_depth = 0
-
-    for char in params_str:
-        if char == '<':
-            bracket_depth += 1
-            current_param += char
-        elif char == '>':
-            bracket_depth -= 1
-            current_param += char
-        elif char == '[':
-            square_depth += 1
-            current_param += char
-        elif char == ']':
-            square_depth -= 1
-            current_param += char
-        elif char == ',' and bracket_depth == 0 and square_depth == 0:
-            if current_param.strip():
-                params.append(current_param.strip())
-            current_param = ""
-        else:
-            current_param += char
-
-    if current_param.strip():
-        params.append(current_param.strip())
-
     parsed_params = []
-    for param in params:
+    for param in _split_parameters(params_str):
         parsed = parse_parameter(param)
-        if parsed:
-            parsed_params.append(parsed)
-        else:
+        if parsed is None:
             return None
+        parsed_params.append(parsed)
 
     return parsed_params
