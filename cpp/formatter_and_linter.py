@@ -28,7 +28,7 @@ def _load_modules():
     import formatter.module.module_formatter
     import formatter.spacing.prototype_spacing
     import formatter.braces.short_if_formatter
-    import linter.linter
+    import linter.core.linter
     import shared.comment_utils
     from formatter.join_lines import join_lines as join_lines_fn
     from shared.progress_bar import ProgressBar
@@ -47,7 +47,7 @@ def _load_modules():
         "module_formatter": formatter.module.module_formatter,
         "prototype_spacing": formatter.spacing.prototype_spacing,
         "short_if_formatter": formatter.braces.short_if_formatter,
-        "linter": linter.linter,
+        "linter": linter.core.linter,
         "comment_utils": shared.comment_utils,
         "join_lines": join_lines_fn,
         "ProgressBar": ProgressBar,

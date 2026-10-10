@@ -13,7 +13,7 @@ import unittest
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from linter.module_filename_checks import check_module_filename_convention
+from linter.module.module_filename_checks import check_module_filename_convention
 
 
 class TestCheckModuleFilenameConvention(unittest.TestCase):

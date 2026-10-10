@@ -11,7 +11,7 @@ import unittest
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from linter.multiple_var_decl_checks import MULTIPLE_VAR_DECL_MESSAGE, check_multiple_var_declarations
+from linter.style.multiple_var_decl_checks import MULTIPLE_VAR_DECL_MESSAGE, check_multiple_var_declarations
 
 
 def check_code(code: str):

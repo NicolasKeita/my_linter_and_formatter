@@ -17,7 +17,7 @@ correctly.
 """
 
 
-from linter.cppm_inline_function_checks import (
+from linter.module.cppm_inline_function_checks import (
     _Block,
     _BlockKind,
     _classify_header,

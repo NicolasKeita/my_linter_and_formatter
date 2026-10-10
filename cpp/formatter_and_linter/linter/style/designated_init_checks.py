@@ -21,7 +21,7 @@ declared variable.
 
 import re
 
-from linter.style_checks import _NON_DECLARATION_KEYWORD_RE, _mask_strings_and_comments
+from linter.style.style_checks import _NON_DECLARATION_KEYWORD_RE, _mask_strings_and_comments
 
 _DESIGNATED_INIT_MESSAGE = (
     "Warning [C++20-designated-init]: Préférez l'initialisation désignée "

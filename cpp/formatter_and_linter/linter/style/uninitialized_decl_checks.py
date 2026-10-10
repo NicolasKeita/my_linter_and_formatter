@@ -11,7 +11,7 @@ reported, and any interleaved instruction cancels the detection.
 
 import re
 
-from linter.style_checks import _NON_DECLARATION_KEYWORD_RE, _mask_strings_and_comments
+from linter.style.style_checks import _NON_DECLARATION_KEYWORD_RE, _mask_strings_and_comments
 
 UNINITIALIZED_DECL_MESSAGE = (
     "Variable '{name}' déclarée puis initialisée par assignation membre par membre. "

@@ -13,7 +13,7 @@ import unittest
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from linter.directory_checks import (
+from linter.core.directory_checks import (
     MAX_FILES_PER_DIRECTORY,
     check_directory_file_counts,
     count_source_files_per_directory,

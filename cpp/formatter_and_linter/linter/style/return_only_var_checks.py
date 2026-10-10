@@ -15,8 +15,8 @@ reported line number is the one where the declaration starts.
 
 import re
 
-from linter.multiple_var_decl_checks import _has_top_level_declaration_comma
-from linter.style_checks import _NON_DECLARATION_KEYWORD_RE, _mask_strings_and_comments
+from linter.style.multiple_var_decl_checks import _has_top_level_declaration_comma
+from linter.style.style_checks import _NON_DECLARATION_KEYWORD_RE, _mask_strings_and_comments
 
 RETURN_ONLY_VAR_MESSAGE = (
     "Variable '{name}' déclarée uniquement pour être retournée immédiatement. "

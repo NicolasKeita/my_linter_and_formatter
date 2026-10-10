@@ -15,7 +15,7 @@ import unittest
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from linter.style_checks import MAX_FUNCTION_LENGTH, check_function_length
+from linter.style.style_checks import MAX_FUNCTION_LENGTH, check_function_length
 
 
 def check_lines(lines):

@@ -20,7 +20,7 @@ exceeds the threshold a warning suggests splitting it into sub-modules.
 import os
 import re
 
-from linter.style_checks import _mask_strings_and_comments
+from linter.style.style_checks import _mask_strings_and_comments
 
 MAX_IMPLEMENTATION_FILES_PER_MODULE = 8
 SOURCE_EXTENSIONS = ('.cpp', '.cppm')

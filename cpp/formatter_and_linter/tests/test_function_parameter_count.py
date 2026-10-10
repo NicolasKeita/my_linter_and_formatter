@@ -15,7 +15,7 @@ import unittest
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from linter.function_parameter_count_checks import (
+from linter.style.function_parameter_count_checks import (
     MAX_FUNCTION_PARAMETERS,
     WARN_FUNCTION_TOO_MANY_PARAMETERS_TAG,
     check_function_parameter_count,

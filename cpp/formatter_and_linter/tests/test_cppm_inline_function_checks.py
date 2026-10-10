@@ -15,7 +15,7 @@ from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from linter.cppm_inline_function_checks import (
+from linter.module.cppm_inline_function_checks import (
     MAX_CPPM_INLINE_FUNCTION_BODY_LINES,
     WARN_CPPM_INLINE_FUNCTION_TAG,
     check_cppm_inline_function_bodies,

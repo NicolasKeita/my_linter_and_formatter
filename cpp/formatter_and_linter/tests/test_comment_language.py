@@ -12,7 +12,7 @@ import unittest
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from linter.comment_language_checks import (
+from linter.core.comment_language_checks import (
     CONFIDENCE_MARGIN,
     LINGUA_AVAILABLE,
     MIN_SIGNIFICANT_WORDS,

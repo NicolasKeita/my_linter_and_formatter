@@ -9,7 +9,7 @@ brackets, function call parentheses or braced initializers are ignored.
 
 import re
 
-from linter.style_checks import _NON_DECLARATION_KEYWORD_RE, _mask_strings_and_comments
+from linter.style.style_checks import _NON_DECLARATION_KEYWORD_RE, _mask_strings_and_comments
 
 MULTIPLE_VAR_DECL_MESSAGE = "[MULTIPLE_VAR_DECL] Declare only one variable per line."
 

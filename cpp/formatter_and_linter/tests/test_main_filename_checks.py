@@ -11,7 +11,7 @@ import unittest
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from linter.main_filename_checks import MAIN_FILENAME_MESSAGE, check_main_function_filename
+from linter.module.main_filename_checks import MAIN_FILENAME_MESSAGE, check_main_function_filename
 
 
 def check_file(code_lines, file_path):

@@ -7,18 +7,18 @@ Warning message rendering for the C++ code linter.
 
 import sys
 
-from linter.cmake_checks import MAX_CMAKELISTS_LINES
-from linter.cppm_inline_function_checks import format_cppm_inline_function_message
-from linter.designated_init_checks import format_designated_init_message
-from linter.function_parameter_count_checks import (
+from linter.module.cmake_checks import MAX_CMAKELISTS_LINES
+from linter.module.cppm_inline_function_checks import format_cppm_inline_function_message
+from linter.style.designated_init_checks import format_designated_init_message
+from linter.style.function_parameter_count_checks import (
     format_function_parameter_count_message,
 )
-from linter.main_filename_checks import MAIN_FILENAME_MESSAGE
-from linter.module_size_checks import format_module_too_large_message
-from linter.multiple_var_decl_checks import MULTIPLE_VAR_DECL_MESSAGE
-from linter.return_only_var_checks import format_return_only_var_message
-from linter.style_checks import MAX_FILE_LENGTH, MAX_FUNCTION_LENGTH
-from linter.uninitialized_decl_checks import format_uninitialized_decl_message
+from linter.module.main_filename_checks import MAIN_FILENAME_MESSAGE
+from linter.module.module_size_checks import format_module_too_large_message
+from linter.style.multiple_var_decl_checks import MULTIPLE_VAR_DECL_MESSAGE
+from linter.style.return_only_var_checks import format_return_only_var_message
+from linter.style.style_checks import MAX_FILE_LENGTH, MAX_FUNCTION_LENGTH
+from linter.style.uninitialized_decl_checks import format_uninitialized_decl_message
 
 
 def _get_path_label(file_path: str) -> str:

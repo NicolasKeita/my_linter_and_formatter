@@ -14,7 +14,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from linter.return_only_var_checks import (
+from linter.style.return_only_var_checks import (
     check_return_only_variable,
     format_return_only_var_message,
 )

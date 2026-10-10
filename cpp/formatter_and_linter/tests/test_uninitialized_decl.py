@@ -13,7 +13,7 @@ import unittest
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from linter.uninitialized_decl_checks import (
+from linter.style.uninitialized_decl_checks import (
     check_uninitialized_declarations,
     format_uninitialized_decl_message,
 )

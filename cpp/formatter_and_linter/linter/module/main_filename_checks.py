@@ -11,7 +11,7 @@ cannot be verified and the check is skipped.
 import os
 import re
 
-from linter.style_checks import _mask_strings_and_comments
+from linter.style.style_checks import _mask_strings_and_comments
 
 MAIN_FILENAME_MESSAGE = "[MAIN_FILENAME] A file defining main() must be named 'main.cpp'."
 
