@@ -12,7 +12,7 @@ import unittest
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from formatter.declaration_blank_line_formatter import remove_blank_lines_between_declarations
+from formatter.declarations.declaration_blank_line_formatter import remove_blank_lines_between_declarations
 
 
 def fmt(code):

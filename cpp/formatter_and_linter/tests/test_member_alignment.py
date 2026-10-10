@@ -12,7 +12,7 @@ import unittest
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from formatter.member_alignment_formatter import (
+from formatter.declarations.member_alignment_formatter import (
     align_member_variables,
     format_member_alignment_for_file,
 )

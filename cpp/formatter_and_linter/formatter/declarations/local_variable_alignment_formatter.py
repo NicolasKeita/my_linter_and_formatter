@@ -53,7 +53,7 @@ from shared.declaration_parse import (
     split_trailing_comment,
 )
 
-from formatter.declaration_blank_line_formatter import is_function_open_brace
+from formatter.declarations.declaration_blank_line_formatter import is_function_open_brace
 
 
 class StatementBlock(NamedTuple):

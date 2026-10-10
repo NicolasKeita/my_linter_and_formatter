@@ -15,38 +15,38 @@ sys.path.insert(0, PACKAGE_DIR)
 
 
 def _load_modules():
-    import formatter.brace_formatter
-    import formatter.comment_function_formatter
-    import formatter.declaration_blank_line_formatter
-    import formatter.designated_init_split_formatter
+    import formatter.braces.brace_formatter
+    import formatter.spacing.comment_function_formatter
+    import formatter.declarations.declaration_blank_line_formatter
+    import formatter.declarations.designated_init_split_formatter
     import formatter.file_handler
-    import formatter.function_formatter
-    import formatter.include_formatter
-    import formatter.initialization_block_formatter
-    import formatter.local_variable_alignment_formatter
-    import formatter.member_alignment_formatter
-    import formatter.module_formatter
-    import formatter.prototype_spacing
-    import formatter.short_if_formatter
+    import formatter.params.function_formatter
+    import formatter.spacing.include_formatter
+    import formatter.declarations.initialization_block_formatter
+    import formatter.declarations.local_variable_alignment_formatter
+    import formatter.declarations.member_alignment_formatter
+    import formatter.module.module_formatter
+    import formatter.spacing.prototype_spacing
+    import formatter.braces.short_if_formatter
     import linter.linter
     import shared.comment_utils
     from formatter.join_lines import join_lines as join_lines_fn
     from shared.progress_bar import ProgressBar
 
     return {
-        "brace_formatter": formatter.brace_formatter,
-        "comment_function_formatter": formatter.comment_function_formatter,
-        "declaration_blank_line_formatter": formatter.declaration_blank_line_formatter,
-        "designated_init_split_formatter": formatter.designated_init_split_formatter,
+        "brace_formatter": formatter.braces.brace_formatter,
+        "comment_function_formatter": formatter.spacing.comment_function_formatter,
+        "declaration_blank_line_formatter": formatter.declarations.declaration_blank_line_formatter,
+        "designated_init_split_formatter": formatter.declarations.designated_init_split_formatter,
         "file_handler": formatter.file_handler,
-        "function_formatter": formatter.function_formatter,
-        "include_formatter": formatter.include_formatter,
-        "initialization_block_formatter": formatter.initialization_block_formatter,
-        "local_variable_alignment_formatter": formatter.local_variable_alignment_formatter,
-        "member_alignment_formatter": formatter.member_alignment_formatter,
-        "module_formatter": formatter.module_formatter,
-        "prototype_spacing": formatter.prototype_spacing,
-        "short_if_formatter": formatter.short_if_formatter,
+        "function_formatter": formatter.params.function_formatter,
+        "include_formatter": formatter.spacing.include_formatter,
+        "initialization_block_formatter": formatter.declarations.initialization_block_formatter,
+        "local_variable_alignment_formatter": formatter.declarations.local_variable_alignment_formatter,
+        "member_alignment_formatter": formatter.declarations.member_alignment_formatter,
+        "module_formatter": formatter.module.module_formatter,
+        "prototype_spacing": formatter.spacing.prototype_spacing,
+        "short_if_formatter": formatter.braces.short_if_formatter,
         "linter": linter.linter,
         "comment_utils": shared.comment_utils,
         "join_lines": join_lines_fn,

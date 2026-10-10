@@ -11,7 +11,7 @@ The with-braces handling lives in if_brace_formatter.
 
 import re
 
-from formatter.if_brace_formatter import (
+from formatter.braces.if_brace_formatter import (
     find_matching_paren,
     format_short_if_statements_with_braces,
 )

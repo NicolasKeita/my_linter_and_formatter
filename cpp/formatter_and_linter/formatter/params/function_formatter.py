@@ -11,8 +11,8 @@ multi-line signatures, parameter alignment and spacing.
 
 import re
 
-from formatter.multiline_function_formatter import format_multiline_function_params
-from formatter.parameter_formatter import (
+from formatter.params.multiline_function_formatter import format_multiline_function_params
+from formatter.params.parameter_formatter import (
     PARAM_NAME_SEPARATOR_WIDTH,
     calculate_alignment,
     calculate_indentation,
@@ -20,7 +20,7 @@ from formatter.parameter_formatter import (
     format_single_function,
     should_format_function,
 )
-from formatter.parameter_parser import extract_parameters, parse_parameter
+from formatter.params.parameter_parser import extract_parameters, parse_parameter
 
 
 def _single_line_function_pattern() -> str:

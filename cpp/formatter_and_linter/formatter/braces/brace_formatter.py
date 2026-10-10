@@ -10,9 +10,9 @@ while opening braces of control structures (if, else, for, while, switch,
 catch, do, try) are placed on the same line as their header.
 """
 
-from formatter.advanced_function_braces import format_function_braces_advanced
-from formatter.control_structure_braces import format_control_structure_braces
-from formatter.function_braces import format_function_braces
+from formatter.braces.advanced_function_braces import format_function_braces_advanced
+from formatter.braces.control_structure_braces import format_control_structure_braces
+from formatter.braces.function_braces import format_function_braces
 
 __all__ = [
     "format_control_structure_braces",

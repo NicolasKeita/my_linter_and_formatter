@@ -36,7 +36,7 @@ from shared.brace_utils import (
 )
 from shared.function_analysis import find_function_start_for_brace
 
-from formatter.initialization_block_formatter import DECLARATION_PATTERN
+from formatter.declarations.initialization_block_formatter import DECLARATION_PATTERN
 
 _CONTROL_BLOCK_RE = re.compile(r'\b(class|struct|enum|namespace|do|else|try)\b')
 

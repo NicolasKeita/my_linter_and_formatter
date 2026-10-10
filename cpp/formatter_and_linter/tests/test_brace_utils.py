@@ -45,7 +45,7 @@ def test_control_statement_is_not_a_function():
 
 
 def test_function_braces_pass_keeps_initializer_rows_with_parens_in_strings():
-    from formatter.brace_formatter import format_function_braces
+    from formatter.braces.brace_formatter import format_function_braces
 
     code = (
         "const std::array<ScenarioEntry, 10> ScenarioCatalog::scenarios_{{\n"

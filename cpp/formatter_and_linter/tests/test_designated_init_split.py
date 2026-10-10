@@ -13,7 +13,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from formatter.designated_init_split_formatter import split_long_designated_initializations
+from formatter.declarations.designated_init_split_formatter import split_long_designated_initializations
 
 
 def _long_scenario_line():

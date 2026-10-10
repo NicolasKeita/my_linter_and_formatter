@@ -10,7 +10,7 @@ import re
 
 from shared.regex_patterns import USING_REGEX
 
-from formatter.prototype_detection import (
+from formatter.module.prototype_detection import (
     is_function_prototype,
     is_function_prototype_start,
     is_import_or_include_or_module,

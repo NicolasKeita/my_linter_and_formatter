@@ -9,12 +9,12 @@ several lines.
 from dataclasses import dataclass
 import re
 
-from formatter.parameter_formatter import (
+from formatter.params.parameter_formatter import (
     calculate_alignment,
     calculate_indentation,
     format_parameters_list,
 )
-from formatter.parameter_parser import extract_parameters
+from formatter.params.parameter_parser import extract_parameters
 
 SIGNATURE_PATTERN = (
     r"^(\s*)((?:(?:static|inline|virtual|explicit|constexpr|const)\s+)*[\w:]+(?:\s*[*&])*)\s+([\w:]+)\s*\("

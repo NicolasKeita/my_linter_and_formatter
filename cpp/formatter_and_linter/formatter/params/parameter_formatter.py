@@ -8,7 +8,7 @@ for C++ function declarations/definitions.
 
 from re import Match
 
-from formatter.parameter_parser import extract_parameters
+from formatter.params.parameter_parser import extract_parameters
 
 PARAM_NAME_SEPARATOR_WIDTH = 1
 

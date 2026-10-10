@@ -10,17 +10,17 @@ Handles spacing between module declarations and imports, reordering of using
 statements, and import block formatting.
 """
 
-from formatter.import_spacing import (
+from formatter.spacing.import_spacing import (
     format_import_order,
     format_module_import_spacing,
 )
-from formatter.prototype_detection import (
+from formatter.module.prototype_detection import (
     is_function_prototype,
     is_function_prototype_start,
     is_import_or_include_or_module,
 )
-from formatter.using_import_reorderer import reorder_using_after_import
-from formatter.using_prototype_reorderer import reorder_using_after_prototypes
+from formatter.module.using_import_reorderer import reorder_using_after_import
+from formatter.module.using_prototype_reorderer import reorder_using_after_prototypes
 
 __all__ = [
     "is_import_or_include_or_module",

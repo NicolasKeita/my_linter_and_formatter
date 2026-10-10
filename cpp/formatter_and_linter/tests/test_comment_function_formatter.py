@@ -16,7 +16,7 @@ import unittest
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from formatter.comment_function_formatter import format_comment_function_spacing
+from formatter.spacing.comment_function_formatter import format_comment_function_spacing
 
 
 def fmt(code: str) -> str:
