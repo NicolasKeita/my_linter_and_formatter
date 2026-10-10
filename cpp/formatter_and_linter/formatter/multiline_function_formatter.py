@@ -6,6 +6,7 @@ Re-formats C++ function definitions whose parameters are already spread over
 several lines.
 """
 
+from dataclasses import dataclass
 import re
 
 from formatter.parameter_formatter import (
@@ -18,6 +19,19 @@ from formatter.parameter_parser import extract_parameters
 SIGNATURE_PATTERN = (
     r"^(\s*)((?:(?:static|inline|virtual|explicit|constexpr|const)\s+)*[\w:]+(?:\s*[*&])*)\s+([\w:]+)\s*\("
 )
+
+
+@dataclass
+class _SignatureParts:
+    """Grouped fields needed to render a formatted multi-line signature."""
+
+    leading_indent: str
+    full_prefix: str
+    full_func_name: str
+    formatted_params: str
+    signature_suffix: str
+    has_brace: bool
+    inline_body: str
 
 
 def _short_name(qualified_name: str) -> str:
@@ -68,25 +82,18 @@ def _split_signature_suffix(all_params: str) -> tuple[str, str, str]:
     return all_params, signature_suffix, inline_body
 
 
-def _render_multiline_signature(
-    leading_indent: str,
-    full_prefix: str,
-    full_func_name: str,
-    formatted_params: str,
-    signature_suffix: str,
-    has_brace: bool,
-    inline_body: str,
-) -> list[str]:
-    const_part = f" {signature_suffix}" if signature_suffix else ""
-    if has_brace:
+def _render_multiline_signature(parts: _SignatureParts) -> list[str]:
+    const_part = f" {parts.signature_suffix}" if parts.signature_suffix else ""
+    if parts.has_brace:
         emitted = [
-            f"{leading_indent}{full_prefix} {full_func_name}" f"{formatted_params}{const_part}",
-            f"{leading_indent}{{",
+            f"{parts.leading_indent}{parts.full_prefix} {parts.full_func_name}"
+            f"{parts.formatted_params}{const_part}",
+            f"{parts.leading_indent}{{",
         ]
-        if inline_body:
-            emitted.append(inline_body.strip())
+        if parts.inline_body:
+            emitted.append(parts.inline_body.strip())
         return emitted
-    return [f"{leading_indent}{full_prefix} {full_func_name}{formatted_params};"]
+    return [f"{parts.leading_indent}{parts.full_prefix} {parts.full_func_name}{parts.formatted_params};"]
 
 
 def _advance_after_signature(has_brace: bool, brace_on_next_line: bool, end: int) -> int:
@@ -142,13 +149,15 @@ def format_multiline_function_params(code: str) -> str:
                         formatted_params = format_parameters_list(parsed_params, indent, max_type_len)
                         result_lines.extend(
                             _render_multiline_signature(
-                                leading_indent,
-                                full_prefix,
-                                full_func_name,
-                                formatted_params,
-                                signature_suffix,
-                                has_brace,
-                                inline_body,
+                                _SignatureParts(
+                                    leading_indent,
+                                    full_prefix,
+                                    full_func_name,
+                                    formatted_params,
+                                    signature_suffix,
+                                    has_brace,
+                                    inline_body,
+                                )
                             )
                         )
                         i = _advance_after_signature(has_brace, brace_on_next_line, j)
