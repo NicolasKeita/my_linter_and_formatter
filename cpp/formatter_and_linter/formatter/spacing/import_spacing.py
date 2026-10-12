@@ -8,12 +8,13 @@ spacing around module declarations and import blocks.
 
 import re
 
-from shared.import_utils import sort_imports
-from shared.regex_patterns import (
-    IMPORT_REGEX,
-    MODULE_DECL_REGEX,
-    MODULE_PARTITION_REGEX,
+from formatter.spacing.import_blocks import (
+    handle_import_block,
+    handle_module_declaration,
+    is_module_boundary,
 )
+from shared.import_utils import sort_imports
+from shared.regex_patterns import IMPORT_REGEX
 
 
 def format_import_order(code: str) -> str:
@@ -62,47 +63,12 @@ def format_module_import_spacing(code: str) -> str:
     while i < len(lines):
         line = lines[i]
 
-        if re.match(MODULE_DECL_REGEX, line) or re.match(MODULE_PARTITION_REGEX, line):
-            new_lines.append(line)
-            i += 1
-
-            while i < len(lines) and lines[i].strip() == '':
-                i += 1
-
-            if i < len(lines) and lines[i].strip() != '':
-                new_lines.append('')
-
+        if _is_module_boundary(line):
+            i = _handle_module_declaration(lines, i, new_lines)
             continue
 
         if re.match(IMPORT_REGEX, line):
-            imports = []
-            while i < len(lines) and re.match(IMPORT_REGEX, lines[i]):
-                imports.append(lines[i])
-                i += 1
-
-            need_blank_before = False
-            if new_lines:
-                last_line = new_lines[-1]
-                if not re.match(MODULE_DECL_REGEX, last_line) and \
-                   not re.match(MODULE_PARTITION_REGEX, last_line):
-                    if last_line.strip() != '':
-                        need_blank_before = True
-
-            if need_blank_before:
-                new_lines.append('')
-
-            new_lines.extend(imports)
-
-            while i < len(lines) and lines[i].strip() == '':
-                i += 1
-
-            if i < len(lines) and lines[i].strip() != '':
-                next_line = lines[i]
-                if not re.match(IMPORT_REGEX, next_line) and \
-                   not re.match(MODULE_DECL_REGEX, next_line) and \
-                   not re.match(MODULE_PARTITION_REGEX, next_line):
-                    new_lines.append('')
-
+            i = _handle_import_block(lines, i, new_lines)
             continue
 
         new_lines.append(line)
