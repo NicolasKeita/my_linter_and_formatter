@@ -26,7 +26,7 @@ def _load_modules():
     import formatter.module.module_formatter
     import formatter.params.function_formatter
     import formatter.spacing.comment_function_formatter
-    import formatter.spacing.include_formatter
+    import formatter.spacing.includes.include_formatter
     import formatter.spacing.prototype_spacing
     import linter.core.linter
     import shared.comment_utils
@@ -40,7 +40,7 @@ def _load_modules():
         "designated_init_split_formatter": formatter.declarations.designated_init_split_formatter,
         "file_handler": formatter.file_handler,
         "function_formatter": formatter.params.function_formatter,
-        "include_formatter": formatter.spacing.include_formatter,
+        "include_formatter": formatter.spacing.includes.include_formatter,
         "initialization_block_formatter": formatter.declarations.initialization_block_formatter,
         "local_variable_alignment_formatter": formatter.declarations.local_variable_alignment_formatter,
         "member_alignment_formatter": formatter.declarations.member_alignment_formatter,

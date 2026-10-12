@@ -8,7 +8,7 @@ spacing around module declarations and import blocks.
 
 import re
 
-from formatter.spacing.import_blocks import (
+from formatter.spacing.includes.import_blocks import (
     handle_import_block,
     handle_module_declaration,
     is_module_boundary,

@@ -17,7 +17,7 @@ from formatter.module.prototype_detection import (
 )
 from formatter.module.using_import_reorderer import reorder_using_after_import
 from formatter.module.using_prototype_reorderer import reorder_using_after_prototypes
-from formatter.spacing.import_spacing import (
+from formatter.spacing.includes.import_spacing import (
     format_import_order,
     format_module_import_spacing,
 )

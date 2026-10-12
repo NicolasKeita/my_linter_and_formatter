@@ -8,11 +8,11 @@ and proper spacing.
 
 import re
 
-from formatter.spacing.include_blank_lines import (
+from formatter.spacing.includes.include_blank_lines import (
     ensure_single_blank_lines,
     remove_blank_lines_between_includes,
 )
-from formatter.spacing.include_group import format_include_group
+from formatter.spacing.includes.include_group import format_include_group
 from shared.regex_patterns import INCLUDE_REGEX
 
 
