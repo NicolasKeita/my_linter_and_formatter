@@ -46,9 +46,9 @@ def _check(files: list[Path], structure_issues: list[Issue]) -> int:
     lint_output: list[str] = []
     import_output: list[str] = []
     format_output: list[str] = []
-    lint_status = run_ruff("check", files, "--ignore", "I", "--unfixable", "ALL", output=lint_output)
+    lint_status = run_ruff("check", files, "--ignore", "I", "--unfixable", "ALL", "--quiet", output=lint_output)
     issues = structure_issues + _check_files(files)
-    import_status = run_ruff("check", files, "--select", "I", output=import_output)
+    import_status = run_ruff("check", files, "--select", "I", "--quiet", output=import_output)
     format_status = run_ruff("format", files, "--check", output=format_output)
     lint_text, import_text, format_text = ("".join(output) for output in (lint_output, import_output, format_output))
     diagnostic_pattern = r"^.+:\d+:\d+: "
@@ -63,6 +63,8 @@ def _check(files: list[Path], structure_issues: list[Issue]) -> int:
     print(f"Formatter: {import_count} import diagnostics; {format_count} files to reformat")
     if 2 in (lint_status, import_status, format_status):
         print("Ruff could not complete the check; counts may be incomplete.")
+    elif not (lint_status or import_status or format_status or issues):
+        print("All checks passed!")
 
     print("\n=== Linter diagnostics ===")
     print(lint_text, end="")

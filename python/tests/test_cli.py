@@ -77,6 +77,7 @@ class CliTests(unittest.TestCase):
                 check=False,
             )
             self.assertEqual(check.returncode, 1)
+            self.assertNotIn("All checks passed!", check.stdout)
             self.assertEqual(path.read_bytes(), before)
             formatted = subprocess.run(
                 [sys.executable, "-m", "nk_python", "format", str(path)],
@@ -93,6 +94,7 @@ class CliTests(unittest.TestCase):
                 check=False,
             )
             self.assertEqual(checked.returncode, 0, checked.stderr + checked.stdout)
+            self.assertEqual(checked.stdout.count("All checks passed!"), 1)
             self.assertTrue(checked.stdout.startswith("=== Check summary ==="))
             self.assertIn("Linter: 0 warnings\nFormatter: 0 import diagnostics; 0 files to reformat", checked.stdout)
 
