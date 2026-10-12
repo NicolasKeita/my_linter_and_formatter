@@ -16,18 +16,18 @@ sys.path.insert(0, PACKAGE_DIR)
 
 def _load_modules():
     import formatter.braces.brace_formatter
-    import formatter.spacing.comment_function_formatter
+    import formatter.braces.short_if_formatter
     import formatter.declarations.declaration_blank_line_formatter
     import formatter.declarations.designated_init_split_formatter
-    import formatter.file_handler
-    import formatter.params.function_formatter
-    import formatter.spacing.include_formatter
     import formatter.declarations.initialization_block_formatter
     import formatter.declarations.local_variable_alignment_formatter
     import formatter.declarations.member_alignment_formatter
+    import formatter.file_handler
     import formatter.module.module_formatter
+    import formatter.params.function_formatter
+    import formatter.spacing.comment_function_formatter
+    import formatter.spacing.include_formatter
     import formatter.spacing.prototype_spacing
-    import formatter.braces.short_if_formatter
     import linter.core.linter
     import shared.comment_utils
     from formatter.join_lines import join_lines as join_lines_fn

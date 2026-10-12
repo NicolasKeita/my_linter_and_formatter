@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Signature-level formatting for multi-line C++ function parameters."""
 
+import re
 from dataclasses import dataclass
 
 from formatter.params.parameter_formatter import (
@@ -9,6 +10,9 @@ from formatter.params.parameter_formatter import (
     format_parameters_list,
 )
 from formatter.params.parameter_parser import extract_parameters
+
+
+@dataclass
 class _SignatureParts:
     """Grouped fields needed to render a formatted multi-line signature."""
 

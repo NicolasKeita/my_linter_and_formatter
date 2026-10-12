@@ -41,14 +41,22 @@ def main(argv: list[str] | None = None) -> int:
         format_status = _run_ruff("format", files)
         return max(import_status, format_status)
 
-    lint_status = _run_ruff("check", files)
-    format_status = _run_ruff("format", files, "--check")
+    return _check(files, structure_issues)
+
+
+def _check(files: list[Path], structure_issues: list[Issue]) -> int:
+    print("=== Linter diagnostics ===", flush=True)
+    lint_status = _run_ruff("check", files, "--ignore", "I", "--unfixable", "ALL")
     issues = structure_issues + _check_files(files)
     for issue in sorted(issues):
         print(issue)
     if not LANGUAGE_AVAILABLE:
-        print("Comment language check skipped (install nk-python-style[comments] to enable it).", file=sys.stderr)
-    return int(bool(lint_status or format_status or issues))
+        print("Comment language check skipped (install nk-python-style[comments] to enable it).")
+
+    print("\n=== Formatter: corrections available via 'format' ===", flush=True)
+    import_status = _run_ruff("check", files, "--select", "I")
+    format_status = _run_ruff("format", files, "--check")
+    return int(bool(lint_status or import_status or format_status or issues))
 
 
 def _positive_int(value: str) -> int:

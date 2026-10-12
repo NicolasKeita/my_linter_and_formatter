@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Parameter formatting package for C++ function declarations/definitions."""
 
+import re
+
 from formatter.params.parameter_formatter.alignment import (
     calculate_alignment,
     calculate_indentation,
@@ -9,9 +11,7 @@ from formatter.params.parameter_formatter.rendering import (
     PARAM_NAME_SEPARATOR_WIDTH,
     format_parameters_list,
 )
-
 from formatter.params.parameter_parser import extract_parameters
-
 
 __all__ = [
     "PARAM_NAME_SEPARATOR_WIDTH",
@@ -44,7 +44,7 @@ def should_format_function(prefix: str, func_name: str, params_str: str) -> bool
     return True
 
 
-def format_single_function(match: Match[str]) -> str:
+def format_single_function(match: re.Match[str]) -> str:
     """
     Format a single function's parameters.
 
@@ -68,7 +68,7 @@ def format_single_function(match: Match[str]) -> str:
     if not parsed_params:
         return match.group(0)
 
-    max_type_len, max_name_len = calculate_alignment(parsed_params)
+    max_type_len, _ = calculate_alignment(parsed_params)
 
     indent = calculate_indentation(full_prefix, func_name, max_type_len)
 

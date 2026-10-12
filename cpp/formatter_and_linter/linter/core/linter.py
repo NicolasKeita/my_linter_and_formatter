@@ -16,39 +16,12 @@ import sys
 
 from shared.comment_utils import check_comment_placement, detect_comments_and_functions
 
-from linter.module.cmake_checks import (
-    MAX_CMAKELISTS_LINES,
-    check_cmake_file_lengths,
-)
 from linter.core.comment_language_checks import check_code_comments_language
-from linter.module.cppm_checks import (
-    MAX_CPPM_INLINE_BODY_LINES,
-    check_cppm_interface_implementations,
-)
-from linter.module.cppm_inline_function_checks import (
-    MAX_CPPM_INLINE_FUNCTION_BODY_LINES,
-    check_cppm_inline_function_bodies,
-    check_cppm_inline_functions,
-    format_cppm_inline_function_message,
-)
-from linter.style.designated_init_checks import check_designated_init_candidates
 from linter.core.directory_checks import (
     MAX_FILES_PER_DIRECTORY,
     check_directory_file_counts,
 )
-from linter.style.function_parameter_count_checks import (
-    MAX_FUNCTION_PARAMETERS,
-    check_function_parameter_count,
-)
-from linter.module.main_filename_checks import check_main_function_filename
-from linter.module.module_filename_checks import check_module_filename_convention
-from linter.module.module_size_checks import (
-    MAX_IMPLEMENTATION_FILES_PER_MODULE,
-    check_module_implementation_counts,
-)
-from linter.style.multiple_var_decl_checks import check_multiple_var_declarations
 from linter.core.reporting import (
-    _get_path_label,
     print_blank_line_after_initialization_warnings,
     print_cmake_length_warnings,
     print_comment_language_warnings,
@@ -69,6 +42,32 @@ from linter.core.reporting import (
     print_return_only_var_warnings,
     print_uninitialized_decl_warnings,
 )
+from linter.module.cmake_checks import (
+    MAX_CMAKELISTS_LINES,
+    check_cmake_file_lengths,
+)
+from linter.module.cppm_checks import (
+    MAX_CPPM_INLINE_BODY_LINES,
+    check_cppm_interface_implementations,
+)
+from linter.module.cppm_inline_function_checks import (
+    MAX_CPPM_INLINE_FUNCTION_BODY_LINES,
+    check_cppm_inline_function_bodies,
+    check_cppm_inline_functions,
+    format_cppm_inline_function_message,
+)
+from linter.module.main_filename_checks import check_main_function_filename
+from linter.module.module_filename_checks import check_module_filename_convention
+from linter.module.module_size_checks import (
+    MAX_IMPLEMENTATION_FILES_PER_MODULE,
+    check_module_implementation_counts,
+)
+from linter.style.designated_init_checks import check_designated_init_candidates
+from linter.style.function_parameter_count_checks import (
+    MAX_FUNCTION_PARAMETERS,
+    check_function_parameter_count,
+)
+from linter.style.multiple_var_decl_checks import check_multiple_var_declarations
 from linter.style.return_only_var_checks import check_return_only_variable
 from linter.style.style_checks import (
     MAX_FILE_LENGTH,
@@ -168,7 +167,6 @@ __all__ = [
     "MAX_FUNCTION_LENGTH",
     "MAX_FILE_LENGTH",
     "MAX_CPPM_INLINE_BODY_LINES",
-    "MAX_FILES_PER_DIRECTORY",
     "check_line_length",
     "check_file_length",
     "check_function_length",
@@ -186,12 +184,12 @@ __all__ = [
     "MAX_FUNCTION_PARAMETERS",
     "check_function_parameter_count",
     "check_directory_file_counts",
+    "MAX_FILES_PER_DIRECTORY",
     "check_module_filename_convention",
     "MAX_IMPLEMENTATION_FILES_PER_MODULE",
     "check_module_implementation_counts",
     "MAX_CMAKELISTS_LINES",
     "check_cmake_file_lengths",
-    "_get_path_label",
     "print_issue_header",
     "print_line_length_warnings",
     "print_comment_placement_warnings",

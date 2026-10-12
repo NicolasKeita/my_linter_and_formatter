@@ -16,11 +16,11 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
+from linter.core.linter import lint_code
 from linter.style.designated_init_checks import (
     check_designated_init_candidates,
     format_designated_init_message,
 )
-from linter.core.linter import lint_code
 
 
 def check_code(code):

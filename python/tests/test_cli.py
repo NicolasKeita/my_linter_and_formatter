@@ -6,6 +6,36 @@ from pathlib import Path
 
 
 class CliTests(unittest.TestCase):
+    def test_check_separates_linter_diagnostics_and_formatter_corrections(self):
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "sample.py"
+            source = "import sys\nimport os\n\nvalue=1  # inline comment\n"
+            path.write_text(source, encoding="utf-8")
+            command = [sys.executable, "-m", "nk_python"]
+            checked = subprocess.run(command + ["check", str(path)], capture_output=True, text=True, check=False)
+            output = checked.stdout
+            self.assertEqual(checked.returncode, 1, checked.stderr + output)
+            linter, formatter = output.split("=== Formatter: corrections available via 'format' ===")
+            self.assertTrue(linter.startswith("=== Linter diagnostics ==="))
+            self.assertIn("F401", linter)
+            self.assertIn("PY005", linter)
+            self.assertNotIn("[*]", linter)
+            self.assertNotIn("I001", linter)
+            self.assertNotIn("would be reformatted", linter)
+            self.assertIn("I001", formatter)
+            self.assertIn("would be reformatted", formatter)
+            self.assertNotIn("F401", formatter)
+            self.assertNotIn("PY005", formatter)
+            self.assertEqual(path.read_text(encoding="utf-8"), source)
+            formatted = subprocess.run(command + ["format", str(path)], capture_output=True, text=True, check=False)
+            self.assertEqual(formatted.returncode, 0, formatted.stderr + formatted.stdout)
+            checked = subprocess.run(command + ["check", str(path)], capture_output=True, text=True, check=False)
+            self.assertEqual(checked.returncode, 1, checked.stderr + checked.stdout)
+            self.assertIn("F401", checked.stdout)
+            self.assertIn("PY005", checked.stdout)
+            self.assertNotIn("I001", checked.stdout)
+            self.assertNotIn("would be reformatted", checked.stdout)
+
     def test_check_reports_relative_paths_without_source_excerpts(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)

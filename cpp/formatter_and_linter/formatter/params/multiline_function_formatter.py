@@ -7,16 +7,7 @@ several lines.
 
 import re
 
-from formatter.params.parameter_formatter import (
-    calculate_alignment,
-    calculate_indentation,
-    format_parameters_list,
-)
-from formatter.params.parameter_parser import extract_parameters
-from formatter.params.multiline_signature_formatter import (
-    _SignatureParts,
-    _try_format_signature,
-)
+from formatter.params.multiline_signature_formatter import _try_format_signature
 
 SIGNATURE_PATTERN = (
     r"^(\s*)((?:(?:static|inline|virtual|explicit|constexpr|const)\s+)*[\w:]+(?:\s*[*&])*)\s+([\w:]+)\s*\("
