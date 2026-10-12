@@ -16,7 +16,11 @@ class CliTests(unittest.TestCase):
             output = checked.stdout
             self.assertEqual(checked.returncode, 1, checked.stderr + output)
             linter, formatter = output.split("=== Formatter: corrections available via 'format' ===")
-            self.assertTrue(linter.startswith("=== Linter diagnostics ==="))
+            self.assertTrue(linter.startswith("=== Check summary ==="))
+            self.assertIn(
+                "Files checked: 1\nLinter: 3 diagnostics\nFormatter: 1 import diagnostics; 1 files to reformat", linter
+            )
+            self.assertIn("=== Linter diagnostics ===", linter)
             self.assertIn("F401", linter)
             self.assertIn("PY005", linter)
             self.assertNotIn("[*]", linter)
@@ -89,6 +93,8 @@ class CliTests(unittest.TestCase):
                 check=False,
             )
             self.assertEqual(checked.returncode, 0, checked.stderr + checked.stdout)
+            self.assertTrue(checked.stdout.startswith("=== Check summary ==="))
+            self.assertIn("Linter: 0 diagnostics\nFormatter: 0 import diagnostics; 0 files to reformat", checked.stdout)
 
 
 if __name__ == "__main__":

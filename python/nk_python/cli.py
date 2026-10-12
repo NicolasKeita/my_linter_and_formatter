@@ -2,17 +2,15 @@
 
 import argparse
 import importlib.util
-import os
-import subprocess
+import re
 import sys
 from pathlib import Path
 
 from .ast_checks import check_source
 from .comment_checks import LANGUAGE_AVAILABLE, check_comments
 from .model import Issue
+from .ruff_runner import run_ruff
 from .structure_checks import discover
-
-RUFF_CONFIG = Path(__file__).with_name("ruff.toml")
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -37,25 +35,45 @@ def main(argv: list[str] | None = None) -> int:
         return 2
 
     if arguments.command == "format":
-        import_status = _run_ruff("check", files, "--select", "I", "--fix")
-        format_status = _run_ruff("format", files)
+        import_status = run_ruff("check", files, "--select", "I", "--fix")
+        format_status = run_ruff("format", files)
         return max(import_status, format_status)
 
     return _check(files, structure_issues)
 
 
 def _check(files: list[Path], structure_issues: list[Issue]) -> int:
-    print("=== Linter diagnostics ===", flush=True)
-    lint_status = _run_ruff("check", files, "--ignore", "I", "--unfixable", "ALL")
+    lint_output: list[str] = []
+    import_output: list[str] = []
+    format_output: list[str] = []
+    lint_status = run_ruff("check", files, "--ignore", "I", "--unfixable", "ALL", output=lint_output)
     issues = structure_issues + _check_files(files)
+    import_status = run_ruff("check", files, "--select", "I", output=import_output)
+    format_status = run_ruff("format", files, "--check", output=format_output)
+    lint_text, import_text, format_text = ("".join(output) for output in (lint_output, import_output, format_output))
+    diagnostic_pattern = r"^.+:\d+:\d+: "
+    lint_count = len(re.findall(diagnostic_pattern, lint_text, re.MULTILINE)) + len(issues)
+    import_count = len(re.findall(diagnostic_pattern, import_text, re.MULTILINE))
+    format_count = sum(
+        int(count) for count in re.findall(r"^(\d+) files? would be reformatted", format_text, re.MULTILINE)
+    )
+    print("=== Check summary ===")
+    print(f"Files checked: {len(files)}")
+    print(f"Linter: {lint_count} diagnostics")
+    print(f"Formatter: {import_count} import diagnostics; {format_count} files to reformat")
+    if 2 in (lint_status, import_status, format_status):
+        print("Ruff could not complete the check; counts may be incomplete.")
+
+    print("\n=== Linter diagnostics ===")
+    print(lint_text, end="")
     for issue in sorted(issues):
         print(issue)
     if not LANGUAGE_AVAILABLE:
         print("Comment language check skipped (install nk-python-style[comments] to enable it).")
 
-    print("\n=== Formatter: corrections available via 'format' ===", flush=True)
-    import_status = _run_ruff("check", files, "--select", "I")
-    format_status = _run_ruff("format", files, "--check")
+    print("\n=== Formatter: corrections available via 'format' ===")
+    print(import_text, end="")
+    print(format_text, end="")
     return int(bool(lint_status or import_status or format_status or issues))
 
 
@@ -64,27 +82,6 @@ def _positive_int(value: str) -> int:
     if result < 1:
         raise argparse.ArgumentTypeError("--max-files must be positive")
     return result
-
-
-def _run_ruff(command: str, files: list[Path], *options: str) -> int:
-    status = 0
-    for offset in range(0, len(files), 50):
-        batch = files[offset : offset + 50]
-        result = subprocess.run(
-            [
-                sys.executable,
-                "-m",
-                "ruff",
-                command,
-                "--config",
-                str(RUFF_CONFIG),
-                *options,
-                *(os.path.relpath(path) for path in batch),
-            ],
-            check=False,
-        )
-        status = max(status, result.returncode)
-    return status
 
 
 def _check_files(files: list[Path]) -> list[Issue]:
