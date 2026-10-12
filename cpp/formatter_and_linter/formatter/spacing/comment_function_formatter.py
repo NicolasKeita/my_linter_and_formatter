@@ -15,9 +15,34 @@ def _is_comment_line(text: str) -> bool:
     return text.startswith("//") or text.startswith("/*") or text.endswith("*/")
 
 
+def _find_last_meaningful(new_lines: list[str]) -> tuple[int, str | None]:
+    """Return the index of the last non-blank emitted line and its stripped text."""
+    j = len(new_lines) - 1
+    while j >= 0 and new_lines[j].strip() == '':
+        j -= 1
+    if j >= 0:
+        return j, new_lines[j].strip()
+    return j, None
+
+
+def _format_function_line(line: str, new_lines: list[str]) -> list[str]:
+    """Apply the blank-line rules for a detected function line."""
+    j, last_line = _find_last_meaningful(new_lines)
+
+    if last_line is not None and _is_comment_line(last_line):
+        while new_lines and new_lines[-1].strip() == '':
+            new_lines.pop()
+    elif not new_lines or new_lines[-1].strip() != '':
+        if last_line is None or not re.match(FUNC_REGEX, new_lines[j]):
+            new_lines.append('')
+
+    new_lines.append(line)
+    return new_lines
+
+
 def format_comment_function_spacing(code: str) -> str:
     lines = code.splitlines()
-    new_lines = []
+    new_lines: list[str] = []
     prev_blank = False
 
     for line in lines:
@@ -30,26 +55,7 @@ def format_comment_function_spacing(code: str) -> str:
             continue
 
         if re.match(FUNC_REGEX, line):
-            j = len(new_lines) - 1
-            while j >= 0 and new_lines[j].strip() == '':
-                j -= 1
-
-            if j >= 0:
-                last_line = new_lines[j].strip()
-            else:
-                last_line = None
-
-            if last_line is not None and _is_comment_line(last_line):
-                while new_lines and new_lines[-1].strip() == '':
-                    new_lines.pop()
-            else:
-                if not new_lines or new_lines[-1].strip() != '':
-                    if last_line is not None and re.match(FUNC_REGEX, new_lines[j]):
-                        pass
-                    else:
-                        new_lines.append('')
-
-            new_lines.append(line)
+            new_lines = _format_function_line(line, new_lines)
             prev_blank = False
         else:
             new_lines.append(line)

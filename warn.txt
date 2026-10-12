@@ -1,0 +1,204 @@
+﻿=== Check summary ===
+Files checked: 145
+Linter: 42 warnings
+Formatter: 0 import diagnostics; 145 files to reformat
+
+=== Linter diagnostics ===
+All checks passed!
+All checks passed!
+All checks passed!
+cpp\formatter_and_linter\formatter\params\multiline_signature_formatter.py:121: PY002 File has 125 lines (max 120).
+cpp\formatter_and_linter\formatter\spacing\comment_function_formatter.py:18: PY003 Function 'format_comment_function_spacing' has 41 lines (max 40).
+cpp\formatter_and_linter\formatter\spacing\import_spacing.py:57: PY003 Function 'format_module_import_spacing' has 55 lines (max 40).
+cpp\formatter_and_linter\formatter\spacing\include_formatter.py:121: PY002 File has 185 lines (max 120).
+cpp\formatter_and_linter\formatter\spacing\prototype_spacing.py:46: PY003 Function '_strip_comments' has 63 lines (max 40).
+cpp\formatter_and_linter\formatter\spacing\prototype_spacing.py:121: PY002 File has 292 lines (max 120).
+cpp\formatter_and_linter\formatter\spacing\prototype_spacing.py:196: PY003 Function 'collapse_prototype_blank_lines' has 57 lines (max 40).
+cpp\formatter_and_linter\linter\core\comment_language_checks.py:121: PY002 File has 209 lines (max 120).
+cpp\formatter_and_linter\linter\core\linter.py:83: PY003 Function 'lint_code' has 81 lines (max 40).
+cpp\formatter_and_linter\linter\core\linter.py:121: PY002 File has 219 lines (max 120).
+cpp\formatter_and_linter\linter\core\reporting.py:121: PY002 File has 219 lines (max 120).
+cpp\formatter_and_linter\linter\module\cppm_checks.py:58: PY003 Function 'check_cppm_interface_implementations' has 75 lines (max 40).
+cpp\formatter_and_linter\linter\module\cppm_checks.py:121: PY002 File has 132 lines (max 120).
+cpp\formatter_and_linter\linter\module\cppm_inline_function_checks.py:121: PY002 File has 394 lines (max 120).
+cpp\formatter_and_linter\linter\module\cppm_inline_function_checks.py:135: PY003 Function '_sanitize_code' has 77 lines (max 40).
+cpp\formatter_and_linter\linter\module\cppm_inline_function_checks.py:318: PY003 Function '_scan_sanitized_code' has 42 lines (max 40).
+cpp\formatter_and_linter\linter\module\module_filename_checks.py:101: PY003 Function 'check_module_filename_convention' has 41 lines (max 40).
+cpp\formatter_and_linter\linter\module\module_filename_checks.py:121: PY002 File has 141 lines (max 120).
+cpp\formatter_and_linter\linter\module\module_size_checks.py:121: PY002 File has 145 lines (max 120).
+cpp\formatter_and_linter\tests\formatter_tests\test_blank_lines_between_declarations.py:24: PY003 Function 'test_prompt_example_same_line_brace' has 41 lines (max 40).
+cpp\formatter_and_linter\tests\formatter_tests\test_blank_lines_between_declarations.py:121: PY002 File has 462 lines (max 120).
+cpp\formatter_and_linter\tests\formatter_tests\test_comment_function_formatter.py:121: PY002 File has 203 lines (max 120).
+cpp\formatter_and_linter\tests\formatter_tests\test_designated_init_split.py:121: PY002 File has 159 lines (max 120).
+cpp\formatter_and_linter\tests\formatter_tests\test_join_lines.py:121: PY002 File has 666 lines (max 120).
+cpp\formatter_and_linter\tests\formatter_tests\test_local_variable_alignment.py:28: PY003 Function 'test_prompt_example_is_aligned' has 42 lines (max 40).
+cpp\formatter_and_linter\tests\formatter_tests\test_local_variable_alignment.py:121: PY002 File has 494 lines (max 120).
+cpp\formatter_and_linter\tests\formatter_tests\test_local_variable_alignment.py:298: PY003 Function 'test_multiline_brace_init_stays_in_same_group' has 53 lines (max 40).
+cpp\formatter_and_linter\tests\formatter_tests\test_member_alignment.py:121: PY002 File has 403 lines (max 120).
+cpp\formatter_and_linter\tests\formatter_tests\test_prototype_spacing.py:121: PY002 File has 170 lines (max 120).
+cpp\formatter_and_linter\tests\linter_module_tests\test_cppm_inline_function_checks.py:121: PY002 File has 395 lines (max 120).
+cpp\formatter_and_linter\tests\linter_module_tests\test_main_filename_checks.py:121: PY002 File has 121 lines (max 120).
+cpp\formatter_and_linter\tests\linter_module_tests\test_module_filename_checks.py:121: PY002 File has 163 lines (max 120).
+cpp\formatter_and_linter\tests\linter_module_tests\test_module_size_checks.py:121: PY002 File has 197 lines (max 120).
+cpp\formatter_and_linter\tests\linter_style_tests\test_blank_line_after_initialization.py:121: PY002 File has 342 lines (max 120).
+cpp\formatter_and_linter\tests\linter_style_tests\test_designated_init.py:121: PY002 File has 402 lines (max 120).
+cpp\formatter_and_linter\tests\linter_style_tests\test_function_parameter_count.py:121: PY002 File has 259 lines (max 120).
+cpp\formatter_and_linter\tests\linter_style_tests\test_multiple_var_decl.py:121: PY002 File has 130 lines (max 120).
+cpp\formatter_and_linter\tests\linter_style_tests\test_return_only_var.py:121: PY002 File has 314 lines (max 120).
+cpp\formatter_and_linter\tests\linter_style_tests\test_style_checks.py:121: PY002 File has 126 lines (max 120).
+cpp\formatter_and_linter\tests\linter_style_tests\test_uninitialized_decl.py:121: PY002 File has 268 lines (max 120).
+cpp\formatter_and_linter\tests\shared_tests\test_comment_placement.py:121: PY002 File has 203 lines (max 120).
+cpp\formatter_and_linter.py:121: PY002 File has 299 lines (max 120).
+
+=== Formatter: corrections available via 'format' ===
+All checks passed!
+All checks passed!
+All checks passed!
+cpp\formatter_and_linter\formatter\__init__.py:1:44: unformatted: File would be reformatted
+cpp\formatter_and_linter\formatter\braces\__init__.py:1:71: unformatted: File would be reformatted
+cpp\formatter_and_linter\formatter\braces\advanced_function_braces.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\formatter\braces\brace_formatter.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\formatter\braces\control_structure_braces.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\formatter\braces\function_braces.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\formatter\braces\if_brace_formatter.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\formatter\braces\short_if_formatter.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\formatter\declarations\__init__.py:1:73: unformatted: File would be reformatted
+cpp\formatter_and_linter\formatter\declarations\declaration_blank_line_formatter\__init__.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\formatter\declarations\declaration_blank_line_formatter\function_brace.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\formatter\declarations\declaration_blank_line_formatter\zone.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\formatter\declarations\designated_init_split_formatter\__init__.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\formatter\declarations\designated_init_split_formatter\initializer_scan.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\formatter\declarations\designated_init_split_formatter\segment_split.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\formatter\declarations\initialization_block_formatter\__init__.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\formatter\declarations\initialization_block_formatter\patterns.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\formatter\declarations\initialization_block_formatter\scan_state.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\formatter\declarations\local_variable_alignment_formatter\__init__.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\formatter\declarations\local_variable_alignment_formatter\block.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\formatter\declarations\local_variable_alignment_formatter\collect.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\formatter\declarations\local_variable_alignment_formatter\statement.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\formatter\declarations\member_alignment_formatter\__init__.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\formatter\declarations\member_alignment_formatter\alignment_pass.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\formatter\declarations\member_alignment_formatter\block_flush.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\formatter\declarations\member_alignment_formatter\scan_state.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\formatter\file_handler.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\formatter\join_lines\__init__.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\formatter\join_lines\decision.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\formatter\join_lines\joining.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\formatter\join_lines\logical_mask.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\formatter\join_lines\masks.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\formatter\join_lines\patterns.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\formatter\join_lines\statement_masks.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\formatter\join_lines\triggers.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\formatter\module\__init__.py:1:59: unformatted: File would be reformatted
+cpp\formatter_and_linter\formatter\module\module_formatter.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\formatter\module\prototype_detection.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\formatter\module\using_import_reorderer.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\formatter\module\using_prototype_reorderer.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\formatter\params\__init__.py:1:65: unformatted: File would be reformatted
+cpp\formatter_and_linter\formatter\params\function_formatter.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\formatter\params\multiline_function_formatter.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\formatter\params\multiline_signature_formatter.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\formatter\params\parameter_formatter\__init__.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\formatter\params\parameter_formatter\alignment.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\formatter\params\parameter_formatter\rendering.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\formatter\params\parameter_parser.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\formatter\spacing\__init__.py:1:58: unformatted: File would be reformatted
+cpp\formatter_and_linter\formatter\spacing\comment_function_formatter.py:1:23: unformatted: File would be reformatted
+50 files would be reformatted
+cpp\formatter_and_linter\formatter\spacing\import_spacing.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\formatter\spacing\include_formatter.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\formatter\spacing\prototype_spacing.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\formatter\spacing\space_formatter.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\linter\__init__.py:1:42: unformatted: File would be reformatted
+cpp\formatter_and_linter\linter\core\__init__.py:1:58: unformatted: File would be reformatted
+cpp\formatter_and_linter\linter\core\comment_language_checks.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\linter\core\directory_checks.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\linter\core\linter.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\linter\core\reporting.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\linter\module\__init__.py:1:48: unformatted: File would be reformatted
+cpp\formatter_and_linter\linter\module\cmake_checks.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\linter\module\cppm_checks.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\linter\module\cppm_inline_function_checks.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\linter\module\main_filename_checks.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\linter\module\module_filename_checks.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\linter\module\module_size_checks.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\linter\style\__init__.py:1:74: unformatted: File would be reformatted
+cpp\formatter_and_linter\linter\style\designated_init_checks\__init__.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\linter\style\designated_init_checks\assignment_parse.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\linter\style\designated_init_checks\patterns.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\linter\style\designated_init_checks\scan.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\linter\style\function_parameter_count_checks\__init__.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\linter\style\function_parameter_count_checks\parameter_count.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\linter\style\function_parameter_count_checks\scan.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\linter\style\multiple_var_decl_checks.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\linter\style\return_only_var_checks\__init__.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\linter\style\return_only_var_checks\declaration_scan.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\linter\style\return_only_var_checks\patterns.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\linter\style\return_only_var_checks\scan.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\linter\style\style_checks\__init__.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\linter\style\style_checks\brace_scanner.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\linter\style\style_checks\declaration_block.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\linter\style\style_checks\declaration_classify.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\linter\style\style_checks\function_length.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\linter\style\style_checks\scanning.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\linter\style\style_checks\signature_scan.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\linter\style\uninitialized_decl_checks.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\shared\brace_utils\__init__.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\shared\brace_utils\brace_scanner.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\shared\brace_utils\keywords.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\shared\brace_utils\signature.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\shared\comment_utils\__init__.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\shared\comment_utils\comment_entries.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\shared\comment_utils\detection.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\shared\comment_utils\line_classification.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\shared\comment_utils\literal_scanners.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\shared\comment_utils\patterns.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\shared\comment_utils\placement.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\shared\comment_utils\scanning.py:1:23: unformatted: File would be reformatted
+50 files would be reformatted
+cpp\formatter_and_linter.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\shared\declaration_parse\__init__.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\shared\declaration_parse\comment_split.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\shared\declaration_parse\declaration_assembly.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\shared\declaration_parse\keywords.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\shared\declaration_parse\literal_mask.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\shared\declaration_parse\parse.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\shared\declaration_parse\separators.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\shared\function_analysis\__init__.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\shared\function_analysis\definition_context.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\shared\function_analysis\qualifiers.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\shared\function_analysis\start_finder.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\shared\function_analysis\stream_operators.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\shared\import_utils.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\shared\progress_bar.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\shared\progress_render.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\shared\regex_patterns.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\tests\formatter_tests\__init__.py:1:34: unformatted: File would be reformatted
+cpp\formatter_and_linter\tests\formatter_tests\test_blank_lines_between_declarations.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\tests\formatter_tests\test_comment_function_formatter.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\tests\formatter_tests\test_designated_init_split.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\tests\formatter_tests\test_join_lines.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\tests\formatter_tests\test_local_variable_alignment.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\tests\formatter_tests\test_member_alignment.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\tests\formatter_tests\test_prototype_spacing.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\tests\linter_core_tests\__init__.py:1:36: unformatted: File would be reformatted
+cpp\formatter_and_linter\tests\linter_core_tests\test_comment_language.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\tests\linter_core_tests\test_directory_checks.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\tests\linter_module_tests\__init__.py:1:38: unformatted: File would be reformatted
+cpp\formatter_and_linter\tests\linter_module_tests\test_cmake_checks.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\tests\linter_module_tests\test_cppm_inline_function_checks.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\tests\linter_module_tests\test_main_filename_checks.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\tests\linter_module_tests\test_module_filename_checks.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\tests\linter_module_tests\test_module_size_checks.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\tests\linter_style_tests\__init__.py:1:37: unformatted: File would be reformatted
+cpp\formatter_and_linter\tests\linter_style_tests\test_blank_line_after_initialization.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\tests\linter_style_tests\test_designated_init.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\tests\linter_style_tests\test_function_parameter_count.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\tests\linter_style_tests\test_multiple_var_decl.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\tests\linter_style_tests\test_return_only_var.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\tests\linter_style_tests\test_style_checks.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\tests\linter_style_tests\test_uninitialized_decl.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\tests\shared_tests\__init__.py:1:31: unformatted: File would be reformatted
+cpp\formatter_and_linter\tests\shared_tests\test_brace_utils.py:1:23: unformatted: File would be reformatted
+cpp\formatter_and_linter\tests\shared_tests\test_comment_placement.py:1:23: unformatted: File would be reformatted
+45 files would be reformatted
