@@ -59,7 +59,7 @@ def _check(files: list[Path], structure_issues: list[Issue]) -> int:
     )
     print("=== Check summary ===")
     print(f"Files checked: {len(files)}")
-    print(f"Linter: {lint_count} diagnostics")
+    print(f"Linter: {lint_count} warnings")
     print(f"Formatter: {import_count} import diagnostics; {format_count} files to reformat")
     if 2 in (lint_status, import_status, format_status):
         print("Ruff could not complete the check; counts may be incomplete.")

@@ -22,7 +22,7 @@ class SummaryTests(unittest.TestCase):
             summary, details = checked.stdout.split("=== Linter diagnostics ===")
             self.assertTrue(summary.startswith("=== Check summary ==="))
             self.assertIn("Files checked: 51", summary)
-            self.assertIn("Linter: 103 diagnostics", summary)
+            self.assertIn("Linter: 103 warnings", summary)
             self.assertIn("Formatter: 51 import diagnostics; 51 files to reformat", summary)
             self.assertIn("PY008", details)
             self.assertEqual(checked.stdout.count("=== Check summary ==="), 1)
