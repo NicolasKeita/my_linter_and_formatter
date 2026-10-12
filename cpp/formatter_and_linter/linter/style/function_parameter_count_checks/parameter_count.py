@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Counting of top-level parameters in a function signature header."""
 
-from linter.module.cppm_inline_function_checks import _find_parameter_list_paren
+from linter.module.cppm_inline_function_checks.header_classify import _find_parameter_list_paren
 
 
 def _extract_parameter_list(normalized: str, paren_index: int) -> str:

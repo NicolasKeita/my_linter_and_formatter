@@ -6,8 +6,6 @@ Detects non-trivial function implementations inside .cppm module interfaces;
 implementations belong in .cpp files.
 """
 
-import re
-
 from linter.module.cppm_checks.detector import detect_definition
 from linter.module.cppm_checks.patterns import (
     CLASS_DECLARATION_REGEX,

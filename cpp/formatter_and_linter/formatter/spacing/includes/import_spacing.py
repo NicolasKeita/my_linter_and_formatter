@@ -63,12 +63,12 @@ def format_module_import_spacing(code: str) -> str:
     while i < len(lines):
         line = lines[i]
 
-        if _is_module_boundary(line):
-            i = _handle_module_declaration(lines, i, new_lines)
+        if is_module_boundary(line):
+            i = handle_module_declaration(lines, i, new_lines)
             continue
 
         if re.match(IMPORT_REGEX, line):
-            i = _handle_import_block(lines, i, new_lines)
+            i = handle_import_block(lines, i, new_lines)
             continue
 
         new_lines.append(line)

@@ -16,7 +16,7 @@ parameters, template arguments and braced default values are handled
 correctly.
 """
 
-from linter.module.cppm_inline_function_checks import _sanitize_code
+from linter.module.cppm_inline_function_checks.sanitizer import _sanitize_code
 
 from .scan import _scan_for_parameter_count
 

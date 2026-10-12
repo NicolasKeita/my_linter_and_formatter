@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """Scan of sanitised code for functions with too many parameters."""
 
-from linter.module.cppm_inline_function_checks import (
+from linter.module.cppm_inline_function_checks.block_model import (
     _Block,
     _BlockKind,
+)
+from linter.module.cppm_inline_function_checks.header_classify import (
     _classify_header,
     _compute_line_starts,
     _is_braced_initializer,
