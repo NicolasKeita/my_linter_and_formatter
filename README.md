@@ -67,7 +67,7 @@ Les deux versions reprennent les contrôles généraux du C++ (taille du code, n
 
 | Langage | Installation et commandes principales | Règles principales |
 | --- | --- | --- |
-| [Python](python/README.md) | `python -m pip install -e ./python`, puis `python -m nk_python check <chemin>` ou `python -m nk_python format <chemin>` | Ruff et contrôles AST/tokenize : 120 caractères et 120 lignes par fichier, 40 lignes par fonction, 5 paramètres, placement des commentaires, 8 fichiers Python directs par dossier. La détection de langue des commentaires est optionnelle. |
+| [Python](python/README.md) | `python -m pip install -e ./python`, puis `python -m nk_python check <chemin>` ou `python -m nk_python format <chemin>` | Ruff et contrôles AST/tokenize : 120 caractères et 120 lignes par fichier, 40 lignes par fonction, 5 paramètres, placement et langue des commentaires, 8 fichiers Python directs par dossier. Ruff et Lingua sont installés par défaut. |
 | [C#](csharp/README.md) | `dotnet build csharp/NkLint.csproj`, puis `dotnet run --project csharp/NkLint.csproj -- check <projet.csproj>`. Les sous-commandes `init` et `format` configurent et corrigent le projet. | Roslyn et `dotnet format` : 120 caractères et 400 lignes par fichier, 40 lignes par corps de fonction, 5 paramètres, déclarations et commentaires, 10 fichiers C# directs par dossier. SDK .NET 10 requis. |
 
 Les règles de modules C++20, de renommage vers PascalCase et de fichier `main.cpp` ne sont pas transposées. Les règles et exceptions exactes figurent dans les README [Python](python/README.md) et [C#](csharp/README.md).

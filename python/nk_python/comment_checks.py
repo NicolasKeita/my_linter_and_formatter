@@ -1,19 +1,14 @@
-"""Token-based comment placement and optional language checks."""
+"""Token-based comment placement and language checks."""
 
 import io
 import re
 import tokenize
 from pathlib import Path
 
+from lingua import Language, LanguageDetectorBuilder
+
 from .model import Issue
 
-try:
-    from lingua import Language, LanguageDetectorBuilder
-except ImportError:
-    Language = None
-    LanguageDetectorBuilder = None
-
-LANGUAGE_AVAILABLE = LanguageDetectorBuilder is not None
 _detector = None
 _DIRECTIVE = re.compile(
     r"^(?:!|coding[:=]|noqa\b|type:\s*ignore\b|pyright:\s*ignore\b|"
@@ -52,8 +47,6 @@ def check_comments(path: Path, source: str, functions: list[tuple[int, int]]) ->
 
 
 def _comment_language(comment: str) -> str | None:
-    if not LANGUAGE_AVAILABLE:
-        return None
     words = [word for word in _WORD.findall(comment) if _natural_word(word)]
     if len(words) < 3 or len(" ".join(words)) < 20:
         return None

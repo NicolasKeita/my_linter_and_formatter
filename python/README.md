@@ -10,11 +10,7 @@ Depuis ce dépôt :
 python -m pip install -e ./python
 ```
 
-Pour activer la détection de la langue des commentaires, installer l'extra optionnel (Lingua est volumineux) :
-
-```bash
-python -m pip install -e "./python[comments]"
-```
+L'installation inclut Ruff et Lingua. La détection de la langue des commentaires est toujours active.
 
 Depuis un autre projet, une installation non éditable fonctionne aussi : `python -m pip install <chemin-vers-ce-dépôt>/python`. La commande `nk-python` est ensuite disponible dans le même environnement Python. On peut également utiliser `python -m nk_python`.
 
@@ -42,7 +38,7 @@ La sortie de `check` commence par un résumé : fichiers analysés, nombre de wa
 | `PY004` | Cinq paramètres maximum ; `self` ou `cls` est exclu pour les méthodes. |
 | `PY005` | Commentaire de fin de ligne interdit, sauf directive d'outil. |
 | `PY006` | Commentaire dans une fonction interdit, sauf directive d'outil ; utiliser une docstring ou clarifier le code. |
-| `PY007` | Commentaire qui semble non anglais ; actif si l'extra `comments` est installé. Les textes trop courts ou ambigus sont ignorés. |
+| `PY007` | Commentaire qui semble non anglais. Les textes trop courts ou ambigus sont ignorés. |
 | `PY008` | Huit fichiers `.py`/`.pyi` directs maximum dans un dossier parcouru. |
 
 Ruff vérifie en plus les erreurs Python (`E4`, `E7`, `E9`, `F`), l'ordre des imports (`I`), les erreurs fréquentes (`B`), certaines modernisations sûres (`UP`) et la variable créée uniquement pour être retournée (`RET504`). Sa configuration est fournie par l'outil, donc les mêmes règles s'appliquent depuis un autre projet. Le formatter impose une indentation de quatre espaces, des guillemets doubles et des fins de ligne LF. Les règles C++ propres aux accolades, `#include`, modules et initialiseurs désignés ne s'appliquent pas à Python.

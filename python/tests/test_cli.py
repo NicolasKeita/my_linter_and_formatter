@@ -6,6 +6,23 @@ from pathlib import Path
 
 
 class CliTests(unittest.TestCase):
+    def test_check_reports_non_english_comments(self):
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "sample.py"
+            source = "# Cette fonction calcule la valeur finale pour chaque entrée.\nvalue = 1\n"
+            path.write_text(source, encoding="utf-8")
+            checked = subprocess.run(
+                [sys.executable, "-m", "nk_python", "check", str(path)],
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            self.assertEqual(checked.returncode, 1, checked.stderr + checked.stdout)
+            self.assertIn("PY007", checked.stdout)
+            self.assertIn("Linter: 1 warnings", checked.stdout)
+            self.assertNotIn("All checks passed!", checked.stdout)
+            self.assertEqual(path.read_text(encoding="utf-8"), source)
+
     def test_check_separates_linter_diagnostics_and_formatter_corrections(self):
         with tempfile.TemporaryDirectory() as temp:
             path = Path(temp) / "sample.py"

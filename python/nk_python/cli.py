@@ -7,7 +7,7 @@ import sys
 from pathlib import Path
 
 from .ast_checks import check_source
-from .comment_checks import LANGUAGE_AVAILABLE, check_comments
+from .comment_checks import check_comments
 from .model import Issue
 from .ruff_runner import run_ruff
 from .structure_checks import discover
@@ -70,9 +70,6 @@ def _check(files: list[Path], structure_issues: list[Issue]) -> int:
     print(lint_text, end="")
     for issue in sorted(issues):
         print(issue)
-    if not LANGUAGE_AVAILABLE:
-        print("Comment language check skipped (install nk-python-style[comments] to enable it).")
-
     print("\n=== Formatter: corrections available via 'format' ===")
     print(import_text, end="")
     print(format_text, end="")

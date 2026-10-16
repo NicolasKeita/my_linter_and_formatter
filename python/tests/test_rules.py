@@ -3,7 +3,7 @@ import unittest
 from pathlib import Path
 
 from nk_python.ast_checks import check_source
-from nk_python.comment_checks import LANGUAGE_AVAILABLE, check_comments
+from nk_python.comment_checks import check_comments
 from nk_python.structure_checks import discover
 
 
@@ -43,9 +43,8 @@ class RuleTests(unittest.TestCase):
 
     def test_inline_comment_and_language(self):
         self.assertIn("PY005", codes("value = 1  # a comment next to code\n"))
-        if LANGUAGE_AVAILABLE:
-            self.assertIn("PY007", codes("# Cette fonction calcule la valeur finale pour chaque entrée.\nvalue = 1\n"))
-            self.assertNotIn("PY007", codes("# This function computes the final value for every input.\nvalue = 1\n"))
+        self.assertIn("PY007", codes("# Cette fonction calcule la valeur finale pour chaque entrée.\nvalue = 1\n"))
+        self.assertNotIn("PY007", codes("# This function computes the final value for every input.\nvalue = 1\n"))
 
     def test_trailing_comment_stays_in_function_scope(self):
         source = "def item():\n    return 1\n    # trailing inside function\n# outside function\n"
