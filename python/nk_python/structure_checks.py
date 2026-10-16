@@ -1,6 +1,7 @@
 """Collect Python files and check direct file counts in each directory."""
 
 import os
+from fnmatch import fnmatchcase
 from pathlib import Path
 
 from .model import Issue
@@ -12,7 +13,7 @@ IGNORED_DIRECTORIES = {
     ".pytest_cache",
     ".ruff_cache",
     ".tox",
-    ".venv",
+    ".venv*",
     "venv",
     "__pycache__",
     "build",
@@ -36,7 +37,11 @@ def discover(paths: list[Path], max_files: int = 8) -> tuple[list[Path], list[Is
             files.add(target)
             continue
         for root, directory_names, file_names in os.walk(target):
-            directory_names[:] = sorted(name for name in directory_names if name not in IGNORED_DIRECTORIES)
+            directory_names[:] = sorted(
+                name
+                for name in directory_names
+                if not any(fnmatchcase(name, pattern) for pattern in IGNORED_DIRECTORIES)
+            )
             directory = Path(root).resolve()
             source_names = sorted(name for name in file_names if Path(name).suffix in SUFFIXES)
             files.update(directory / name for name in source_names)

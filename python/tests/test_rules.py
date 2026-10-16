@@ -65,6 +65,28 @@ class RuleTests(unittest.TestCase):
             self.assertEqual(len(files), 9)
             self.assertEqual([issue.code for issue in issues], ["PY008"])
 
+    def test_structure_ignores_virtual_environment_variants_at_every_depth(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            source = root / "src"
+            source.mkdir()
+            expected = []
+            for name in ("venv_helpers", "app.venv"):
+                directory = source / name
+                directory.mkdir()
+                path = directory / "visible.py"
+                path.write_text("value = 1\n", encoding="utf-8")
+                expected.append(path.resolve())
+            for parent in (root, source):
+                for name in (".venv", ".venv-cardd", ".venv-vision", ".venv312"):
+                    directory = parent / name / "Lib" / "site-packages"
+                    directory.mkdir(parents=True)
+                    for number in range(9):
+                        (directory / f"ignored_{number}.py").write_text("invalid python\n", encoding="utf-8")
+            files, issues = discover([root], max_files=8)
+            self.assertEqual(files, sorted(expected))
+            self.assertEqual(issues, [])
+
 
 if __name__ == "__main__":
     unittest.main()

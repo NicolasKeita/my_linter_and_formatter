@@ -27,7 +27,7 @@ nk-python check fichier.py            # fichier précis
 nk-python check . --max-files 10       # seuil de dossier personnalisé
 ```
 
-Sans chemin, la commande traite le dossier courant. Les sous-dossiers de cache, d'environnement virtuel et de construction sont ignorés. `check` contrôle **aussi** le formatage Ruff et retourne un code non nul si une règle échoue. `format` applique le tri des imports Ruff et `ruff format`; relancer `check` pour les diagnostics qui ne se corrigent pas automatiquement.
+Sans chemin, la commande traite le dossier courant. Les sous-dossiers de cache, d'environnement virtuel et de construction sont ignorés. Cela inclut tous les dossiers dont le nom commence par `.venv`, comme `.venv-cardd` et `.venv-vision`. `check` contrôle **aussi** le formatage Ruff et retourne un code non nul si une règle échoue. `format` applique le tri des imports Ruff et `ruff format`; relancer `check` pour les diagnostics qui ne se corrigent pas automatiquement.
 
 Les diagnostics s'affichent sans extraits de code, avec des chemins relatifs au dossier courant.
 La sortie de `check` commence par un résumé : fichiers analysés, nombre de warnings du linter (Ruff et règles `PY…`), problèmes d'ordre des imports et fichiers à reformater. Elle présente ensuite les diagnostics du linter, puis une section formatter à la fin : ordre des imports et fichiers à reformater. Cette dernière correspond aux corrections appliquées par `format`. Les autres corrections automatiques proposées par Ruff ne sont pas appliquées par cette commande.
