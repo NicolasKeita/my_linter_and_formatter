@@ -171,6 +171,20 @@ void generate_faults() {
 
 ## Usage
 
+The structure checks also report `[WARN_SIMILAR_FILENAME]` once per affected `.cpp` or `.cppm`
+under `Src`, `Tests` and `apps`: numeric suffixes, separator variants, or at least 85% normalized
+name similarity. Extensions are compared separately. For implementations declaring the same
+module, its `<Module>-` prefix does not inflate approximate similarity. No file is renamed by
+this rule. Structure warnings return exit code 1. Use the default directory scope or extend
+comparisons across the project:
+
+```sh
+python formatter_and_linter.py --check --similarity-scope project
+```
+
+The option also applies with `-r`. See the [shared policy](../../README.md#noms-de-fichiers-similaires)
+for normalization, thresholds and limitations.
+
 Depuis le dossier `cpp`, utiliser le [script principal](../formatter_and_linter.py) :
 
 ```bash

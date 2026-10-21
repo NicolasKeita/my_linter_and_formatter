@@ -4,6 +4,7 @@ import os
 from fnmatch import fnmatchcase
 from pathlib import Path
 
+from .filenames import find_similar
 from .model import Issue
 
 IGNORED_DIRECTORIES = {
@@ -33,7 +34,9 @@ SUFFIXES = {".py", ".pyi"}
 MAX_SUBDIRECTORIES = 8
 
 
-def discover(paths: list[Path], max_files: int = 8) -> tuple[list[Path], list[Issue]]:
+def discover(
+    paths: list[Path], max_files: int = 8, similarity_scope: str = "directory"
+) -> tuple[list[Path], list[Issue]]:
     files: set[Path] = set()
     issues: list[Issue] = []
     seen_directories: set[Path] = set()
@@ -69,4 +72,5 @@ def discover(paths: list[Path], max_files: int = 8) -> tuple[list[Path], list[Is
                     )
                 )
             seen_directories.add(directory)
+    issues.extend(Issue(path, 1, "PY010", message) for path, message in find_similar(list(files), similarity_scope))
     return sorted(files), sorted(issues)

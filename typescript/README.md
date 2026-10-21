@@ -42,6 +42,19 @@ Append another config object after `...config` to override rules for a project. 
 
 Use `--max-files N` to change the threshold, `--ignore NAME` to skip another directory name, or `--strict` to exit with code 1 when warnings exist.
 
+The structure command also reports `[similar-filename]` on each affected JavaScript/TypeScript
+source file: numeric suffixes, separator variants, or at least 85% normalized name similarity.
+Each extension and technical role (`.test`, `.spec`, `.stories`, `.d`) is compared separately;
+assets do not participate in this rule. Use `--similarity-scope project` to compare across
+subdirectories, or `--similarity-scope directory` for the default local comparison. For example:
+
+```sh
+nk-lint-structure src --similarity-scope project --strict
+```
+
+The command never renames files. Warnings exit with 0 by default and with 1 in strict mode.
+See the [shared policy](../README.md#noms-de-fichiers-similaires) for normalization, examples and limitations.
+
 ## Development
 
 From the `typescript/` directory, install dependencies and run the checks:

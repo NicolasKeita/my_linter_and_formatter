@@ -1,3 +1,4 @@
+import hashlib
 import subprocess
 import sys
 import tempfile
@@ -5,12 +6,16 @@ import unittest
 from pathlib import Path
 
 
+def fixture_name(number):
+    return "case_" + hashlib.sha256(str(number).encode()).hexdigest()[:16] + "_batch.py"
+
+
 class SummaryTests(unittest.TestCase):
     def test_success_is_reported_once_only_when_all_checks_pass(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
             for number in range(51):
-                (root / f"sample_{number}.py").write_text("value = 1\n", encoding="utf-8", newline="\n")
+                (root / fixture_name(number)).write_text("value = 1\n", encoding="utf-8", newline="\n")
             command = [sys.executable, "-m", "nk_python", "check", str(root)]
             checked = subprocess.run(command, capture_output=True, text=True, check=False)
             self.assertEqual(checked.returncode, 1, checked.stderr + checked.stdout)
@@ -30,7 +35,7 @@ class SummaryTests(unittest.TestCase):
             root = Path(temp)
             source = "import sys\nimport os\n\nvalue=1\n"
             for number in range(51):
-                (root / f"sample_{number}.py").write_text(source, encoding="utf-8")
+                (root / fixture_name(number)).write_text(source, encoding="utf-8")
             checked = subprocess.run(
                 [sys.executable, "-m", "nk_python", "check", str(root)],
                 capture_output=True,
@@ -55,7 +60,7 @@ class SummaryTests(unittest.TestCase):
             root = Path(temp)
             for number in range(101):
                 source = "value=1\n" if number % 2 == 0 else "value = 1\n"
-                (root / f"sample_{number:03}.py").write_text(source, encoding="utf-8", newline="\n")
+                (root / fixture_name(number)).write_text(source, encoding="utf-8", newline="\n")
             command = [sys.executable, "-m", "nk_python"]
             checked = subprocess.run(
                 command + ["check", str(root), "--max-files", "101"],

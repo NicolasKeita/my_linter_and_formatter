@@ -78,27 +78,25 @@ def write_output_file(filepath: str, content: str) -> None:
         sys.exit(1)
 
 
-def parse_arguments() -> tuple[bool, bool, bool, list[str]]:
-    """
-    Parse command-line arguments.
-
-    Returns:
-        A tuple containing:
-        - in_place: Whether to modify the file in place (bool)
-        - check_only: Whether to only check without modifying (bool)
-        - recursive: Whether to search recursively in Src/, Tests/ and apps/ for .cpp files (bool)
-        - input_files: List of paths to input files (List[str])
-    """
+def parse_arguments() -> tuple[bool, bool, bool, list[str], str]:
+    """Return in-place/check/recursive flags, explicit inputs and filename comparison scope."""
     in_place = False
     check_only = False
     recursive = False
     input_files = []
+    similarity_scope = "directory"
 
     args = sys.argv[1:]
 
     i = 0
     while i < len(args):
-        if args[i] == "-i":
+        if args[i] == "--similarity-scope":
+            if i + 1 >= len(args) or args[i + 1] not in {"directory", "project"}:
+                print("--similarity-scope requires directory or project", file=sys.stderr)
+                sys.exit(2)
+            similarity_scope = args[i + 1]
+            i += 2
+        elif args[i] == "-i":
             in_place = True
             i += 1
         elif args[i] == "--check":
@@ -111,4 +109,4 @@ def parse_arguments() -> tuple[bool, bool, bool, list[str]]:
             input_files.append(args[i])
             i += 1
 
-    return in_place, check_only, recursive, input_files
+    return in_place, check_only, recursive, input_files, similarity_scope

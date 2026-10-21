@@ -6,12 +6,12 @@ A formatter that ensures if statements are not placed on a single line,
 following the coding style rule: AllowShortIfStatementsOnASingleLine: false.
 Handles both simple if statements and if statements with braces on single lines.
 
-The with-braces handling lives in if_brace_formatter.
+The with-braces handling lives in braced_conditionals.
 """
 
 import re
 
-from formatter.braces.if_brace_formatter import (
+from formatter.braces.braced_conditionals import (
     find_matching_paren,
     format_short_if_statements_with_braces,
 )

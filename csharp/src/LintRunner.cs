@@ -14,7 +14,7 @@ internal static class LintRunner
     private const int MaxParameters = 5;
     private const int MaxFilesPerDirectory = 10;
 
-    internal static List<LintDiagnostic> Analyze(string target)
+    internal static List<LintDiagnostic> Analyze(string target, string similarityScope = "directory")
     {
         var result = new List<LintDiagnostic>();
         var files = Path.GetExtension(target).ToLowerInvariant() switch
@@ -52,6 +52,7 @@ internal static class LintRunner
             }
         }
 
+        result.AddRange(SimilarFilenames.Analyze(selected.Select(file => file.Path), similarityScope));
         return result.Distinct().ToList();
     }
 

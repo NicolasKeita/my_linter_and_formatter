@@ -5,7 +5,7 @@ import noFrenchComments from './rules/no-french-comments.js';
 const plugin = {
   meta: {
     name: 'eslint-config-nicolaskeita',
-    version: '0.1.2',
+    version: '0.1.3',
   },
   rules: {
     'no-comments-in-functions': noCommentsInFunctions,

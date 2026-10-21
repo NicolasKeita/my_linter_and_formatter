@@ -1,10 +1,16 @@
 #!/usr/bin/env python3
 """Project-level structural checks (directories, modules, CMake)."""
 
+from linter.core.filenames.scan import check_similar_filenames
+
 from app.registry import linter
 
 
-def check_directory_structure() -> bool:
+def check_directory_structure(similarity_scope: str = "directory") -> bool:
+    filename_violations = check_similar_filenames(["Src", "Tests", "apps"], similarity_scope)
+    linter.print_module_filename_warnings(
+        [(str(path), "[WARN_SIMILAR_FILENAME] " + message) for path, message in filename_violations]
+    )
     directory_violations = linter.check_directory_file_counts(
         ["Src", "Tests", "apps"],
         max_files=linter.MAX_FILES_PER_DIRECTORY,
@@ -33,7 +39,8 @@ def check_directory_structure() -> bool:
     )
 
     return (
-        len(directory_violations) > 0
+        bool(filename_violations)
+        or len(directory_violations) > 0
         or len(subdirectory_violations) > 0
         or len(module_filename_violations) > 0
         or len(module_size_violations) > 0

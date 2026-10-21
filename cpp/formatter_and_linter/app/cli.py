@@ -18,6 +18,7 @@ def _print_usage() -> None:
         file=sys.stderr,
     )
     print("       python formatter_and_linter.py --check", file=sys.stderr)
+    print("  --similarity-scope directory|project : Filename comparison scope (default: directory)", file=sys.stderr)
     print("  -i, --in-place    : Modify the file in place (otherwise create output.cpp)", file=sys.stderr)
     print(
         "  -r, --recursive   : Process all .cpp/.cppm files in Src/, Tests/ and apps/ recursively",
@@ -71,8 +72,8 @@ def _process_files(input_files: list[str], in_place: bool, check_only: bool) -> 
 
 
 def main() -> NoReturn:
-    in_place, check_only, recursive, input_files = file_handler.parse_arguments()
-    has_directory_violations = check_directory_structure() if (check_only or recursive) else False
+    in_place, check_only, recursive, input_files, similarity_scope = file_handler.parse_arguments()
+    has_directory_violations = check_directory_structure(similarity_scope) if (check_only or recursive) else False
     input_files = _resolve_input_files(check_only, recursive, input_files)
 
     if not check_only and not recursive:

@@ -12,7 +12,7 @@ internal static class Program
             return args.Length == 0 ? 2 : 0;
         }
 
-        if (args.Length != 2)
+        if (args.Length != 2 && args.Length != 4)
         {
             PrintHelp();
             return 2;
@@ -21,12 +21,19 @@ internal static class Program
         try
         {
             var target = Path.GetFullPath(args[1]);
+            var similarityScope = args.Length == 4 ? args[3] : "directory";
+
+            if (args.Length == 4 && (args[2] != "--similarity-scope" || args[0] is not ("lint" or "check"))
+                || similarityScope is not ("directory" or "project"))
+            {
+                throw new ArgumentException("--similarity-scope requires directory or project (lint/check only)");
+            }
 
             return args[0] switch
             {
-                "lint" => Lint(target),
+                "lint" => Lint(target, similarityScope),
                 "format" => Format(target, verify: false),
-                "check" => Check(target),
+                "check" => Check(target, similarityScope),
                 "init" => InstallConfig(target),
                 _ => UnknownCommand(args[0]),
             };
@@ -45,7 +52,7 @@ internal static class Program
         return 2;
     }
 
-    private static int Lint(string target)
+    private static int Lint(string target, string similarityScope)
     {
         if (!File.Exists(target) && !Directory.Exists(target))
         {
@@ -58,7 +65,7 @@ internal static class Program
             throw new ArgumentException("Le linter accepte un fichier .cs, un projet, une solution ou un dossier.");
         }
 
-        var diagnostics = LintRunner.Analyze(target);
+        var diagnostics = LintRunner.Analyze(target, similarityScope);
         foreach (var diagnostic in diagnostics.OrderBy(item => item.Path)
                      .ThenBy(item => item.Line)
                      .ThenBy(item => item.Column)
@@ -73,11 +80,11 @@ internal static class Program
         return diagnostics.Count == 0 ? 0 : 1;
     }
 
-    private static int Check(string target)
+    private static int Check(string target, string similarityScope)
     {
         var workspace = FindWorkspace(target);
         var formatResult = Format(workspace, verify: true);
-        var lintResult = Lint(workspace);
+        var lintResult = Lint(workspace, similarityScope);
 
         return formatResult == 0 && lintResult == 0 ? 0 : 1;
     }
@@ -156,6 +163,7 @@ internal static class Program
     private static void PrintHelp()
     {
         Console.WriteLine("nk-csharp <lint|format|check|init> <chemin>");
+        Console.WriteLine("  lint/check : --similarity-scope directory|project (défaut : directory)");
         Console.WriteLine("  lint    Analyse un fichier .cs, un dossier, un projet ou une solution.");
         Console.WriteLine("  format  Exécute dotnet format sur un .csproj/.sln/.slnx.");
         Console.WriteLine("  check   Vérifie le formatage sans écrire, puis analyse le code.");

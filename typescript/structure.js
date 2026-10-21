@@ -1,6 +1,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
+import { findSimilar } from './filenames/index.js';
+
 export const defaultIgnoredNames = [
   '.git',
   '.next',
@@ -11,7 +13,9 @@ export const defaultIgnoredNames = [
 ];
 export const maxSubdirectories = 8;
 
-export function scanStructure(rootDirectory, { maxFiles = 10, ignore = defaultIgnoredNames } = {}) {
+export function scanStructure(
+  rootDirectory, { maxFiles = 10, ignore = defaultIgnoredNames, similarityScope = 'directory' } = {},
+) {
   if (!Number.isInteger(maxFiles) || maxFiles < 0) {
     throw new TypeError('maxFiles must be a non-negative integer.');
   }
@@ -19,6 +23,7 @@ export function scanStructure(rootDirectory, { maxFiles = 10, ignore = defaultIg
   const root = path.resolve(rootDirectory);
   const ignoredNames = new Set(ignore);
   const diagnostics = [];
+  const files = [];
 
   function visit(directory) {
     const entries = fs.readdirSync(directory, { withFileTypes: true })
@@ -31,6 +36,8 @@ export function scanStructure(rootDirectory, { maxFiles = 10, ignore = defaultIg
     }
 
     const fileCount = entries.filter((entry) => entry.isFile()).length;
+
+    files.push(...entries.filter((entry) => entry.isFile()).map((entry) => path.join(directory, entry.name)));
 
     if (fileCount > maxFiles) {
       diagnostics.push({ directory, kind: 'too-many-files', fileCount, maxFiles });
@@ -50,5 +57,6 @@ export function scanStructure(rootDirectory, { maxFiles = 10, ignore = defaultIg
   }
 
   visit(root);
+  diagnostics.push(...findSimilar(files, similarityScope));
   return diagnostics;
 }

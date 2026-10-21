@@ -56,8 +56,8 @@ class RuleTests(unittest.TestCase):
     def test_structure_counts_direct_sources_and_ignores_cache(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
-            for number in range(9):
-                (root / f"file_{number}.py").write_text("x = 1\n", encoding="utf-8")
+            for name in ("alpha", "bravo", "charlie", "delta", "echo", "foxtrot", "golf", "hotel", "india"):
+                (root / f"{name}.py").write_text("x = 1\n", encoding="utf-8")
             (root / "__pycache__").mkdir()
             (root / "__pycache__" / "ignored.py").write_text("", encoding="utf-8")
             files, issues = discover([root], max_files=8)

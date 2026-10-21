@@ -21,6 +21,7 @@ nk-python check Src Tests              # Ruff et règles propres, sans écriture
 nk-python format Src Tests             # trie les imports et formate en place
 nk-python check fichier.py            # fichier précis
 nk-python check . --max-files 10       # seuil de dossier personnalisé
+nk-python check . --similarity-scope project
 ```
 
 Sans chemin, la commande traite le dossier courant. Les sous-dossiers de cache, d'environnement virtuel et de construction sont ignorés. Cela inclut tous les dossiers dont le nom commence par `.venv`, comme `.venv-cardd` et `.venv-vision`. `check` contrôle **aussi** le formatage Ruff et retourne un code non nul si une règle échoue. `format` applique le tri des imports Ruff et `ruff format`; relancer `check` pour les diagnostics qui ne se corrigent pas automatiquement.
@@ -44,6 +45,13 @@ Dans `check` et `format`, le bilan du formatage affiche les totaux sur l'ensembl
 | `PY007` | Commentaire qui semble non anglais. Les textes trop courts ou ambigus sont ignorés. |
 | `PY008` | Huit fichiers `.py`/`.pyi` directs maximum dans un dossier parcouru. |
 | `PY009` | Huit sous-dossiers directs maximum dans chaque dossier parcouru, y compris les sous-dossiers vides, après exclusions. |
+| `PY010` | Noms de fichiers similaires : variantes numériques/séparateurs ou similarité ≥ 85 %, sans renommage automatique. |
+
+`PY010` compare les `.py` entre eux et les `.pyi` entre eux, dans chaque dossier par défaut.
+`--similarity-scope project` étend les comparaisons à tous les chemins sélectionnés par l'invocation.
+Le warning apparaît sur chaque fichier concerné, avec ses correspondances et motifs ; `check`
+retourne 1 en présence de warnings. `format` ne renomme aucun fichier. Voir la
+[politique commune](../README.md#noms-de-fichiers-similaires) pour la normalisation, les seuils et les limites.
 
 Ruff vérifie en plus les erreurs Python (`E4`, `E7`, `E9`, `F`), l'ordre des imports (`I`), les erreurs fréquentes (`B`), certaines modernisations sûres (`UP`) et la variable créée uniquement pour être retournée (`RET504`). Sa configuration est fournie par l'outil, donc les mêmes règles s'appliquent depuis un autre projet. Le formatter impose une indentation de quatre espaces, des guillemets doubles et des fins de ligne LF. Les règles C++ propres aux accolades, `#include`, modules et initialiseurs désignés ne s'appliquent pas à Python.
 

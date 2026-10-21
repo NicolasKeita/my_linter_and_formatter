@@ -74,3 +74,38 @@ Les quatre outils limitent chaque dossier parcouru à **8 sous-dossiers directs*
 | [C#](csharp/README.md) | `dotnet build csharp/NkLint.csproj`, puis `dotnet run --project csharp/NkLint.csproj -- check <projet.csproj>`. Les sous-commandes `init` et `format` configurent et corrigent le projet. | Roslyn et `dotnet format` : 120 caractères et 400 lignes par fichier, 40 lignes par corps de fonction, 5 paramètres, déclarations et commentaires, 10 fichiers C# directs par dossier. SDK .NET 10 requis. |
 
 Les règles de modules C++20, de renommage vers PascalCase et de fichier `main.cpp` ne sont pas transposées. Les règles et exceptions exactes figurent dans les README [Python](python/README.md) et [C#](csharp/README.md).
+
+## Noms de fichiers similaires
+
+Les quatre outils signalent les noms suggérant un découpage artificiel : `Utility_1`,
+`Utility-02`, `UtilityPart3`, `Utility__`, `Utility-`, ainsi que les petites fautes comme
+`Utiliy`. Un fichier seul ne déclenche pas ce contrôle. Aucun renommage n'est automatique.
+Chaque fichier concerné reçoit un warning regroupant ses correspondances directes et leurs motifs.
+
+Le contrôle compare les noms sans extension, après normalisation Unicode NFKC, mise en minuscules,
+retrait des caractères invisibles usuels et normalisation des séparateurs `_`, tirets et espaces.
+Les numéros terminaux (avec éventuellement `part`, `chunk` ou `split`) sont retirés de manière
+répétée ; les chiffres internes restent significatifs. Une base normalisée identique déclenche
+un warning, même si elle est courte. Sinon, pour deux bases d'au moins six caractères, le seuil
+inclusif est de **85 %**, selon `1 - distance / longueur_maximale`. La distance de
+Damerau-Levenshtein tient compte de l'ordre et des inversions adjacentes : `course` / `source`
+obtient 66,7 % et ne déclenche aucun warning. Les décisions utilisent le score non arrondi.
+
+Par défaut, les comparaisons restent dans chaque dossier. `--similarity-scope project` compare
+tous les fichiers retenus dans une même invocation, y compris entre sous-dossiers. Les chemins
+répétés sont dédoublonnés ; deux noms strictement identiques dans des dossiers différents restent
+autorisés (par exemple deux `index.ts`). Les correspondances ne sont pas transitives.
+
+Chaque extension est comparée séparément : les couples `.cpp` / `.cppm`, `.py` / `.pyi` et
+`.ts` / `.js` restent autorisés. En JavaScript/TypeScript, `.test`, `.spec`, `.stories` et `.d`
+définissent aussi des rôles séparés ; deux variantes numériques du même rôle restent contrôlées.
+Les fichiers non sources et les exclusions habituelles de chaque outil ne participent pas.
+En C++, les fichiers `.cpp` et `.cppm` sont contrôlés sous `Src`, `Tests` et `apps` ; pour deux
+implémentations déclarant le même module, son préfixe `<Module>-` ne gonfle pas le score approximatif.
+En C#, la sélection MSBuild et les exclusions de fichiers générés restent appliquées.
+
+Cette règle est une heuristique de nommage, pas une preuve de duplication ou d'intention.
+Des variantes légitimes comme `Sha256` / `Sha512` ou des noms très longs peuvent être signalées.
+Des fichiers renommés avec des noms différents peuvent lui échapper. Le mode projet est plus
+large et peut produire davantage de faux positifs. Les codes de sortie habituels sont conservés :
+écart bloquant dans les outils C++, Python et C#, warning non bloquant en TypeScript sauf avec `--strict`.

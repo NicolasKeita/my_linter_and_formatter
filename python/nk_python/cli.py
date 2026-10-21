@@ -20,13 +20,16 @@ def main(argv: list[str] | None = None) -> int:
         "paths", nargs="*", default=["."], help="Python files or directories (default: current directory)."
     )
     parser.add_argument("--max-files", type=_positive_int, default=8, help="Maximum direct Python files per directory.")
+    parser.add_argument("--similarity-scope", choices=("directory", "project"), default="directory")
     arguments = parser.parse_args(argv)
 
     if importlib.util.find_spec("ruff") is None:
         print("Ruff is required. Install this tool with: pip install -e ./python", file=sys.stderr)
         return 2
     try:
-        files, structure_issues = discover([Path(value) for value in arguments.paths], arguments.max_files)
+        files, structure_issues = discover(
+            [Path(value) for value in arguments.paths], arguments.max_files, arguments.similarity_scope
+        )
     except (FileNotFoundError, ValueError) as error:
         print(error, file=sys.stderr)
         return 2
