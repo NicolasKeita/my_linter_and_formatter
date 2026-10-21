@@ -14,6 +14,22 @@ L'installation inclut Ruff et Lingua. La détection de la langue des commentaire
 
 Depuis un autre projet, une installation non éditable fonctionne aussi : `python -m pip install <chemin-vers-ce-dépôt>/python`. La commande `nk-python` est ensuite disponible dans le même environnement Python. On peut également utiliser `python -m nk_python`.
 
+## Publication sur PyPI
+
+Depuis la racine du dépôt :
+
+```bash
+cd python
+python -m pip install build twine
+python -m build
+python -m twine check dist/*
+python -m twine upload dist/nk_python_style-0.2.5*
+```
+
+Remplacer `0.2.5` dans la commande d'upload par la version à publier, définie dans
+`pyproject.toml`. Si cette version est déjà publiée sur PyPI, l'incrémenter avant
+de reconstruire le paquet. Utiliser un token API PyPI si Twine demande un mot de passe.
+
 ## Utilisation
 
 ```bash
