@@ -38,7 +38,7 @@ Append another config object after `...config` to override rules for a project. 
 
 ## Directory checks
 
-`nk-lint-structure <directory>` reports empty directories and directories containing more than 10 direct files. It counts all files, including assets and files that ESLint does not parse. It ignores `.git`, `.next`, `node_modules`, `dist`, `build`, and `coverage` by name. It exits successfully on warnings, matching the ESLint rule severity used in the portfolio.
+`nk-lint-structure <directory>` reports empty directories, directories containing more than 10 direct files, and directories containing more than 8 direct subdirectories. Empty subdirectories count toward this limit; each level is checked separately. It counts all files, including assets and files that ESLint does not parse. It ignores `.git`, `.next`, `node_modules`, `dist`, `build`, and `coverage` by name, including when counting subdirectories. It exits successfully on warnings, matching the ESLint rule severity used in the portfolio.
 
 Use `--max-files N` to change the threshold, `--ignore NAME` to skip another directory name, or `--strict` to exit with code 1 when warnings exist.
 

@@ -11,13 +11,13 @@ from linter.style.multiple_var_decl_checks import MULTIPLE_VAR_DECL_MESSAGE, che
 
 
 def check_code(code: str):
-    return check_multiple_var_declarations('\n'.join(code))
+    return check_multiple_var_declarations("\n".join(code))
 
 
 class TestMultipleVarDeclarations(unittest.TestCase):
     def test_preprocessor_lines_are_ignored(self):
         code = [
-            '#define PAIR(a, b) a, b',
+            "#define PAIR(a, b) a, b",
         ]
         self.assertEqual(check_code(code), [])
 

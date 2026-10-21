@@ -60,4 +60,5 @@ def test_function_braces_pass_keeps_initializer_rows_with_parens_in_strings():
 
 if __name__ == "__main__":
     import pytest
+
     pytest.main([__file__, "-v"])

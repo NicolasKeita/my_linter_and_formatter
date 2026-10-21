@@ -20,11 +20,7 @@ from formatter.params.signature_helpers import (
 )
 
 
-def _try_format_signature(
-    lines: list[str],
-    i: int,
-    match: re.Match[str],
-) -> tuple[list[str], int] | None:
+def _try_format_signature(lines: list[str], i: int, match: re.Match[str]) -> tuple[list[str], int] | None:
     """Format the multi-line signature starting at ``lines[i]``; returns the
     emitted lines plus the resume index, or None when unreformattable."""
     stripped = lines[i].strip()
@@ -37,7 +33,7 @@ def _try_format_signature(
         return None
 
     _, next_line_is_brace = resolve_prototype_flag(param_lines[-1].strip(), lines, j)
-    first_line_params = lines[i][match.end():]
+    first_line_params = lines[i][match.end() :]
     all_params = join_param_lines(first_line_params, param_lines)
     has_brace = "{" in param_lines[-1] or next_line_is_brace
     brace_on_next_line = has_brace and "{" not in param_lines[-1] and next_line_is_brace
@@ -53,8 +49,12 @@ def _try_format_signature(
     formatted_params = format_parameters_list(parsed_params, indent, max_type_len)
 
     parts = SignatureParts(
-        leading_indent, full_prefix, full_func_name, formatted_params,
-        signature_suffix, has_brace, inline_body,
+        leading_indent,
+        full_prefix,
+        full_func_name,
+        formatted_params,
+        signature_suffix,
+        has_brace,
+        inline_body,
     )
     return render_multiline_signature(parts), advance_after_signature(has_brace, brace_on_next_line, j)
-

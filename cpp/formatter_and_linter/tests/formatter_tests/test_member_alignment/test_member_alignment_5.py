@@ -53,6 +53,17 @@ class TestMemberAlignment(unittest.TestCase):
         self.assertEqual(result[3], "        int    beta = 2;")
         self.assertEqual(result[5], "    [[nodiscard]] std::string_view name(int value);")
 
+    def test_string_literal_with_slashes(self):
+        code = [
+            "struct S {",
+            '    std::string endpoint = "http://127.0.0.1:8080";',
+            "    int a = 1;",
+            "};",
+        ]
+        result = align_lines(code)
+        self.assertEqual(result[1], '    std::string endpoint = "http://127.0.0.1:8080";')
+        self.assertEqual(result[2], "    int         a = 1;")
+
 
 if __name__ == "__main__":
     unittest.main()

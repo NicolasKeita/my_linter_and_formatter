@@ -6,9 +6,7 @@ from typing import NamedTuple
 
 from shared.declaration_parse import DeclarationParts
 
-CLASS_HEADER_REGEX = re.compile(
-    r"^\s*(?:export\s+)?(?:template\s*<[^<>]*>\s*)?(?:struct|class|union)\b"
-)
+CLASS_HEADER_REGEX = re.compile(r"^\s*(?:export\s+)?(?:template\s*<[^<>]*>\s*)?(?:struct|class|union)\b")
 
 PREPROCESSOR_REGEX = re.compile(r"^\s*#")
 
@@ -48,11 +46,7 @@ class ScanState:
             self.pending_header_depth = self.depth
         header_consumed = self._consume_braces(masked_code, has_header)
         if self.pending_header_depth is not None and not header_consumed:
-            if (
-                "{" in masked_code
-                or "}" in masked_code
-                or masked_code.rstrip().endswith(";")
-            ):
+            if "{" in masked_code or "}" in masked_code or masked_code.rstrip().endswith(";"):
                 self.pending_header_depth = None
 
     def _consume_braces(self, masked_code: str, has_header: bool) -> bool:

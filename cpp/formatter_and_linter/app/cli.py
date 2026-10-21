@@ -20,13 +20,11 @@ def _print_usage() -> None:
     print("       python formatter_and_linter.py --check", file=sys.stderr)
     print("  -i, --in-place    : Modify the file in place (otherwise create output.cpp)", file=sys.stderr)
     print(
-        "  -r, --recursive   : Process all .cpp/.cppm files "
-        "in Src/, Tests/ and apps/ recursively",
+        "  -r, --recursive   : Process all .cpp/.cppm files in Src/, Tests/ and apps/ recursively",
         file=sys.stderr,
     )
     print(
-        "  --check           : Check all files in Src/, Tests/ and apps/ "
-        "and CMakeLists.txt without modifying",
+        "  --check           : Check all files in Src/, Tests/ and apps/ and CMakeLists.txt without modifying",
         file=sys.stderr,
     )
 
@@ -63,9 +61,7 @@ def _process_files(input_files: list[str], in_place: bool, check_only: bool) -> 
     try:
         for input_file in input_files:
             progress.set_file(input_file)
-            has_long_lines = progress.run_with_captured_output(
-                format_file, input_file, in_place, check_only
-            )
+            has_long_lines = progress.run_with_captured_output(format_file, input_file, in_place, check_only)
             progress.advance()
             if has_long_lines:
                 has_any_long_lines = True
@@ -76,9 +72,8 @@ def _process_files(input_files: list[str], in_place: bool, check_only: bool) -> 
 
 def main() -> NoReturn:
     in_place, check_only, recursive, input_files = file_handler.parse_arguments()
-    input_files = _resolve_input_files(check_only, recursive, input_files)
-
     has_directory_violations = check_directory_structure() if (check_only or recursive) else False
+    input_files = _resolve_input_files(check_only, recursive, input_files)
 
     if not check_only and not recursive:
         print("Renaming files to PascalCase...")

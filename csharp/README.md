@@ -52,6 +52,7 @@ exécutez aussi `dotnet build` sur votre projet.
 | NK009 | Signale une variable initialisée puis immédiatement retournée. |
 | NK010 | Fichier sans code C#. |
 | NK011 | Au plus 10 fichiers `.cs` directs par dossier. |
+| NK012 | Au plus 8 sous-dossiers directs par dossier parcouru, y compris les sous-dossiers vides, après exclusions. |
 
 Le contrôle descend dans les sous-dossiers et ignore `.git`, `.vs`, `bin`, `obj`,
 `node_modules` et `TestResults`, ainsi que les fichiers `*.g.cs`, `*.generated.cs`,
@@ -60,6 +61,10 @@ les virgules d'un appel ou d'un type générique ne sont pas prises pour des dé
 multiples, et `//` dans une chaîne de caractères n'est pas traité comme un commentaire.
 Les plafonds de 400 lignes par fichier et 10 fichiers directs par dossier sont des adaptations
 volontaires des seuils C++ aux projets C#.
+
+La limite de sous-dossiers s'applique à chaque niveau, même sans fichier `.cs`, à partir
+du dossier analysé ou de la racine du projet ou de la solution. Elle ne s'applique pas
+lorsqu'un fichier `.cs` est fourni seul.
 
 Le formatter règle notamment l'indentation de 4 espaces, les fins de ligne LF, les espaces
 en fin de ligne, le saut de ligne final, l'ordre des `using` et le placement des accolades.

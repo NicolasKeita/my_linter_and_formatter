@@ -16,99 +16,30 @@ def fmt(code: str) -> str:
 
 class TestCommentFunctionSpacing(unittest.TestCase):
     def test_block_comment_closing_with_no_blank_line_before_function(self):
-        code = (
-            "/*\n"
-            "  Description...\n"
-            "*/\n"
-            "static int foo()\n"
-            "{\n"
-            "    return 0;\n"
-            "}"
-        )
+        code = "/*\n  Description...\n*/\nstatic int foo()\n{\n    return 0;\n}"
         self.assertEqual(fmt(code), code)
 
     def test_block_comment_with_extra_blank_line_is_collapsed(self):
-        code = (
-            "/*\n"
-            "  Description...\n"
-            "*/\n"
-            "\n"
-            "static int foo()\n"
-            "{\n"
-            "    return 0;\n"
-            "}"
-        )
-        expected = (
-            "/*\n"
-            "  Description...\n"
-            "*/\n"
-            "static int foo()\n"
-            "{\n"
-            "    return 0;\n"
-            "}"
-        )
+        code = "/*\n  Description...\n*/\n\nstatic int foo()\n{\n    return 0;\n}"
+        expected = "/*\n  Description...\n*/\nstatic int foo()\n{\n    return 0;\n}"
         self.assertEqual(fmt(code), expected)
 
     def test_block_comment_with_multiple_blank_lines_is_collapsed(self):
-        code = (
-            "/*\n"
-            "  Description...\n"
-            "*/\n"
-            "\n"
-            "\n"
-            "\n"
-            "static int foo()\n"
-            "{\n"
-            "    return 0;\n"
-            "}"
-        )
-        expected = (
-            "/*\n"
-            "  Description...\n"
-            "*/\n"
-            "static int foo()\n"
-            "{\n"
-            "    return 0;\n"
-            "}"
-        )
+        code = "/*\n  Description...\n*/\n\n\n\nstatic int foo()\n{\n    return 0;\n}"
+        expected = "/*\n  Description...\n*/\nstatic int foo()\n{\n    return 0;\n}"
         self.assertEqual(fmt(code), expected)
 
     def test_single_line_comment_before_function(self):
-        code = (
-            "// Description...\n"
-            "static int foo()\n"
-            "{\n"
-            "    return 0;\n"
-            "}"
-        )
+        code = "// Description...\nstatic int foo()\n{\n    return 0;\n}"
         self.assertEqual(fmt(code), code)
 
     def test_single_line_block_comment_before_function(self):
-        code = (
-            "/* Description... */\n"
-            "static int foo()\n"
-            "{\n"
-            "    return 0;\n"
-            "}"
-        )
+        code = "/* Description... */\nstatic int foo()\n{\n    return 0;\n}"
         self.assertEqual(fmt(code), code)
 
     def test_code_before_function_gets_blank_line(self):
-        code = (
-            "int x = 5;\n"
-            "static int foo()\n"
-            "{\n"
-            "    return 0;\n"
-            "}"
-        )
-        expected = (
-            "int x = 5;\n"
-            "\n"
-            "static int foo()\n"
-            "{\n"
-            "    return 0;\n"
-            "}"
-        )
+        code = "int x = 5;\nstatic int foo()\n{\n    return 0;\n}"
+        expected = "int x = 5;\n\nstatic int foo()\n{\n    return 0;\n}"
         self.assertEqual(fmt(code), expected)
 
 

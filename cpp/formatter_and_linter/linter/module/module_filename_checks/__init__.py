@@ -37,8 +37,7 @@ def _single_implementation_violation(root: str, module_name: str, implementation
         return None
     return (
         os.path.join(root, implementation),
-        "single implementation of '" + module_name + "' must be named '"
-        + expected_name + "'",
+        "single implementation of '" + module_name + "' must be named '" + expected_name + "'",
     )
 
 
@@ -52,11 +51,18 @@ def _multiple_implementation_violations(
     for file_name in implementations:
         if file_name == base_name or not file_name.startswith(module_name + "-"):
             suggestion = suggest_hyphenated_name(module_name, file_name)
-            violations.append((
-                os.path.join(root, file_name),
-                "multiple implementations of '" + module_name + "' must follow '"
-                + module_name + "-<Suffix>.cpp' (e.g. '" + suggestion + "')",
-            ))
+            violations.append(
+                (
+                    os.path.join(root, file_name),
+                    "multiple implementations of '"
+                    + module_name
+                    + "' must follow '"
+                    + module_name
+                    + "-<Suffix>.cpp' (e.g. '"
+                    + suggestion
+                    + "')",
+                )
+            )
     return violations
 
 
@@ -66,7 +72,7 @@ def _validate_interface(
     interface_file: str,
     declared: dict[str, str | None],
 ) -> list[tuple[str, str]]:
-    module_name = interface_file[:-len(INTERFACE_EXTENSION)]
+    module_name = interface_file[: -len(INTERFACE_EXTENSION)]
     implementations = find_implementation_files(files, module_name, declared)
 
     if len(implementations) == 0:
@@ -87,14 +93,10 @@ def check_module_filename_convention(directories: list[str]) -> list[tuple[str, 
     violations: list[tuple[str, str]] = []
     for directory in directories:
         for root, _, files in os.walk(directory):
-            interface_files = [
-                file for file in files if file.endswith(INTERFACE_EXTENSION)
-            ]
+            interface_files = [file for file in files if file.endswith(INTERFACE_EXTENSION)]
             declared = declared_modules(root, files)
             for interface_file in interface_files:
-                violations.extend(
-                    _validate_interface(root, files, interface_file, declared)
-                )
+                violations.extend(_validate_interface(root, files, interface_file, declared))
 
     return sorted(violations)
 

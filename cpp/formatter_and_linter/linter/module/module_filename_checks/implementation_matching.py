@@ -28,9 +28,7 @@ def find_implementation_files(
             continue
         if declared.get(file) == module_name:
             candidates.append(file)
-        elif declared.get(file, "missing") is None and (
-            file == base_name or file.startswith(module_name + "-")
-        ):
+        elif declared.get(file, "missing") is None and (file == base_name or file.startswith(module_name + "-")):
             candidates.append(file)
     return sorted(candidates)
 
@@ -38,4 +36,4 @@ def find_implementation_files(
 def suggest_hyphenated_name(module_name: str, file_name: str) -> str:
     if file_name == module_name + IMPLEMENTATION_EXTENSION:
         return module_name + "-Core" + IMPLEMENTATION_EXTENSION
-    return module_name + "-" + file_name[:-len(IMPLEMENTATION_EXTENSION)] + IMPLEMENTATION_EXTENSION
+    return module_name + "-" + file_name[: -len(IMPLEMENTATION_EXTENSION)] + IMPLEMENTATION_EXTENSION

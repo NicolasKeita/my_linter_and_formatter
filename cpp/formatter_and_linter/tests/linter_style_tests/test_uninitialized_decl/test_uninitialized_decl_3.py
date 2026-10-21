@@ -14,60 +14,60 @@ from linter.style.uninitialized_decl_checks import (
 
 
 def check_code(code):
-    return check_uninitialized_declarations('\n'.join(code))
+    return check_uninitialized_declarations("\n".join(code))
 
 
 class TestUninitializedDeclarations(unittest.TestCase):
     def test_template_type_declaration_is_reported(self):
         code = [
-            'std::map<std::uint32_t, std::string> lookup;',
-            'lookup.index = 1;',
+            "std::map<std::uint32_t, std::string> lookup;",
+            "lookup.index = 1;",
         ]
-        self.assertEqual(check_code(code), [(1, 'lookup')])
+        self.assertEqual(check_code(code), [(1, "lookup")])
 
     def test_nested_template_type_declaration_is_reported(self):
         code = [
-            'std::map<std::string, std::vector<int>> values;',
-            'values.count = 1;',
+            "std::map<std::string, std::vector<int>> values;",
+            "values.count = 1;",
         ]
-        self.assertEqual(check_code(code), [(1, 'values')])
+        self.assertEqual(check_code(code), [(1, "values")])
 
     def test_reference_declaration_is_reported(self):
         code = [
-            'Config& config;',
-            'config.count = 1;',
+            "Config& config;",
+            "config.count = 1;",
         ]
-        self.assertEqual(check_code(code), [(1, 'config')])
+        self.assertEqual(check_code(code), [(1, "config")])
 
     def test_multiple_declarators_are_not_reported(self):
         code = [
-            'Type a, b;',
-            'a.champ = 1;',
+            "Type a, b;",
+            "a.champ = 1;",
         ]
         self.assertEqual(check_code(code), [])
 
     def test_two_statements_on_one_line_are_not_reported(self):
         code = [
-            'TypeVar ma_var; prepare();',
-            'ma_var.champ1 = val1;',
+            "TypeVar ma_var; prepare();",
+            "ma_var.champ1 = val1;",
         ]
         self.assertEqual(check_code(code), [])
 
     def test_string_content_is_ignored(self):
         code = [
-            'TypeVar ma_var;',
+            "TypeVar ma_var;",
             'log("ma_var.champ1 = val1");',
-            'ma_var.champ1 = val1;',
+            "ma_var.champ1 = val1;",
         ]
         self.assertEqual(check_code(code), [])
 
     def test_message_text(self):
         self.assertEqual(
-            format_uninitialized_decl_message('injected'),
+            format_uninitialized_decl_message("injected"),
             "Variable 'injected' déclarée puis initialisée par assignation membre par membre. "
             "Préférer l'initialisation directe ou un designated initializer (C++20).",
         )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

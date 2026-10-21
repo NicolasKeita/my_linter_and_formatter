@@ -17,73 +17,28 @@ def placement_violations(code: str):
 
 class TestCommentPlacement(unittest.TestCase):
     def test_header_comment_in_first_lines_is_valid(self):
-        code = (
-            "// file header note\n"
-            "\n"
-            "constexpr int kFoo{1};\n"
-            "\n"
-            "int get_foo()\n"
-            "{\n"
-            "    return kFoo;\n"
-            "}\n"
-        )
+        code = "// file header note\n\nconstexpr int kFoo{1};\n\nint get_foo()\n{\n    return kFoo;\n}\n"
         self.assertEqual(placement_violations(code), [])
 
     def test_comment_above_type_declaration_is_valid(self):
-        code = (
-            "// scenario descriptor\n"
-            "struct Scenario\n"
-            "{\n"
-            "    int id;\n"
-            "};\n"
-        )
+        code = "// scenario descriptor\nstruct Scenario\n{\n    int id;\n};\n"
         self.assertEqual(placement_violations(code), [])
 
     def test_comment_above_nodiscard_function_is_valid(self):
-        code = (
-            "/*\n"
-            "doc\n"
-            "*/\n"
-            "[[nodiscard]] int get_bar()\n"
-            "{\n"
-            "    return 1;\n"
-            "}\n"
-        )
+        code = "/*\ndoc\n*/\n[[nodiscard]] int get_bar()\n{\n    return 1;\n}\n"
         self.assertEqual(placement_violations(code), [])
 
     def test_comment_above_template_nodiscard_function_is_valid(self):
-        code = (
-            "/*\n"
-            "doc\n"
-            "*/\n"
-            "template<typename Number>\n"
-            "[[nodiscard]] Number get_bar(Number n)\n"
-            "{\n"
-            "    return n;\n"
-            "}\n"
-        )
+        code = "/*\ndoc\n*/\ntemplate<typename Number>\n[[nodiscard]] Number get_bar(Number n)\n{\n    return n;\n}\n"
         self.assertEqual(placement_violations(code), [])
 
     def test_comment_above_nodiscard_declaration_is_valid(self):
-        code = (
-            "/*\n"
-            "doc\n"
-            "*/\n"
-            "[[nodiscard]] int get_bar();\n"
-        )
+        code = "/*\ndoc\n*/\n[[nodiscard]] int get_bar();\n"
         self.assertEqual(placement_violations(code), [])
 
     def test_comment_above_nodiscard_namespace_function_is_valid(self):
         code = (
-            "namespace sim::hil {\n"
-            "/*\n"
-            "doc\n"
-            "*/\n"
-            "    [[nodiscard]] int get_bar()\n"
-            "    {\n"
-            "        return 1;\n"
-            "    }\n"
-            "}\n"
+            "namespace sim::hil {\n/*\ndoc\n*/\n    [[nodiscard]] int get_bar()\n    {\n        return 1;\n    }\n}\n"
         )
         self.assertEqual(placement_violations(code), [])
 

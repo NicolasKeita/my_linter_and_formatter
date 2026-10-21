@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Check-collection and warning-printing helpers used by the linter entry point."""
 
+from shared.comment_utils import check_comment_placement, detect_comments_and_functions
+
 from linter.core.comment_language_checks import check_code_comments_language
 from linter.core.reporting import (
     print_blank_line_after_initialization_warnings,
@@ -32,7 +34,6 @@ from linter.style.style_checks import (
     check_line_length,
 )
 from linter.style.uninitialized_decl_checks import check_uninitialized_declarations
-from shared.comment_utils import check_comment_placement, detect_comments_and_functions
 
 
 def collect_cppm_checks(code: str, file_path: str) -> dict:

@@ -2,7 +2,11 @@ line-length = 120
 indent-width = 4
 target-version = "py310"
 output-format = "concise"
-extend-exclude = [".git", ".venv*", "venv", "__pycache__", "build", "dist", "node_modules"]
+extend-exclude = [
+    ".git", ".hg", ".cache", ".idea", ".mypy_cache", ".pytest_cache", ".ruff_cache",
+    ".tox", ".venv*", ".vs", "*.egg-info", "venv", "__pycache__", "bin", "build",
+    "cmake-build-*", "coverage", "dist", "htmlcov", "node_modules", "obj",
+]
 
 [lint]
 select = ["E4", "E7", "E9", "F", "I", "B", "UP", "RET504"]

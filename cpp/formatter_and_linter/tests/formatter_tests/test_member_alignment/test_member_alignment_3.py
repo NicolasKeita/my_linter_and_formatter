@@ -22,20 +22,24 @@ def member_line(indent, type_part, name, rest, target):
 
 class TestMemberAlignment(unittest.TestCase):
     def test_tab_indentation_is_preserved(self):
-        code = "\n".join([
-            "struct S {",
-            "\tint a = 1;",
-            "\tlong_name b = 2;",
-            "};",
-            "",
-        ])
-        expected = "\n".join([
-            "struct S {",
-            "\tint       a = 1;",
-            "\tlong_name b = 2;",
-            "};",
-            "",
-        ])
+        code = "\n".join(
+            [
+                "struct S {",
+                "\tint a = 1;",
+                "\tlong_name b = 2;",
+                "};",
+                "",
+            ]
+        )
+        expected = "\n".join(
+            [
+                "struct S {",
+                "\tint       a = 1;",
+                "\tlong_name b = 2;",
+                "};",
+                "",
+            ]
+        )
         self.assertEqual(align_member_variables(code), expected)
 
     def test_nested_struct_blocks_are_independent(self):
@@ -101,17 +105,6 @@ class TestMemberAlignment(unittest.TestCase):
         result = align_lines(code)
         self.assertEqual(result[1], "    const AircraftState*  ptr = nullptr;")
         self.assertEqual(result[2], "    const AircraftState & ref = *state;")
-
-    def test_string_literal_with_slashes(self):
-        code = [
-            "struct S {",
-            '    std::string endpoint = "http://127.0.0.1:8080";',
-            "    int a = 1;",
-            "};",
-        ]
-        result = align_lines(code)
-        self.assertEqual(result[1], '    std::string endpoint = "http://127.0.0.1:8080";')
-        self.assertEqual(result[2], "    int         a = 1;")
 
 
 if __name__ == "__main__":

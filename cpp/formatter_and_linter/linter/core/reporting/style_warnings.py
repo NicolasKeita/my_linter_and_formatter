@@ -56,6 +56,9 @@ def print_function_parameter_count_warnings(
     path_label = get_path_label(file_path)
     for function_name, start_line, param_count in violations:
         message = format_function_parameter_count_message(
-            path_label, function_name, start_line, param_count,
+            path_label,
+            function_name,
+            start_line,
+            param_count,
         )
         print(f"⚠️  {message}", file=sys.stderr)

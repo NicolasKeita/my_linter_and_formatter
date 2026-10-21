@@ -16,17 +16,8 @@ def _merged_pair(total):
 
 
 def test_single_condition_trailing_operator_is_joined():
-    code = (
-        "    if (a &&\n"
-        "        b) {\n"
-        "        handle();\n"
-        "    }\n"
-    )
-    expected = (
-        "    if (a && b) {\n"
-        "        handle();\n"
-        "    }\n"
-    )
+    code = "    if (a &&\n        b) {\n        handle();\n    }\n"
+    expected = "    if (a && b) {\n        handle();\n    }\n"
     assert join_lines(code) == expected
 
 
@@ -61,13 +52,7 @@ def test_multiple_logical_conditions_after_equal_stay_split():
 
 
 def test_multi_condition_trailing_operator_stays_split():
-    code = (
-        "    if (a &&\n"
-        "        b &&\n"
-        "        c) {\n"
-        "        handle();\n"
-        "    }\n"
-    )
+    code = "    if (a &&\n        b &&\n        c) {\n        handle();\n    }\n"
     assert join_lines(code) == code
 
 
@@ -105,8 +90,5 @@ def test_custom_max_length_overrides_default():
 
 
 def test_lines_with_line_comments_are_never_joined():
-    code = (
-        "    int value =\n"
-        "        42; // computed at runtime\n"
-    )
+    code = "    int value =\n        42; // computed at runtime\n"
     assert join_lines(code) == code

@@ -15,9 +15,7 @@ from linter.module.cppm_inline_function_checks.header_classify import (
 def _close_function_block(state: dict, block: _Block, close_index: int) -> None:
     if block.kind != _BlockKind.FUNCTION:
         return
-    effective_lines = _count_effective_lines(
-        state["sanitized"], state["line_starts"], block.open_pos, close_index
-    )
+    effective_lines = _count_effective_lines(state["sanitized"], state["line_starts"], block.open_pos, close_index)
     if effective_lines > state["max_body_lines"]:
         start_line = _line_of_position(state["line_starts"], block.start_pos) + 1
         state["violations"].append((block.name, start_line, effective_lines))
@@ -32,7 +30,7 @@ def _open_function_block(sanitized: str, segment_start: int, brace_index: int) -
 
 def _handle_open_brace(sanitized: str, segment_start: int, index: int) -> tuple[_Block, int]:
     if _is_braced_initializer(sanitized, segment_start, index):
-        return _Block(_BlockKind.OTHER, '', index, index, True), segment_start
+        return _Block(_BlockKind.OTHER, "", index, index, True), segment_start
     block = _open_function_block(sanitized, segment_start, index)
     return block, index + 1
 
@@ -49,18 +47,16 @@ def _handle_close_brace(state: dict, index: int) -> None:
 
 
 def _advance(sanitized: str, index: int, char: str, state: dict) -> None:
-    if char == '(':
+    if char == "(":
         state["paren_depth"] += 1
-    elif char == ')':
+    elif char == ")":
         state["paren_depth"] = max(0, state["paren_depth"] - 1)
-    elif char == '{' and state["paren_depth"] == 0:
-        block, state["segment_start"] = _handle_open_brace(
-            sanitized, state["segment_start"], index
-        )
+    elif char == "{" and state["paren_depth"] == 0:
+        block, state["segment_start"] = _handle_open_brace(sanitized, state["segment_start"], index)
         state["blocks"].append(block)
-    elif char == '}' and state["paren_depth"] == 0:
+    elif char == "}" and state["paren_depth"] == 0:
         _handle_close_brace(state, index)
-    elif char == ';' and state["paren_depth"] == 0:
+    elif char == ";" and state["paren_depth"] == 0:
         state["segment_start"] = index + 1
 
 

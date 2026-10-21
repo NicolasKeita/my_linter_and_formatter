@@ -65,5 +65,5 @@ def _parse_statement_start(line: str) -> tuple[DeclarationParts, str] | None:
     name_start = masked_head.find(parsed.name, len(parsed.indent) + len(parsed.type_part))
     if name_start < 0:
         return None
-    tail = stripped[name_start + len(parsed.name):]
+    tail = stripped[name_start + len(parsed.name) :]
     return parsed, tail

@@ -31,6 +31,8 @@ def main(argv: list[str] | None = None) -> int:
         print(error, file=sys.stderr)
         return 2
     if not files:
+        if arguments.command == "check" and structure_issues:
+            return _check(files, structure_issues)
         print("No Python files found.", file=sys.stderr)
         return 2
 

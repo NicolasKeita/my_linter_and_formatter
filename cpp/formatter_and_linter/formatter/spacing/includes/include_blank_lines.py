@@ -18,9 +18,9 @@ def ensure_single_blank_lines(lines: list[str]) -> list[str]:
     for line in lines:
         stripped = line.strip()
 
-        if stripped == '':
+        if stripped == "":
             if not prev_blank:
-                new_lines.append('')
+                new_lines.append("")
             prev_blank = True
             last_was_func_or_comment = False
         elif re.match(FUNC_REGEX, line):
@@ -29,11 +29,11 @@ def ensure_single_blank_lines(lines: list[str]) -> list[str]:
                     pass
                 else:
                     if not last_was_func_or_comment:
-                        new_lines.append('')
+                        new_lines.append("")
             new_lines.append(line)
             prev_blank = False
             last_was_func_or_comment = True
-        elif stripped.startswith('//') or stripped.startswith('/*'):
+        elif stripped.startswith("//") or stripped.startswith("/*"):
             new_lines.append(line)
             prev_blank = False
             last_was_func_or_comment = True
@@ -46,19 +46,19 @@ def ensure_single_blank_lines(lines: list[str]) -> list[str]:
 
 
 def _blank_line_touches_preprocessor(lines: list[str], blank_index: int) -> bool:
-    previous = ''
+    previous = ""
     for j in range(blank_index - 1, -1, -1):
         if lines[j].strip():
             previous = lines[j].strip()
             break
 
-    following = ''
+    following = ""
     for j in range(blank_index + 1, len(lines)):
         if lines[j].strip():
             following = lines[j].strip()
             break
 
-    starts_with_hash = re.compile(r'^\s*#')
+    starts_with_hash = re.compile(r"^\s*#")
     return bool(starts_with_hash.match(previous) or starts_with_hash.match(following))
 
 
@@ -83,11 +83,11 @@ def remove_blank_lines_between_includes(lines: list[str]) -> list[str]:
         elif re.match(INCLUDE_REGEX, line):
             result.append(line)
         elif i > last_include_index:
-            if stripped != '' and i == last_include_index + 1:
-                if result and result[-1].strip() != '' and not re.match(r'^\s*#', line):
-                    result.append('')
+            if stripped != "" and i == last_include_index + 1:
+                if result and result[-1].strip() != "" and not re.match(r"^\s*#", line):
+                    result.append("")
             result.append(line)
-        elif stripped == '':
+        elif stripped == "":
             if _blank_line_touches_preprocessor(lines, i):
                 result.append(line)
             continue

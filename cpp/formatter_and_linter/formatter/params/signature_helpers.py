@@ -50,7 +50,7 @@ def split_signature_suffix(all_params: str) -> tuple[str, str, str]:
     signature_suffix = ""
     if ")" in all_params:
         closing_index = all_params.rfind(")")
-        signature_suffix = all_params[closing_index + 1:]
+        signature_suffix = all_params[closing_index + 1 :]
         all_params = all_params[:closing_index]
     inline_body = ""
     if "{" in signature_suffix:

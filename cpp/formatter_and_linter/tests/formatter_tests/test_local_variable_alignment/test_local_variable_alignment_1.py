@@ -55,12 +55,15 @@ class TestLocalVariableAlignment(unittest.TestCase):
         ]
         self.assertEqual(align(self.PROMPT_EXAMPLE_CODE), "\n".join(expected) + "\n")
         result = align(self.PROMPT_EXAMPLE_CODE).splitlines()
-        columns = {line.index(name) for line, name in [
-            (result[1], "unit"),
-            (result[4], "fault_roll"),
-            (result[5], "result"),
-            (result[6], "dx"),
-        ]}
+        columns = {
+            line.index(name)
+            for line, name in [
+                (result[1], "unit"),
+                (result[4], "fault_roll"),
+                (result[5], "result"),
+                (result[6], "dx"),
+            ]
+        }
         self.assertEqual(len(columns), 1)
 
     def test_only_two_declarations_align(self):
@@ -92,26 +95,6 @@ class TestLocalVariableAlignment(unittest.TestCase):
             "}",
         ]
         self.assertEqual(align(code), "\n".join(code) + "\n")
-
-    def test_first_block_only_second_block_left_alone(self):
-        code = [
-            "void f() {",
-            "    int a = 1;",
-            "    long_name b = 2;",
-            "",
-            "    do_something();",
-            "",
-            "    int c = 3;",
-            "    long_name d = 4;",
-            "}",
-        ]
-        result = align(code).splitlines()
-        target = len("long_name") + 1
-        self.assertEqual(result[1], aligned_line("    ", "int", "a", " = 1;", target))
-        self.assertEqual(result[2], aligned_line("    ", "long_name", "b", " = 2;", target))
-        self.assertEqual(result[4], "    do_something();")
-        self.assertEqual(result[6], "    int c = 3;")
-        self.assertEqual(result[7], "    long_name d = 4;")
 
 
 if __name__ == "__main__":

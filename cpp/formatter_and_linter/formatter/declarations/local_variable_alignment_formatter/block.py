@@ -19,13 +19,7 @@ def _flush_block(block: list[StatementBlock], result: list[str]) -> None:
     target = max(len(statement.parts.type_part) for statement in block) + 1
     for statement in block:
         parts = statement.parts
-        rebuilt = (
-            parts.indent
-            + parts.type_part
-            + " " * (target - len(parts.type_part))
-            + parts.name
-            + statement.tail
-        )
+        rebuilt = parts.indent + parts.type_part + " " * (target - len(parts.type_part)) + parts.name + statement.tail
         if parts.comment:
             rebuilt = rebuilt.rstrip() + " " + parts.comment
         result.append(rebuilt)
@@ -96,9 +90,7 @@ def _process_first_block(lines: list[str], start: int, result: list[str]) -> int
             result.append(line)
             return _copy_until_close(lines, i + 1, result, brace_depth + delta)
         if statement is None:
-            return _stop_at_non_declaration(
-                lines, i, (next_index, new_depth), block, result
-            )
+            return _stop_at_non_declaration(lines, i, (next_index, new_depth), block, result)
 
         block.append(statement)
         brace_depth = new_depth

@@ -71,7 +71,7 @@ def _count_logical_operators(line: str) -> int:
             string_char = char
             i += 1
             continue
-        if line[i:i + 2] in ("&&", "||"):
+        if line[i : i + 2] in ("&&", "||"):
             count += 1
             i += 2
             continue

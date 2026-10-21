@@ -14,4 +14,3 @@ def clean_code(code: str) -> str:
     if cleaned and had_trailing_newline:
         cleaned += "\n"
     return cleaned
-

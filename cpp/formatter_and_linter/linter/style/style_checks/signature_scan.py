@@ -20,19 +20,19 @@ def _classify_signature(
     but no function name, e.g. a control structure) or 'incomplete' (the
     parameter list is not balanced yet and more lines must be accumulated).
     """
-    signature = ' '.join(signature_parts)
+    signature = " ".join(signature_parts)
     if not signature:
-        return ('incomplete', None)
+        return ("incomplete", None)
     effective_signature = strip_trailing_qualifiers(signature)
-    if not effective_signature.endswith(')'):
-        return ('incomplete', None)
+    if not effective_signature.endswith(")"):
+        return ("incomplete", None)
     paren_index = _find_matching_paren(effective_signature)
     if paren_index is None:
-        return ('incomplete', None)
-    func_name = extract_function_name(effective_signature[:paren_index] + '(')
+        return ("incomplete", None)
+    func_name = extract_function_name(effective_signature[:paren_index] + "(")
     if func_name is None:
-        return ('invalid', None)
-    return ('found', (func_name, start_line if start_line is not None else line_idx))
+        return ("invalid", None)
+    return ("found", (func_name, start_line if start_line is not None else line_idx))
 
 
 def _scan_previous_lines(
@@ -46,26 +46,28 @@ def _scan_previous_lines(
     while scan_idx >= 0 and len(signature_parts) < MAX_SIGNATURE_SCAN_LINES:
         masked_line, _ = _mask_strings_and_comments(lines[scan_idx], False)
         stripped_line = masked_line.strip()
-        if (not stripped_line
-                or stripped_line.startswith('#')
-                or stripped_line.startswith(':')
-                or stripped_line.startswith(',')):
+        if (
+            not stripped_line
+            or stripped_line.startswith("#")
+            or stripped_line.startswith(":")
+            or stripped_line.startswith(",")
+        ):
             scan_idx -= 1
             continue
-        if stripped_line == '{' or stripped_line == '}' or stripped_line.endswith(';'):
-            return ('invalid', None)
+        if stripped_line == "{" or stripped_line == "}" or stripped_line.endswith(";"):
+            return ("invalid", None)
 
         signature_parts.insert(0, stripped_line)
         start_line = scan_idx
         scan_idx -= 1
 
         status, result = _classify_signature(signature_parts, start_line, line_idx)
-        if status == 'found':
-            return ('found', result)
-        if status == 'invalid':
-            return ('invalid', None)
+        if status == "found":
+            return ("found", result)
+        if status == "invalid":
+            return ("invalid", None)
 
-    return ('incomplete', None)
+    return ("incomplete", None)
 
 
 def _find_function_opening(lines: list[str], line_idx: int, head: str) -> tuple[str, int] | None:
@@ -85,12 +87,12 @@ def _find_function_opening(lines: list[str], line_idx: int, head: str) -> tuple[
         signature_parts.append(strip_trailing_qualifiers(stripped_head))
         start_line = line_idx
         status, result = _classify_signature(signature_parts, start_line, line_idx)
-        if status == 'found':
+        if status == "found":
             return result
-        if status == 'invalid':
+        if status == "invalid":
             return None
 
     status, result = _scan_previous_lines(lines, line_idx, signature_parts, start_line)
-    if status == 'found':
+    if status == "found":
         return result
     return None

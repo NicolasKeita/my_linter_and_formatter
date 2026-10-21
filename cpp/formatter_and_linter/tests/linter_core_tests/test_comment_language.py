@@ -25,7 +25,6 @@ from linter.core.comment_language_checks import (
 
 @unittest.skipUnless(LINGUA_AVAILABLE, "lingua-language-detector is not installed")
 class TestCheckCommentLanguage(unittest.TestCase):
-
     def test_spec_english_with_separators_is_valid(self):
         self.assertTrue(check_comment_language("// Contextual helpers / scenarios."))
 
@@ -52,25 +51,27 @@ class TestCheckCommentLanguage(unittest.TestCase):
         self.assertTrue(check_comment_language("/** Returns the mission state. */"))
 
     def test_camel_case_identifiers_do_not_trigger_detection(self):
-        self.assertTrue(check_comment_language(
-            "/*\nFilename: Src/SIL/ActuatorFaultInjector.cpp\n"
-            "Description: Actuator fault injection implementation.\n*/"
-        ))
+        self.assertTrue(
+            check_comment_language(
+                "/*\nFilename: Src/SIL/ActuatorFaultInjector.cpp\n"
+                "Description: Actuator fault injection implementation.\n*/"
+            )
+        )
 
     def test_french_comment_dominated_by_technical_identifiers_is_invalid(self):
-        self.assertFalse(check_comment_language(
-            "/*\nOrchestrateur SIL : boucle temporelle synchrone a pas constant reliant toute la\n"
-            "chaine Aircraft -> FaultInjector -> Sensors/Comms -> FC1/FC2 -> HealthMonitor ->\n"
-            "SafetyManager -> Actuators.\n*/"
-        ))
+        self.assertFalse(
+            check_comment_language(
+                "/*\nOrchestrateur SIL : boucle temporelle synchrone a pas constant reliant toute la\n"
+                "chaine Aircraft -> FaultInjector -> Sensors/Comms -> FC1/FC2 -> HealthMonitor ->\n"
+                "SafetyManager -> Actuators.\n*/"
+            )
+        )
 
     def test_paths_and_underscores_are_split(self):
         self.assertTrue(check_comment_language("// See helpers/scenarios for details"))
 
     def test_long_french_comment_is_invalid(self):
-        self.assertFalse(check_comment_language(
-            "// Reinitialise l'etat des PIDs sans toucher aux gains du regulateur"
-        ))
+        self.assertFalse(check_comment_language("// Reinitialise l'etat des PIDs sans toucher aux gains du regulateur"))
 
     def test_block_comment_in_code_is_reported_with_line_number(self):
         code = (
@@ -88,7 +89,6 @@ class TestCheckCommentLanguage(unittest.TestCase):
 
 
 class TestConstants(unittest.TestCase):
-
     def test_thresholds(self):
         self.assertEqual(MIN_SIGNIFICANT_WORDS, 3)
         self.assertAlmostEqual(CONFIDENCE_MARGIN, 0.15)

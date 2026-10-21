@@ -42,15 +42,16 @@ def _collect_exceeding_groups(
 ) -> None:
     total = subtree_implementation_count(node)
     if total > max_files and not any(
-        subtree_implementation_count(child) > max_files
-        for child in node["children"].values()
+        subtree_implementation_count(child) > max_files for child in node["children"].values()
     ):
         label = "::".join(segments)
-        violations.append((
-            label,
-            total,
-            _make_suggestion_label(label, node["children"]),
-        ))
+        violations.append(
+            (
+                label,
+                total,
+                _make_suggestion_label(label, node["children"]),
+            )
+        )
         return
 
     for key, child in node["children"].items():

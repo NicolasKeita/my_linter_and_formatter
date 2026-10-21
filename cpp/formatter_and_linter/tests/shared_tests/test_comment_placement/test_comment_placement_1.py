@@ -17,34 +17,15 @@ def placement_violations(code: str):
 
 class TestCommentPlacement(unittest.TestCase):
     def test_single_comment_above_function_is_valid(self):
-        code = (
-            "// doc\n"
-            "int get_bar()\n"
-            "{\n"
-            "    return 1;\n"
-            "}\n"
-        )
+        code = "// doc\nint get_bar()\n{\n    return 1;\n}\n"
         self.assertEqual(placement_violations(code), [])
 
     def test_multiline_slash_slash_comment_above_function_is_valid(self):
-        code = (
-            "// doc line 1\n"
-            "// doc line 2\n"
-            "int get_bar()\n"
-            "{\n"
-            "    return 1;\n"
-            "}\n"
-        )
+        code = "// doc line 1\n// doc line 2\nint get_bar()\n{\n    return 1;\n}\n"
         self.assertEqual(placement_violations(code), [])
 
     def test_comment_above_noexcept_function_is_valid(self):
-        code = (
-            "// doc\n"
-            "int get_bar() noexcept\n"
-            "{\n"
-            "    return 1;\n"
-            "}\n"
-        )
+        code = "// doc\nint get_bar() noexcept\n{\n    return 1;\n}\n"
         self.assertEqual(placement_violations(code), [])
 
     def test_multiline_comment_above_constexpr_variable_is_valid(self):
@@ -61,50 +42,19 @@ class TestCommentPlacement(unittest.TestCase):
         self.assertEqual(placement_violations(code), [])
 
     def test_block_comment_above_function_is_valid(self):
-        code = (
-            "/*\n"
-            "doc\n"
-            "*/\n"
-            "int get_bar()\n"
-            "{\n"
-            "    return 1;\n"
-            "}\n"
-        )
+        code = "/*\ndoc\n*/\nint get_bar()\n{\n    return 1;\n}\n"
         self.assertEqual(placement_violations(code), [])
 
     def test_comment_inside_function_body_above_local_is_invalid(self):
-        code = (
-            "int get_bar()\n"
-            "{\n"
-            "    // note\n"
-            "    int local = 1;\n"
-            "    return local;\n"
-            "}\n"
-        )
+        code = "int get_bar()\n{\n    // note\n    int local = 1;\n    return local;\n}\n"
         self.assertEqual(placement_violations(code), [(3, "singleline")])
 
     def test_comment_inside_function_body_above_statement_is_invalid(self):
-        code = (
-            "int get_bar()\n"
-            "{\n"
-            "    int local = 1;\n"
-            "    // note\n"
-            "    return local;\n"
-            "}\n"
-        )
+        code = "int get_bar()\n{\n    int local = 1;\n    // note\n    return local;\n}\n"
         self.assertEqual(placement_violations(code), [(4, "singleline")])
 
     def test_floating_comment_not_above_declaration_is_invalid(self):
-        code = (
-            "int get_bar()\n"
-            "{\n"
-            "    return 1;\n"
-            "}\n"
-            "\n"
-            "// floating note\n"
-            "\n"
-            "constexpr int kFoo{1};\n"
-        )
+        code = "int get_bar()\n{\n    return 1;\n}\n\n// floating note\n\nconstexpr int kFoo{1};\n"
         self.assertEqual(placement_violations(code), [(6, "singleline")])
 
 

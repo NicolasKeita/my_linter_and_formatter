@@ -8,12 +8,13 @@ and proper spacing.
 
 import re
 
+from shared.regex_patterns import INCLUDE_REGEX
+
 from formatter.spacing.includes.include_blank_lines import (
     ensure_single_blank_lines,
     remove_blank_lines_between_includes,
 )
 from formatter.spacing.includes.include_group import format_include_group
-from shared.regex_patterns import INCLUDE_REGEX
 
 
 def format_includes(code: str) -> str:
@@ -38,7 +39,7 @@ def format_includes(code: str) -> str:
                 pending_group.append(line)
         else:
             flush_pending_group()
-            if re.match(r'^\s*#', line):
+            if re.match(r"^\s*#", line):
                 seen_contents.clear()
             new_lines.append(line)
 
@@ -46,4 +47,4 @@ def format_includes(code: str) -> str:
     lines = new_lines
 
     lines = ensure_single_blank_lines(lines)
-    return '\n'.join(lines)
+    return "\n".join(lines)

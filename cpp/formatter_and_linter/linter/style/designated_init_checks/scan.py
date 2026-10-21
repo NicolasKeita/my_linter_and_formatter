@@ -23,11 +23,11 @@ def _scan_assignment_group(
         scan_masked, in_block_comment = _mask_strings_and_comments(lines[scan_index], in_block_comment)
         scan_stripped = scan_masked.strip()
 
-        if _is_blank_or_comment(scan_stripped) or scan_stripped.startswith('#'):
+        if _is_blank_or_comment(scan_stripped) or scan_stripped.startswith("#"):
             scan_index += 1
             continue
 
-        if not field_chains and scan_stripped in ('{', '}'):
+        if not field_chains and scan_stripped in ("{", "}"):
             break
 
         assignment = _parse_member_assignment(scan_stripped, variable_name)
@@ -67,15 +67,13 @@ class _DesignatedInitScan:
 
     def _mask_line(self, index: int) -> str:
         """Mask strings and comments of ``lines[index]`` and strip the result."""
-        masked, self.in_block_comment = _mask_strings_and_comments(
-            self.lines[index], self.in_block_comment
-        )
+        masked, self.in_block_comment = _mask_strings_and_comments(self.lines[index], self.in_block_comment)
         return masked.strip()
 
     @staticmethod
     def _skip(stripped: str) -> bool:
         """Tell whether the line must be ignored (blank, comment or preprocessor)."""
-        return _is_blank_or_comment(stripped) or stripped.startswith('#')
+        return _is_blank_or_comment(stripped) or stripped.startswith("#")
 
     def _collect_violation(self, declaration: tuple[str, str]) -> None:
         """Gather the member-assignment group that follows the declaration and

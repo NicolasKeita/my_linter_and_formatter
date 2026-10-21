@@ -18,9 +18,9 @@ def _extract_segment(sanitized: str, bounds: dict) -> str:
     line_start, line_end = bounds["line"]
 
     if line_number == open_line and line_number == close_line:
-        return sanitized[open_pos + 1:close_pos]
+        return sanitized[open_pos + 1 : close_pos]
     if line_number == open_line:
-        return sanitized[open_pos + 1:line_end]
+        return sanitized[open_pos + 1 : line_end]
     if line_number == close_line:
         return sanitized[line_start:close_pos]
     return sanitized[line_start:line_end]
@@ -28,15 +28,10 @@ def _extract_segment(sanitized: str, bounds: dict) -> str:
 
 def _is_effective(text: str) -> bool:
     stripped = text.strip()
-    return bool(stripped) and stripped != '{' and stripped != '}'
+    return bool(stripped) and stripped != "{" and stripped != "}"
 
 
-def _count_effective_lines(
-    sanitized: str,
-    line_starts: list[int],
-    open_pos: int,
-    close_pos: int
-) -> int:
+def _count_effective_lines(sanitized: str, line_starts: list[int], open_pos: int, close_pos: int) -> int:
     open_line = _line_of_position(line_starts, open_pos)
     close_line = _line_of_position(line_starts, close_pos)
     effective_lines = 0
@@ -51,4 +46,3 @@ def _count_effective_lines(
         if _is_effective(_extract_segment(sanitized, bounds)):
             effective_lines += 1
     return effective_lines
-

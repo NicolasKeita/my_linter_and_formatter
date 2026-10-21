@@ -10,7 +10,7 @@ def _skip_leading_blank_lines(lines: list[str], body_idx: int, in_block_comment:
     """Advance past blank lines after the opening brace; return (index, comment_state)."""
     while body_idx < len(lines):
         masked, in_block_comment = _mask_strings_and_comments(lines[body_idx], in_block_comment)
-        if masked.strip() == '':
+        if masked.strip() == "":
             body_idx += 1
             continue
         break
@@ -24,7 +24,7 @@ def _advance_to_statement_end(lines: list[str], group_end: int, in_block_comment
     """
     block_masked, in_block_comment = _mask_strings_and_comments(lines[group_end], in_block_comment)
     block_stripped = block_masked.strip()
-    while not (block_stripped.endswith(';') or block_stripped.endswith('}')):
+    while not (block_stripped.endswith(";") or block_stripped.endswith("}")):
         group_end += 1
         if group_end >= len(lines):
             return group_end, in_block_comment, True
@@ -43,9 +43,7 @@ def _scan_declaration_group(lines: list[str], body_idx: int, in_block_comment: b
             break
         if not _is_declaration_line(block_stripped):
             break
-        group_end, in_block_comment, reached_end = _advance_to_statement_end(
-            lines, group_end, in_block_comment
-        )
+        group_end, in_block_comment, reached_end = _advance_to_statement_end(lines, group_end, in_block_comment)
         if reached_end:
             return None
         group_end += 1
@@ -63,9 +61,7 @@ def _scan_body_for_declaration_block(
     when a blank line is missing after it, or None when the rule is satisfied
     or no declaration block is present.
     """
-    body_idx, in_block_comment = _skip_leading_blank_lines(
-        lines, brace_line_index + 1, in_block_comment
-    )
+    body_idx, in_block_comment = _skip_leading_blank_lines(lines, brace_line_index + 1, in_block_comment)
 
     if body_idx >= len(lines):
         return None
@@ -78,7 +74,7 @@ def _scan_body_for_declaration_block(
     if group_end is None or group_end >= len(lines):
         return None
 
-    if lines[group_end].strip() == '':
+    if lines[group_end].strip() == "":
         return None
 
     return group_end - 1
@@ -102,7 +98,7 @@ def check_blank_line_after_initialization(code: str) -> list[tuple[str, int, int
         if not is_open:
             continue
         scanner.scope_depth += 1
-        if head.strip() != '':
+        if head.strip() != "":
             continue
         opening = _find_function_opening(lines, line_index, head)
         if opening is None:

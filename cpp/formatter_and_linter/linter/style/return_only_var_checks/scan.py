@@ -39,21 +39,19 @@ class _ReturnOnlyVarScan:
 
     def _mask_line(self) -> str:
         """Mask strings and comments of the current line and strip the result."""
-        masked, self.in_block_comment = _mask_strings_and_comments(
-            self.lines[self.line_index], self.in_block_comment
-        )
+        masked, self.in_block_comment = _mask_strings_and_comments(self.lines[self.line_index], self.in_block_comment)
         return masked.strip()
 
     @staticmethod
     def _skip(stripped: str) -> bool:
         """Tell whether the line must be ignored (blank, comment or preprocessor)."""
-        return _is_blank_or_comment(stripped) or stripped.startswith('#')
+        return _is_blank_or_comment(stripped) or stripped.startswith("#")
 
     def _advance_pending(self, stripped: str) -> None:
         """Resolve the pending declaration: record a violation on a matching
         'return var;', start a new pending declaration or drop the pending one."""
         return_match = _RETURN_VAR_RE.match(stripped)
-        if return_match is not None and return_match.group('name') == self.pending_name:
+        if return_match is not None and return_match.group("name") == self.pending_name:
             self.violations.append((self.pending_line, self.pending_name))
             self.pending_name = None
             self.line_index += 1
@@ -85,9 +83,7 @@ class _ReturnOnlyVarScan:
             self.line_index += 1
             return
 
-        end_index, self.in_block_comment = _find_declaration_end(
-            self.lines, decl_start, self.in_block_comment
-        )
+        end_index, self.in_block_comment = _find_declaration_end(self.lines, decl_start, self.in_block_comment)
         if end_index is None:
             self.line_index += 1
             return

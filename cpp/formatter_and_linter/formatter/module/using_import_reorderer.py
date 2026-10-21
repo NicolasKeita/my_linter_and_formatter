@@ -33,7 +33,7 @@ def _collect_using_group(lines: list[str], i: int) -> tuple[list[str], list[str]
         elif re.match(USING_REGEX, current_line):
             usings.append(current_line)
             i += 1
-        elif current_stripped == '':
+        elif current_stripped == "":
             trailing_blank_lines.append(current_line)
             i += 1
         else:
@@ -49,7 +49,7 @@ def _starts_using_group(line: str, new_lines: list[str]) -> bool:
         return True
     if not re.match(USING_REGEX, line):
         return False
-    if not new_lines or new_lines[-1].strip() == '':
+    if not new_lines or new_lines[-1].strip() == "":
         return True
     return bool(
         re.match(MODULE_DECL_REGEX, new_lines[-1])
@@ -81,8 +81,8 @@ def reorder_using_after_import(code: str) -> str:
         new_lines.extend(imports_list)
         new_lines.extend(usings)
 
-        if i < len(lines) and lines[i].strip() != '':
-            if trailing_blank_lines or (new_lines and new_lines[-1].strip() != ''):
-                new_lines.append('')
+        if i < len(lines) and lines[i].strip() != "":
+            if trailing_blank_lines or (new_lines and new_lines[-1].strip() != ""):
+                new_lines.append("")
 
-    return '\n'.join(new_lines)
+    return "\n".join(new_lines)

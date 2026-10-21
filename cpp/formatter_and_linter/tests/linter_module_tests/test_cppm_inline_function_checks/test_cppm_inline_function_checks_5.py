@@ -29,7 +29,6 @@ import std;
 
 
 class TestCheckCppmInlineFunctions(unittest.TestCase):
-
     def setUp(self):
         self.temp_dir = tempfile.TemporaryDirectory()
         self.root = Path(self.temp_dir.name)

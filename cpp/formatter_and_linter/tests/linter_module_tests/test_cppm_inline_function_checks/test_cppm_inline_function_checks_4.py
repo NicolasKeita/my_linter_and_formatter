@@ -29,7 +29,6 @@ import std;
 
 
 class TestCheckCppmInlineFunctions(unittest.TestCase):
-
     def setUp(self):
         self.temp_dir = tempfile.TemporaryDirectory()
         self.root = Path(self.temp_dir.name)
@@ -47,11 +46,7 @@ class TestCheckCppmInlineFunctions(unittest.TestCase):
 
     def test_braces_inside_raw_string_are_ignored(self):
         file_path = self.write_cppm(
-            "export class Sample\n"
-            "{\n"
-            "public:\n"
-            "    std::string_view json() const { return R\"({ \"key\": {} })\"; }\n"
-            "};\n"
+            'export class Sample\n{\npublic:\n    std::string_view json() const { return R"({ "key": {} })"; }\n};\n'
         )
         self.assertEqual(check_cppm_inline_functions(file_path), [])
 
@@ -89,11 +84,7 @@ class TestCheckCppmInlineFunctions(unittest.TestCase):
 
     def test_digit_separator_does_not_break_literal_parsing(self):
         file_path = self.write_cppm(
-            "export class Sample\n"
-            "{\n"
-            "public:\n"
-            "    std::int32_t value() const { return 1'000'000; }\n"
-            "};\n"
+            "export class Sample\n{\npublic:\n    std::int32_t value() const { return 1'000'000; }\n};\n"
         )
         self.assertEqual(check_cppm_inline_functions(file_path), [])
 

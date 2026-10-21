@@ -10,19 +10,22 @@ point. Individual style and language checks live in their own submodules
 
 import sys
 
+from linter.core.directory_checks import (
+    MAX_FILES_PER_DIRECTORY,
+    MAX_SUBDIRECTORIES_PER_DIRECTORY,
+    check_directory_file_counts,
+    check_directory_subdirectory_counts,
+)
 from linter.core.linter._checks import (
     _collect_source_checks,
     collect_cppm_checks,
     print_cppm_warnings,
     print_source_warnings,
 )
-from linter.core.directory_checks import (
-    MAX_FILES_PER_DIRECTORY,
-    check_directory_file_counts,
-)
 from linter.core.reporting import (
     print_cmake_length_warnings,
     print_directory_file_count_warnings,
+    print_directory_subdirectory_count_warnings,
     print_issue_header,
     print_module_filename_warnings,
     print_module_size_warnings,
@@ -33,7 +36,6 @@ from linter.module.cmake_checks import (
 )
 from linter.module.module_filename_checks import check_module_filename_convention
 from linter.module.module_size_checks import check_module_implementation_counts
-
 
 
 def _lint_cppm(code: str, file_path: str) -> bool:
@@ -73,7 +75,7 @@ def _has_source_issues(results: dict) -> bool:
 
 
 def lint_code(code: str, max_length: int = 120, file_path: str = "") -> bool:
-    is_module_interface = file_path.lower().endswith('.cppm')
+    is_module_interface = file_path.lower().endswith(".cppm")
     if is_module_interface:
         return _lint_cppm(code, file_path)
 
@@ -91,6 +93,9 @@ __all__ = [
     "check_directory_file_counts",
     "MAX_FILES_PER_DIRECTORY",
     "print_directory_file_count_warnings",
+    "MAX_SUBDIRECTORIES_PER_DIRECTORY",
+    "check_directory_subdirectory_counts",
+    "print_directory_subdirectory_count_warnings",
     "check_module_filename_convention",
     "print_module_filename_warnings",
     "check_module_implementation_counts",
@@ -106,4 +111,3 @@ if __name__ == "__main__":
     code = sys.stdin.read()
     has_issues = lint_code(code)
     sys.exit(1 if has_issues else 0)
-

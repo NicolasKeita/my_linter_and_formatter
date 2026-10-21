@@ -8,13 +8,14 @@ spacing around module declarations and import blocks.
 
 import re
 
+from shared.import_utils import sort_imports
+from shared.regex_patterns import IMPORT_REGEX
+
 from formatter.spacing.includes.import_blocks import (
     handle_import_block,
     handle_module_declaration,
     is_module_boundary,
 )
-from shared.import_utils import sort_imports
-from shared.regex_patterns import IMPORT_REGEX
 
 
 def format_import_order(code: str) -> str:
@@ -33,7 +34,7 @@ def format_import_order(code: str) -> str:
                 if re.match(IMPORT_REGEX, current_line):
                     imports.append(current_line)
                     i += 1
-                elif current_stripped == '':
+                elif current_stripped == "":
                     i += 1
                 else:
                     break
@@ -43,7 +44,7 @@ def format_import_order(code: str) -> str:
             formatted_imports: list[str] = []
             formatted_imports.extend(system_imports)
             if system_imports and local_imports:
-                formatted_imports.append('')
+                formatted_imports.append("")
             formatted_imports.extend(local_imports)
 
             new_lines.extend(formatted_imports)
@@ -52,7 +53,7 @@ def format_import_order(code: str) -> str:
         new_lines.append(line)
         i += 1
 
-    return '\n'.join(new_lines)
+    return "\n".join(new_lines)
 
 
 def format_module_import_spacing(code: str) -> str:
@@ -74,4 +75,4 @@ def format_module_import_spacing(code: str) -> str:
         new_lines.append(line)
         i += 1
 
-    return '\n'.join(new_lines)
+    return "\n".join(new_lines)

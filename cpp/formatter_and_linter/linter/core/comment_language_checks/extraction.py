@@ -12,10 +12,10 @@ def _clean_multiline_text(raw_text: str) -> str:
     lines = []
     for line in raw_text.splitlines():
         cleaned = line.strip()
-        cleaned = cleaned.lstrip('*').strip()
+        cleaned = cleaned.lstrip("*").strip()
         if cleaned:
             lines.append(cleaned)
-    return ' '.join(lines)
+    return " ".join(lines)
 
 
 def _extract_block_comments(
@@ -26,9 +26,9 @@ def _extract_block_comments(
     comments = []
     block_comment_ranges = []
     for start, block_end in comment_ranges:
-        if code[start:start + 2] != '/*':
+        if code[start : start + 2] != "/*":
             continue
-        line_num = code[:start].count('\n') + 1
+        line_num = code[:start].count("\n") + 1
         text = _clean_multiline_text(code[start:block_end][2:-2])
         if text:
             comments.append((line_num, text))
@@ -39,15 +39,15 @@ def _extract_block_comments(
 def _extract_line_comments(code: str, comment_ranges, string_ranges, block_comment_ranges) -> list[tuple[int, str]]:
     comments = []
     for start, _end in comment_ranges:
-        if code[start:start + 2] != '//':
+        if code[start : start + 2] != "//":
             continue
         if _is_in_range(start, string_ranges) or _is_in_range(start, block_comment_ranges):
             continue
-        line_num = code[:start].count('\n') + 1
-        end_pos = code.find('\n', start)
+        line_num = code[:start].count("\n") + 1
+        end_pos = code.find("\n", start)
         if end_pos == -1:
             end_pos = len(code)
-        text = code[start + 2:end_pos].strip()
+        text = code[start + 2 : end_pos].strip()
         if text:
             comments.append((line_num, text))
     return comments

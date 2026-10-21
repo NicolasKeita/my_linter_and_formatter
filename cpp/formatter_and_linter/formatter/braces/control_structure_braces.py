@@ -8,7 +8,7 @@ switch, catch, do, try) are placed on the same line as their header.
 
 import re
 
-CONTROL_HEADER_PATTERN = re.compile(r'^\s*(?:if|else|for|while|switch|catch|do|try)\b')
+CONTROL_HEADER_PATTERN = re.compile(r"^\s*(?:if|else|for|while|switch|catch|do|try)\b")
 
 
 def format_control_structure_braces(code: str) -> str:
@@ -25,7 +25,7 @@ def format_control_structure_braces(code: str) -> str:
     i = 0
 
     while i < total:
-        if lines[i].strip() == '{':
+        if lines[i].strip() == "{":
             start_idx = _find_statement_start_backward(lines, i)
 
             if start_idx is not None and CONTROL_HEADER_PATTERN.match(lines[start_idx]):
@@ -40,7 +40,7 @@ def format_control_structure_braces(code: str) -> str:
 
         i += 1
 
-    return '\n'.join(line for keep, line in zip(emit, lines, strict=False) if keep)
+    return "\n".join(line for keep, line in zip(emit, lines, strict=False) if keep)
 
 
 def _join_brace_with_comment(code_part: str, comment: str | None) -> str:
@@ -62,11 +62,11 @@ def _find_statement_start_backward(lines: list[str], brace_idx: int) -> int | No
     while j >= 0:
         stripped = lines[j].strip()
 
-        if not stripped or stripped.startswith('//'):
+        if not stripped or stripped.startswith("//"):
             j -= 1
             continue
 
-        balance += stripped.count('(') - stripped.count(')')
+        balance += stripped.count("(") - stripped.count(")")
 
         if balance >= 0:
             return j
@@ -83,7 +83,7 @@ def _last_content_line_before(lines: list[str], brace_idx: int) -> int | None:
     while j >= 0:
         stripped = lines[j].strip()
 
-        if stripped and not stripped.startswith('//'):
+        if stripped and not stripped.startswith("//"):
             return j
 
         j -= 1
@@ -104,7 +104,7 @@ def _split_trailing_comment(line: str) -> tuple[str, str | None]:
         char = line[i]
 
         if in_string:
-            if char == '\\':
+            if char == "\\":
                 i += 2
                 continue
             if char == string_char:
@@ -112,7 +112,7 @@ def _split_trailing_comment(line: str) -> tuple[str, str | None]:
         elif char == '"' or char == "'":
             in_string = True
             string_char = char
-        elif char == '/' and i + 1 < len(line) and line[i + 1] == '/':
+        elif char == "/" and i + 1 < len(line) and line[i + 1] == "/":
             return line[:i].rstrip(), line[i:]
 
         i += 1

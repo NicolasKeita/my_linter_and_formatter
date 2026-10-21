@@ -31,7 +31,6 @@ import std;
 
 
 class TestCheckCppmInlineFunctions(unittest.TestCase):
-
     def setUp(self):
         self.temp_dir = tempfile.TemporaryDirectory()
         self.root = Path(self.temp_dir.name)
@@ -82,13 +81,7 @@ class TestCheckCppmInlineFunctions(unittest.TestCase):
 
     def test_empty_body_is_allowed(self):
         file_path = self.write_cppm(
-            "export class Sample\n"
-            "{\n"
-            "public:\n"
-            "    void noop() {}\n"
-            "    void alsoNoop() {\n"
-            "    }\n"
-            "};\n"
+            "export class Sample\n{\npublic:\n    void noop() {}\n    void alsoNoop() {\n    }\n};\n"
         )
         self.assertEqual(check_cppm_inline_functions(file_path), [])
 

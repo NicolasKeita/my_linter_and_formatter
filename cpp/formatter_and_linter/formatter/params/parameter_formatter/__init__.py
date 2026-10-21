@@ -38,7 +38,7 @@ def should_format_function(prefix: str, func_name: str, params_str: str) -> bool
     if not params_str.strip():
         return False
 
-    if '\n' not in params_str:
+    if "\n" not in params_str:
         return False
 
     return True
@@ -75,4 +75,4 @@ def format_single_function(match: re.Match[str]) -> str:
     formatted_params = format_parameters_list(parsed_params, indent, max_type_len)
 
     const_part = f" {signature_suffix}" if signature_suffix else ""
-    return f"{leading_indent}{full_prefix} {func_name}{formatted_params}{const_part}\n{{\""
+    return f'{leading_indent}{full_prefix} {func_name}{formatted_params}{const_part}\n{{"'

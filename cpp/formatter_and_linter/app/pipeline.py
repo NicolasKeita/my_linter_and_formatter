@@ -70,7 +70,7 @@ def _apply_common_passes(formatted_code: str, is_module_interface: bool) -> str:
 def format_file(input_file: str, in_place: bool, check_only: bool) -> bool:
     code = file_handler.read_input_file(input_file)
 
-    is_module_interface = input_file.lower().endswith('.cppm')
+    is_module_interface = input_file.lower().endswith(".cppm")
     if is_module_interface:
         formatted_code = _format_module_interface(code, input_file)
     else:

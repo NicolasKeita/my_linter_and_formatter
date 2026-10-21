@@ -14,11 +14,6 @@ internal static class LintRunner
     private const int MaxParameters = 5;
     private const int MaxFilesPerDirectory = 10;
 
-    private static readonly HashSet<string> IgnoredDirectories = new(StringComparer.OrdinalIgnoreCase)
-    {
-        ".git", ".vs", "bin", "obj", "node_modules", "TestResults",
-    };
-
     internal static List<LintDiagnostic> Analyze(string target)
     {
         var result = new List<LintDiagnostic>();
@@ -43,6 +38,8 @@ internal static class LintRunner
 
         if (!File.Exists(target) || !Path.GetExtension(target).Equals(".cs", StringComparison.OrdinalIgnoreCase))
         {
+            var root = Directory.Exists(target) ? target : Path.GetDirectoryName(target)!;
+            result.AddRange(DirectoryChecks.Analyze(root));
             foreach (var group in selected.Select(file => file.Path)
                          .Distinct(StringComparer.OrdinalIgnoreCase)
                          .GroupBy(Path.GetDirectoryName))
@@ -75,24 +72,13 @@ internal static class LintRunner
             target = Path.GetDirectoryName(target)!;
         }
 
-        var pending = new Stack<string>();
-        pending.Push(target);
-        while (pending.Count > 0)
+        foreach (var (directory, _) in DirectoryChecks.Enumerate(target))
         {
-            var directory = pending.Pop();
             foreach (var file in Directory.EnumerateFiles(directory, "*.cs"))
             {
                 if (!IsGenerated(file))
                 {
                     yield return file;
-                }
-            }
-
-            foreach (var child in Directory.EnumerateDirectories(directory))
-            {
-                if (!IgnoredDirectories.Contains(Path.GetFileName(child)))
-                {
-                    pending.Push(child);
                 }
             }
         }

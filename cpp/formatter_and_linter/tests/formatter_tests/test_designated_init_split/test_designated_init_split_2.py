@@ -38,7 +38,7 @@ def _short_config_line():
 def test_designated_with_brace_value_is_split():
     code = (
         "    const MissionConfig mission{.target{.z = 100.0}, .duration = 120.0, "
-        ".axis = TrackingAxis::x_axis, .tolerance = 0.5, .enabled = true, .name = \"x\"};\n"
+        '.axis = TrackingAxis::x_axis, .tolerance = 0.5, .enabled = true, .name = "x"};\n'
     )
     assert len(code.rstrip()) > 120
     result = split_long_designated_initializations(code)

@@ -13,8 +13,7 @@ from linter.module.module_size_checks import format_module_too_large_message
 def print_comment_language_warnings(violations: list[tuple[int, str]]) -> None:
     for line_num, detected_language in violations:
         print(
-            f"⚠️  Line {line_num}: Comment must be written in English "
-            f"(detected: {detected_language})",
+            f"⚠️  Line {line_num}: Comment must be written in English (detected: {detected_language})",
             file=sys.stderr,
         )
 
@@ -27,6 +26,18 @@ def print_directory_file_count_warnings(
         print(
             f"⚠️  Directory '{directory}' contains {file_count} source files (max: {max_files}). "
             "Split it into subdirectories.",
+            file=sys.stderr,
+        )
+
+
+def print_directory_subdirectory_count_warnings(
+    violations: list[tuple[str, int]],
+    max_subdirectories: int,
+) -> None:
+    for directory, count in violations:
+        print(
+            f"⚠️  Directory '{directory}' contains {count} direct subdirectories "
+            f"(max: {max_subdirectories}). Reorganize the directory structure.",
             file=sys.stderr,
         )
 
@@ -81,6 +92,9 @@ def print_cppm_inline_function_warnings(
     path_label = get_path_label(file_path)
     for function_name, start_line, body_lines in violations:
         message = format_cppm_inline_function_message(
-            path_label, function_name, start_line, body_lines,
+            path_label,
+            function_name,
+            start_line,
+            body_lines,
         )
         print(f"⚠️  {message}", file=sys.stderr)

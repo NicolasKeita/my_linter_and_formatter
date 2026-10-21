@@ -7,8 +7,8 @@ def build_line_depths(lines: list[str]) -> list[int]:
     current_depth = 0
     for line in lines:
         depths.append(current_depth)
-        current_depth += line.count('{')
-        current_depth -= line.count('}')
+        current_depth += line.count("{")
+        current_depth -= line.count("}")
         if current_depth < 0:
             current_depth = 0
     return depths
@@ -22,7 +22,7 @@ def count_significant_body_lines(lines: list[str], open_line: int, end_line: int
         stripped = body_line.strip()
         if not stripped:
             continue
-        if stripped in {'{', '}'}:
+        if stripped in {"{", "}"}:
             continue
         significant_lines += 1
 
@@ -31,11 +31,11 @@ def count_significant_body_lines(lines: list[str], open_line: int, end_line: int
 
 def _trim_body_line(body_line: str, line_idx: int, open_line: int, end_line: int) -> str:
     if line_idx == open_line:
-        opening_pos = body_line.find('{')
+        opening_pos = body_line.find("{")
         if opening_pos >= 0:
-            body_line = body_line[opening_pos + 1:]
+            body_line = body_line[opening_pos + 1 :]
     if line_idx == end_line:
-        closing_pos = body_line.rfind('}')
+        closing_pos = body_line.rfind("}")
         if closing_pos >= 0:
             body_line = body_line[:closing_pos]
     return body_line

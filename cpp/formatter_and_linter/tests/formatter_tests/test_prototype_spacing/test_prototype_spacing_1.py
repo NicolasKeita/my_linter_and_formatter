@@ -25,7 +25,7 @@ RAW_INPUT = (
     "\t\n"
     "void sensor_fault_scenario(TestHarness& runner, std::vector<ScenarioRecord>& records)\n"
     "{\n"
-    "    std::cout << \"\\n=== SIL-004 ===\" << std::endl;\n"
+    '    std::cout << "\\n=== SIL-004 ===" << std::endl;\n'
     "\n"
     "\n"
     "    FaultDomain domain;\n"
@@ -48,7 +48,7 @@ EXPECTED_OUTPUT = (
     "\n"
     "void sensor_fault_scenario(TestHarness& runner, std::vector<ScenarioRecord>& records)\n"
     "{\n"
-    "    std::cout << \"\\n=== SIL-004 ===\" << std::endl;\n"
+    '    std::cout << "\\n=== SIL-004 ===" << std::endl;\n'
     "\n"
     "\n"
     "    FaultDomain domain;\n"
@@ -73,40 +73,13 @@ class TestPrototypeSpacing(unittest.TestCase):
         self.assertEqual(clean_code(code), "int compute(int value);\nint other(int value);\n")
 
     def test_blank_line_kept_before_multiline_definition(self):
-        code = (
-            "void first(int value);\n"
-            "\n"
-            "void second(\n"
-            "    int value)\n"
-            "{\n"
-            "    do_work();\n"
-            "}\n"
-        )
-        expected = (
-            "void first(int value);\n"
-            "\n"
-            "void second(\n"
-            "    int value)\n"
-            "{\n"
-            "    do_work();\n"
-            "}\n"
-        )
+        code = "void first(int value);\n\nvoid second(\n    int value)\n{\n    do_work();\n}\n"
+        expected = "void first(int value);\n\nvoid second(\n    int value)\n{\n    do_work();\n}\n"
         self.assertEqual(clean_code(code), expected)
 
     def test_blank_lines_collapsed_between_multiline_prototypes(self):
-        code = (
-            "Result run(\n"
-            "    const Config& config);\n"
-            "\n"
-            "Result check(\n"
-            "    const Config& config);\n"
-        )
-        expected = (
-            "Result run(\n"
-            "    const Config& config);\n"
-            "Result check(\n"
-            "    const Config& config);\n"
-        )
+        code = "Result run(\n    const Config& config);\n\nResult check(\n    const Config& config);\n"
+        expected = "Result run(\n    const Config& config);\nResult check(\n    const Config& config);\n"
         self.assertEqual(clean_code(code), expected)
 
 

@@ -21,7 +21,6 @@ from linter.core.directory_checks import (
 
 
 class TestCheckDirectoryFileCounts(unittest.TestCase):
-
     def setUp(self):
         self.temp_dir = tempfile.TemporaryDirectory()
         self.root = self.temp_dir.name

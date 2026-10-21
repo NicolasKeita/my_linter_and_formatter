@@ -12,7 +12,6 @@ from linter.module.module_filename_checks import check_module_filename_conventio
 
 
 class TestCheckModuleFilenameConvention(unittest.TestCase):
-
     def setUp(self):
         self.temp_dir = tempfile.TemporaryDirectory()
         self.root = self.temp_dir.name
@@ -42,8 +41,7 @@ class TestCheckModuleFilenameConvention(unittest.TestCase):
 
     def test_module_declaration_inside_comment_is_ignored(self):
         directory = os.path.join(self.root, "Src", "Embedded")
-        self.write_file(directory, "Notes.cpp",
-                        "/*\nDescription: talks about module HilRunner in prose.\n*/\n")
+        self.write_file(directory, "Notes.cpp", "/*\nDescription: talks about module HilRunner in prose.\n*/\n")
         self.create_module_files(directory, ["HilRunner.cppm"])
         self.assertEqual(check_module_filename_convention([directory]), [])
 
@@ -69,6 +67,27 @@ class TestCheckModuleFilenameConvention(unittest.TestCase):
             [file_path for file_path, _ in violations],
             [os.path.join(dir_a, "ModuleA-Core.cpp")],
         )
+
+    def test_module_declaration_attributes_file_even_with_unrelated_name(self):
+        directory = os.path.join(self.root, "Src", "Embedded")
+        self.create_module_files(
+            directory,
+            [
+                "HilRunner.cppm",
+                "HilRunner-Loop.cpp",
+                "HilRunner-Metrics.cpp",
+            ],
+        )
+        self.write_file(directory, "Helper.cpp", "module HilRunner;\n\nimport std;\n")
+        violations = check_module_filename_convention([directory])
+        self.assertEqual(len(violations), 1)
+        self.assertTrue(violations[0][0].endswith("Helper.cpp"))
+        self.assertIn("HilRunner-Helper.cpp", violations[0][1])
+
+    def test_missing_implementation_is_not_reported(self):
+        directory = os.path.join(self.root, "Src", "Utils")
+        self.create_module_files(directory, ["Logger.cppm"])
+        self.assertEqual(check_module_filename_convention([directory]), [])
 
 
 if __name__ == "__main__":

@@ -41,9 +41,7 @@ class AlignmentPass:
         flush the pending block on blank lines, preprocessor directives and
         any non-declaration statement."""
         was_in_block_comment = self.state.in_block_comment
-        code_part, comment_part, block_comment_state = split_trailing_comment(
-            line, self.state.in_block_comment
-        )
+        code_part, comment_part, block_comment_state = split_trailing_comment(line, self.state.in_block_comment)
         self.state.in_block_comment = block_comment_state
         stripped_code = code_part.strip()
 

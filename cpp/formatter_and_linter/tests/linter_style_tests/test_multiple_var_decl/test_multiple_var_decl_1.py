@@ -11,42 +11,42 @@ from linter.style.multiple_var_decl_checks import check_multiple_var_declaration
 
 
 def check_code(code: str):
-    return check_multiple_var_declarations('\n'.join(code))
+    return check_multiple_var_declarations("\n".join(code))
 
 
 class TestMultipleVarDeclarations(unittest.TestCase):
     def test_grouped_declarations_are_reported(self):
         code = [
-            'AircraftState fc1_view{}, sampled_truth{};',
-            'bool fc1_was_alive = true, fault_active = false, fault_recorded = false;',
-            'std::float64_t commanded_rpm = 0.0, last_effective_rpm = 0.0, safe_rpm = 0.0;',
+            "AircraftState fc1_view{}, sampled_truth{};",
+            "bool fc1_was_alive = true, fault_active = false, fault_recorded = false;",
+            "std::float64_t commanded_rpm = 0.0, last_effective_rpm = 0.0, safe_rpm = 0.0;",
         ]
         self.assertEqual(check_code(code), [1, 2, 3])
 
     def test_separate_lines_are_valid(self):
         code = [
-            'AircraftState fc1_view{};',
-            'AircraftState sampled_truth{};',
-            'std::float64_t commanded_rpm = 0.0;',
+            "AircraftState fc1_view{};",
+            "AircraftState sampled_truth{};",
+            "std::float64_t commanded_rpm = 0.0;",
         ]
         self.assertEqual(check_code(code), [])
 
     def test_template_comma_is_not_a_violation(self):
         code = [
-            'std::array<bool, 4> previous_flags{};',
+            "std::array<bool, 4> previous_flags{};",
         ]
         self.assertEqual(check_code(code), [])
 
     def test_aggregate_brace_commas_are_not_a_violation(self):
         code = [
-            'sim::control::TargetState target{.z = 10.0, .x = 1.0};',
+            "sim::control::TargetState target{.z = 10.0, .x = 1.0};",
         ]
         self.assertEqual(check_code(code), [])
 
     def test_function_call_commas_are_not_a_violation(self):
         code = [
-            'simulate(input, output, config);',
-            'auto result = compute(a, b);',
+            "simulate(input, output, config);",
+            "auto result = compute(a, b);",
         ]
         self.assertEqual(check_code(code), [])
 
@@ -69,45 +69,45 @@ class TestMultipleVarDeclarations(unittest.TestCase):
 
     def test_grouped_declaration_after_multiline_call_is_still_reported(self):
         code = [
-            'const ReceiveResult result = ctx.transport.receiveActuator(*ctx.clock, sequence,',
-            '                                                           ctx.actuator_cmd, diag);',
-            'bool fc1_was_alive = true, fault_active = false;',
+            "const ReceiveResult result = ctx.transport.receiveActuator(*ctx.clock, sequence,",
+            "                                                           ctx.actuator_cmd, diag);",
+            "bool fc1_was_alive = true, fault_active = false;",
         ]
         self.assertEqual(check_code(code), [3])
 
     def test_multiline_parenthesized_expression_continuation_is_not_a_violation(self):
         code = [
-            'const std::uint64_t elapsed = sensor_send_wall + static_cast<std::uint64_t>(',
-            '    std::max<std::int64_t>(0, ctx.this_rtt_us));',
-            'bool ok = true;',
+            "const std::uint64_t elapsed = sensor_send_wall + static_cast<std::uint64_t>(",
+            "    std::max<std::int64_t>(0, ctx.this_rtt_us));",
+            "bool ok = true;",
         ]
         self.assertEqual(check_code(code), [])
 
     def test_comma_in_initializer_list_is_not_a_violation(self):
         code = [
-            'std::array<int, 3> values = {1, 2, 3};',
+            "std::array<int, 3> values = {1, 2, 3};",
         ]
         self.assertEqual(check_code(code), [])
 
     def test_comma_inside_comments_and_strings_is_ignored(self):
         code = [
-            '// int a, b;',
+            "// int a, b;",
             'std::string message = "a, b";',
-            '/* bool x = true, y = false; */',
+            "/* bool x = true, y = false; */",
         ]
         self.assertEqual(check_code(code), [])
 
     def test_nested_template_comma_is_not_a_violation(self):
         code = [
-            'std::map<std::uint32_t, std::string> lookup{};',
+            "std::map<std::uint32_t, std::string> lookup{};",
         ]
         self.assertEqual(check_code(code), [])
 
     def test_for_statement_comma_is_not_a_violation(self):
         code = [
-            'for (std::size_t i = 0, j = 1; i < n; ++i) {',
-            '    step(i, j);',
-            '}',
+            "for (std::size_t i = 0, j = 1; i < n; ++i) {",
+            "    step(i, j);",
+            "}",
         ]
         self.assertEqual(check_code(code), [])
 

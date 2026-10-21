@@ -92,18 +92,8 @@ class TestMemberAlignment(unittest.TestCase):
         self.assertEqual(result[5], "    long_name b = 2;")
 
     def test_only_cppm_files_are_processed(self):
-        code = (
-            "struct S {\n"
-            "    double alpha = 1.0;\n"
-            "    int beta = 2;\n"
-            "};\n"
-        )
-        aligned = (
-            "struct S {\n"
-            "    double alpha = 1.0;\n"
-            "    int    beta = 2;\n"
-            "};\n"
-        )
+        code = "struct S {\n    double alpha = 1.0;\n    int beta = 2;\n};\n"
+        aligned = "struct S {\n    double alpha = 1.0;\n    int    beta = 2;\n};\n"
         self.assertEqual(format_member_alignment_for_file("Src/Module.cpp", code), code)
         self.assertEqual(format_member_alignment_for_file("Src/Module.hpp", code), code)
         self.assertEqual(format_member_alignment_for_file("Src/Module.h", code), code)

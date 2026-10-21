@@ -18,8 +18,7 @@ from linter.module.cppm_checks.scanning import (
 
 
 def check_cppm_interface_implementations(
-    code: str,
-    max_body_lines: int = MAX_CPPM_INLINE_BODY_LINES
+    code: str, max_body_lines: int = MAX_CPPM_INLINE_BODY_LINES
 ) -> list[tuple[str, int, int]]:
     lines = code.splitlines()
     if not any(CLASS_DECLARATION_REGEX.search(line) for line in lines):

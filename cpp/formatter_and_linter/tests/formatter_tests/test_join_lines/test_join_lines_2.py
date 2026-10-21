@@ -46,7 +46,7 @@ def test_signature_stream_and_call_together_are_handled():
         "                                                    double               dt)\n"
         "{\n"
         '    std::cout << "t = " << timeSeconds\n'
-        "              << \"s   z = \" << state.z << std::endl;\n"
+        '              << "s   z = " << state.z << std::endl;\n'
         "    int result = compute(first_arg,\n"
         "                         second_arg);\n"
         "    return TiltTargets{};\n"
@@ -58,7 +58,7 @@ def test_signature_stream_and_call_together_are_handled():
         "                                                    double               dt)\n"
         "{\n"
         '    std::cout << "t = " << timeSeconds\n'
-        "              << \"s   z = \" << state.z << std::endl;\n"
+        '              << "s   z = " << state.z << std::endl;\n'
         "    int result = compute(first_arg, second_arg);\n"
         "    return TiltTargets{};\n"
         "}\n"
@@ -67,15 +67,7 @@ def test_signature_stream_and_call_together_are_handled():
 
 
 def test_access_specifier_does_not_swallow_next_line():
-    code = (
-        "class Application\n"
-        "{\n"
-        "public:\n"
-        "    int Run() const;\n"
-        "private:\n"
-        "    void Helper();\n"
-        "};\n"
-    )
+    code = "class Application\n{\npublic:\n    int Run() const;\nprivate:\n    void Helper();\n};\n"
     assert join_lines(code) == code
 
 

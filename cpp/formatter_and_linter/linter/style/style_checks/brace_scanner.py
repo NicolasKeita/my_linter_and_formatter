@@ -20,19 +20,16 @@ class BraceScanner:
 
     def iter_braces(self):
         for line_index, raw_line in enumerate(self._lines):
-            masked_line, self.in_block_comment = _mask_strings_and_comments(
-                raw_line, self.in_block_comment
-            )
-            if masked_line.strip().startswith('#'):
+            masked_line, self.in_block_comment = _mask_strings_and_comments(raw_line, self.in_block_comment)
+            if masked_line.strip().startswith("#"):
                 continue
             for char_index, char in enumerate(masked_line):
-                if char == '(':
+                if char == "(":
                     self.paren_depth += 1
-                elif char == ')':
+                elif char == ")":
                     if self.paren_depth > 0:
                         self.paren_depth -= 1
-                elif char == '{' and self.paren_depth == 0:
+                elif char == "{" and self.paren_depth == 0:
                     yield line_index, char_index, masked_line[:char_index], True
-                elif char == '}' and self.paren_depth == 0:
-                    yield line_index, char_index, '', False
-
+                elif char == "}" and self.paren_depth == 0:
+                    yield line_index, char_index, "", False

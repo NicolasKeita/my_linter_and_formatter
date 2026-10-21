@@ -31,7 +31,7 @@ def _declaration_continues_on_line(stripped_masked: str) -> bool:
     top level (e.g. a closing '}' that is not part of the initializer) is not
     a continuation and cancels the pending declaration.
     """
-    if stripped_masked in ('{', '}'):
+    if stripped_masked in ("{", "}"):
         return False
     return True
 
@@ -56,7 +56,7 @@ def _find_declaration_end(
         masked, block_comment = _mask_strings_and_comments(lines[index], block_comment)
         stripped = masked.strip()
 
-        if _is_blank_or_comment(stripped) or stripped.startswith('#'):
+        if _is_blank_or_comment(stripped) or stripped.startswith("#"):
             index += 1
             continue
 

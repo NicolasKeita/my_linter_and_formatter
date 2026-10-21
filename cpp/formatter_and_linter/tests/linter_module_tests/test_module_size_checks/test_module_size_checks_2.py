@@ -17,7 +17,6 @@ from linter.module.module_size_checks import (
 
 
 class TestCheckModuleImplementationCounts(unittest.TestCase):
-
     def setUp(self):
         self.temp_dir = tempfile.TemporaryDirectory()
         self.root = self.temp_dir.name
@@ -36,16 +35,7 @@ class TestCheckModuleImplementationCounts(unittest.TestCase):
 
     def test_module_declaration_inside_comments_is_ignored(self):
         directory = os.path.join(self.root, "Tests", "Comments")
-        commented_content = (
-            "/*\n"
-            "Filename: Gamma.cpp\n"
-            "module Ghost;\n"
-            "*/\n"
-            "\n"
-            "// module GhostTwo;\n"
-            "\n"
-            "module RealModule;\n"
-        )
+        commented_content = "/*\nFilename: Gamma.cpp\nmodule Ghost;\n*/\n\n// module GhostTwo;\n\nmodule RealModule;\n"
         self.write_source_file(directory, "Gamma.cpp", commented_content)
         self.write_source_file(directory, "Delta.cpp", "module RealModule;\n")
         self.assertEqual(check_module_implementation_counts([directory]), [])
@@ -74,18 +64,19 @@ class TestCheckModuleImplementationCounts(unittest.TestCase):
     def test_module_declaration_overrides_filename_prefix(self):
         directory = os.path.join(self.root, "Tests", "Renamed")
         for index in range(4):
-            self.write_source_file(
-                directory, "Other-Area-Unit" + str(index) + ".cpp", "module SilScenarios;\n"
-            )
+            self.write_source_file(directory, "Other-Area-Unit" + str(index) + ".cpp", "module SilScenarios;\n")
         self.write_prefixed_implementations(directory, "SilScenarios", 5)
         violations = check_module_implementation_counts([directory])
-        self.assertEqual(violations, [
-            (
-                "SilScenarios",
-                MAX_IMPLEMENTATION_FILES_PER_MODULE + 1,
-                "SilScenarios::" + SUB_MODULE_PLACEHOLDER,
-            ),
-        ])
+        self.assertEqual(
+            violations,
+            [
+                (
+                    "SilScenarios",
+                    MAX_IMPLEMENTATION_FILES_PER_MODULE + 1,
+                    "SilScenarios::" + SUB_MODULE_PLACEHOLDER,
+                ),
+            ],
+        )
 
     def test_distinct_module_declarations_are_grouped_separately(self):
         directory = os.path.join(self.root, "Tests", "Split")
@@ -107,6 +98,14 @@ class TestCheckModuleImplementationCounts(unittest.TestCase):
             "Pense à le subdiviser en sous-modules "
             "(ex : 'SilScenarios::Observability::Telemetry').",
         )
+
+    def test_max_implementation_files_constant(self):
+        self.assertEqual(MAX_IMPLEMENTATION_FILES_PER_MODULE, 8)
+
+    def test_group_at_limit_is_valid(self):
+        directory = os.path.join(self.root, "Tests", "Small")
+        self.write_prefixed_implementations(directory, "Alpha-Beta", MAX_IMPLEMENTATION_FILES_PER_MODULE)
+        self.assertEqual(check_module_implementation_counts([directory]), [])
 
 
 if __name__ == "__main__":

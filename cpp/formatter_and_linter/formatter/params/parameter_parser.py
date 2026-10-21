@@ -48,15 +48,15 @@ def _split_parameters(params_str: str) -> list[str]:
     square_depth = 0
 
     for char in params_str:
-        if char == '<':
+        if char == "<":
             bracket_depth += 1
-        elif char == '>':
+        elif char == ">":
             bracket_depth -= 1
-        elif char == '[':
+        elif char == "[":
             square_depth += 1
-        elif char == ']':
+        elif char == "]":
             square_depth -= 1
-        elif char == ',' and bracket_depth == 0 and square_depth == 0:
+        elif char == "," and bracket_depth == 0 and square_depth == 0:
             if current_param.strip():
                 params.append(current_param.strip())
             current_param = ""

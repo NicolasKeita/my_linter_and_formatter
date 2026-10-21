@@ -47,6 +47,10 @@ try {
 
     if (diagnostic.kind === 'empty-directory') {
       process.stdout.write(`${directory}: empty directory\n`);
+    } else if (diagnostic.kind === 'too-many-subdirectories') {
+      process.stdout.write(
+        `${directory}: ${diagnostic.directoryCount} direct subdirectories (maximum ${diagnostic.maxSubdirectories})\n`,
+      );
     } else {
       process.stdout.write(`${directory}: ${diagnostic.fileCount} files (maximum ${diagnostic.maxFiles})\n`);
     }

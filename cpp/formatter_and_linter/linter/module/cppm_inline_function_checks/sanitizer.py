@@ -10,57 +10,57 @@ from linter.module.cppm_inline_function_checks.literal_scanners import (
 
 def _sanitize_code_state(chars: list[str], code: str, index: int, state: _SanitizeState) -> tuple:
     char = code[index]
-    following = code[index + 1] if index + 1 < len(code) else ''
-    if char == '/' and following == '/':
-        chars[index] = ' '
-        chars[index + 1] = ' '
-        return index + 2, _SanitizeState.LINE_COMMENT, ''
-    if char == '/' and following == '*':
-        chars[index] = ' '
-        chars[index + 1] = ' '
-        return index + 2, _SanitizeState.BLOCK_COMMENT, ''
+    following = code[index + 1] if index + 1 < len(code) else ""
+    if char == "/" and following == "/":
+        chars[index] = " "
+        chars[index + 1] = " "
+        return index + 2, _SanitizeState.LINE_COMMENT, ""
+    if char == "/" and following == "*":
+        chars[index] = " "
+        chars[index + 1] = " "
+        return index + 2, _SanitizeState.BLOCK_COMMENT, ""
     if char == '"':
         index, state, raw_terminator = _enter_literal(code, chars, index)
         return index, state, raw_terminator
     if char == "'":
         if _is_digit_separator(code, index):
-            return index + 1, _SanitizeState.CODE, ''
-        chars[index] = ' '
-        return index + 1, _SanitizeState.CHAR, ''
-    return index + 1, _SanitizeState.CODE, ''
+            return index + 1, _SanitizeState.CODE, ""
+        chars[index] = " "
+        return index + 1, _SanitizeState.CHAR, ""
+    return index + 1, _SanitizeState.CODE, ""
 
 
 def _sanitize_line_comment(chars: list[str], char: str, index: int) -> tuple[int, _SanitizeState]:
-    if char == '\n':
+    if char == "\n":
         return index + 1, _SanitizeState.CODE
-    chars[index] = ' '
+    chars[index] = " "
     return index + 1, _SanitizeState.LINE_COMMENT
 
 
 def _sanitize_block_comment(chars: list[str], code: str, char: str, following: str, index: int) -> tuple:
-    if char == '*' and following == '/':
-        chars[index] = ' '
-        chars[index + 1] = ' '
+    if char == "*" and following == "/":
+        chars[index] = " "
+        chars[index + 1] = " "
         return index + 2, _SanitizeState.CODE
-    if char != '\n':
-        chars[index] = ' '
+    if char != "\n":
+        chars[index] = " "
     return index + 1, _SanitizeState.BLOCK_COMMENT
 
 
 def _sanitize_quote_state(chars: list[str], char: str, following: str, index: int, state: _SanitizeState) -> tuple:
     quote = '"' if state == _SanitizeState.STRING else "'"
-    if char == '\\':
-        chars[index] = ' '
-        if following and following != '\n':
-            chars[index + 1] = ' '
+    if char == "\\":
+        chars[index] = " "
+        if following and following != "\n":
+            chars[index + 1] = " "
             return index + 2, state
         return index + 1, state
     if char == quote:
-        chars[index] = ' '
+        chars[index] = " "
         return index + 1, _SanitizeState.CODE
-    if char == '\n':
+    if char == "\n":
         return index + 1, _SanitizeState.CODE
-    chars[index] = ' '
+    chars[index] = " "
     return index + 1, state
 
 
@@ -71,17 +71,17 @@ def _sanitize_string_or_char(chars: list[str], char: str, following: str, index:
 def _sanitize_raw_string(chars: list[str], code: str, char: str, index: int, raw_terminator: str) -> tuple:
     if code.startswith(raw_terminator, index):
         for offset in range(index, index + len(raw_terminator)):
-            chars[offset] = ' '
+            chars[offset] = " "
         index += len(raw_terminator)
         return index, _SanitizeState.CODE
-    if char != '\n':
-        chars[index] = ' '
+    if char != "\n":
+        chars[index] = " "
     return index + 1, _SanitizeState.RAW_STRING
 
 
 def _dispatch_sanitizer(chars: list[str], code: str, index: int, state: _SanitizeState, raw_terminator: str) -> tuple:
     char = code[index]
-    following = code[index + 1] if index + 1 < len(code) else ''
+    following = code[index + 1] if index + 1 < len(code) else ""
 
     if state == _SanitizeState.CODE:
         index, state, raw_terminator = _sanitize_code_state(chars, code, index, state)
@@ -101,10 +101,8 @@ def _sanitize_code(code: str) -> str:
     chars = list(code)
     length = len(code)
     state = _SanitizeState.CODE
-    raw_terminator = ''
+    raw_terminator = ""
     index = 0
     while index < length:
-        index, state, raw_terminator = _dispatch_sanitizer(
-            chars, code, index, state, raw_terminator
-        )
-    return ''.join(chars)
+        index, state, raw_terminator = _dispatch_sanitizer(chars, code, index, state, raw_terminator)
+    return "".join(chars)

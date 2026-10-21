@@ -16,80 +16,25 @@ def fmt(code: str) -> str:
 
 class TestCommentFunctionSpacing(unittest.TestCase):
     def test_function_after_function_gets_blank_line(self):
-        code = (
-            "int setup = 0;\n"
-            "static void first()\n"
-            "{\n"
-            "}\n"
-            "static void second()\n"
-            "{\n"
-            "}"
-        )
-        expected = (
-            "int setup = 0;\n"
-            "\n"
-            "static void first()\n"
-            "{\n"
-            "}\n"
-            "\n"
-            "static void second()\n"
-            "{\n"
-            "}"
-        )
+        code = "int setup = 0;\nstatic void first()\n{\n}\nstatic void second()\n{\n}"
+        expected = "int setup = 0;\n\nstatic void first()\n{\n}\n\nstatic void second()\n{\n}"
         self.assertEqual(fmt(code), expected)
 
     def test_existing_blank_line_between_block_comment_and_function_removed(self):
-        code = (
-            "/*\n"
-            "  Description...\n"
-            "*/\n"
-            "\n"
-            "static void foo()\n"
-            "{\n"
-            "}"
-        )
-        expected = (
-            "/*\n"
-            "  Description...\n"
-            "*/\n"
-            "static void foo()\n"
-            "{\n"
-            "}"
-        )
+        code = "/*\n  Description...\n*/\n\nstatic void foo()\n{\n}"
+        expected = "/*\n  Description...\n*/\nstatic void foo()\n{\n}"
         self.assertEqual(fmt(code), expected)
 
     def test_idempotent_when_correct_with_comment(self):
-        code = (
-            "/*\n"
-            "  Description...\n"
-            "*/\n"
-            "static int foo()\n"
-            "{\n"
-            "    return 0;\n"
-            "}"
-        )
+        code = "/*\n  Description...\n*/\nstatic int foo()\n{\n    return 0;\n}"
         self.assertEqual(fmt(code), code)
 
     def test_idempotent_when_correct_with_blank_between_code(self):
-        code = (
-            "int x = 5;\n"
-            "\n"
-            "static int foo()\n"
-            "{\n"
-            "    return 0;\n"
-            "}"
-        )
+        code = "int x = 5;\n\nstatic int foo()\n{\n    return 0;\n}"
         self.assertEqual(fmt(code), code)
 
     def test_block_comment_before_function_at_start_of_file(self):
-        code = (
-            "/*\n"
-            "  Description...\n"
-            "*/\n"
-            "static void foo()\n"
-            "{\n"
-            "}"
-        )
+        code = "/*\n  Description...\n*/\nstatic void foo()\n{\n}"
         self.assertEqual(fmt(code), code)
 
 

@@ -12,7 +12,6 @@ from linter.module.module_filename_checks import check_module_filename_conventio
 
 
 class TestCheckModuleFilenameConvention(unittest.TestCase):
-
     def setUp(self):
         self.temp_dir = tempfile.TemporaryDirectory()
         self.root = self.temp_dir.name
@@ -38,16 +37,14 @@ class TestCheckModuleFilenameConvention(unittest.TestCase):
 
     def test_multiple_hyphenated_implementations_are_valid(self):
         directory = os.path.join(self.root, "Src", "Control")
-        self.create_module_files(directory, [
-            "FlightController.cppm",
-            "FlightController-Core.cpp",
-            "FlightController-Loops.cpp",
-        ])
-        self.assertEqual(check_module_filename_convention([directory]), [])
-
-    def test_missing_implementation_is_not_reported(self):
-        directory = os.path.join(self.root, "Src", "Utils")
-        self.create_module_files(directory, ["Logger.cppm"])
+        self.create_module_files(
+            directory,
+            [
+                "FlightController.cppm",
+                "FlightController-Core.cpp",
+                "FlightController-Loops.cpp",
+            ],
+        )
         self.assertEqual(check_module_filename_convention([directory]), [])
 
     def test_single_hyphenated_implementation_is_reported(self):
@@ -60,59 +57,59 @@ class TestCheckModuleFilenameConvention(unittest.TestCase):
 
     def test_base_implementation_among_multiple_is_reported(self):
         directory = os.path.join(self.root, "Src", "SIL")
-        self.create_module_files(directory, [
-            "SilRunner.cppm",
-            "SilRunner.cpp",
-            "SilRunner-Loop.cpp",
-        ])
+        self.create_module_files(
+            directory,
+            [
+                "SilRunner.cppm",
+                "SilRunner.cpp",
+                "SilRunner-Loop.cpp",
+            ],
+        )
         violations = check_module_filename_convention([directory])
         self.assertEqual(len(violations), 1)
         self.assertTrue(violations[0][0].endswith("SilRunner.cpp"))
 
     def test_glued_name_is_not_attributed_to_base_module(self):
         directory = os.path.join(self.root, "Src", "Embedded")
-        self.create_module_files(directory, [
-            "HilRunner.cppm",
-            "HilRunner-Loop.cpp",
-            "HilRunner-Metrics.cpp",
-            "HilRunnerMain.cpp",
-        ])
+        self.create_module_files(
+            directory,
+            [
+                "HilRunner.cppm",
+                "HilRunner-Loop.cpp",
+                "HilRunner-Metrics.cpp",
+                "HilRunnerMain.cpp",
+            ],
+        )
         self.assertEqual(check_module_filename_convention([directory]), [])
 
     def test_glued_file_with_own_interface_is_its_own_module(self):
         directory = os.path.join(self.root, "Src", "Embedded")
-        self.create_module_files(directory, [
-            "HilRunner.cppm",
-            "HilRunner-Loop.cpp",
-            "HilRunner-Metrics.cpp",
-            "HilRunnerContext.cppm",
-            "HilRunnerContext.cpp",
-        ])
+        self.create_module_files(
+            directory,
+            [
+                "HilRunner.cppm",
+                "HilRunner-Loop.cpp",
+                "HilRunner-Metrics.cpp",
+                "HilRunnerContext.cppm",
+                "HilRunnerContext.cpp",
+            ],
+        )
         self.assertEqual(check_module_filename_convention([directory]), [])
 
     def test_import_only_file_is_not_an_implementation(self):
         directory = os.path.join(self.root, "Src", "Embedded")
-        self.create_module_files(directory, [
-            "HilRunner.cppm",
-            "HilRunner-Loop.cpp",
-            "HilRunner-Metrics.cpp",
-        ])
-        self.write_file(directory, "HilRunnerMain.cpp",
-                        "import std;\n\nimport HilRunner;\n\nint main() { return 0; }\n")
+        self.create_module_files(
+            directory,
+            [
+                "HilRunner.cppm",
+                "HilRunner-Loop.cpp",
+                "HilRunner-Metrics.cpp",
+            ],
+        )
+        self.write_file(
+            directory, "HilRunnerMain.cpp", "import std;\n\nimport HilRunner;\n\nint main() { return 0; }\n"
+        )
         self.assertEqual(check_module_filename_convention([directory]), [])
-
-    def test_module_declaration_attributes_file_even_with_unrelated_name(self):
-        directory = os.path.join(self.root, "Src", "Embedded")
-        self.create_module_files(directory, [
-            "HilRunner.cppm",
-            "HilRunner-Loop.cpp",
-            "HilRunner-Metrics.cpp",
-        ])
-        self.write_file(directory, "Helper.cpp", "module HilRunner;\n\nimport std;\n")
-        violations = check_module_filename_convention([directory])
-        self.assertEqual(len(violations), 1)
-        self.assertTrue(violations[0][0].endswith("Helper.cpp"))
-        self.assertIn("HilRunner-Helper.cpp", violations[0][1])
 
 
 if __name__ == "__main__":

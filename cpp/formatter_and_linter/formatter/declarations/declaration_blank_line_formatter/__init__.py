@@ -54,7 +54,7 @@ def remove_blank_lines_between_declarations(code: str) -> str:
         result.append(line)
         i += 1
 
-    return '\n'.join(result) + ('\n' if code.endswith('\n') else '')
+    return "\n".join(result) + ("\n" if code.endswith("\n") else "")
 
 
 __all__ = ["remove_blank_lines_between_declarations", "is_function_open_brace"]

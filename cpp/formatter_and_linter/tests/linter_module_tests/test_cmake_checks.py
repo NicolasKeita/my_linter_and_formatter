@@ -21,7 +21,6 @@ from linter.module.cmake_checks import (
 
 
 class TestFindCmakeFiles(unittest.TestCase):
-
     def setUp(self):
         self.temp_dir = tempfile.TemporaryDirectory()
         self.root = self.temp_dir.name
@@ -56,7 +55,6 @@ class TestFindCmakeFiles(unittest.TestCase):
 
 
 class TestCheckCmakeFileLengths(unittest.TestCase):
-
     def setUp(self):
         self.temp_dir = tempfile.TemporaryDirectory()
         self.root = self.temp_dir.name

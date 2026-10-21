@@ -19,25 +19,25 @@ UNINITIALIZED_DECL_MESSAGE = (
 )
 
 _DECLARATION_QUALIFIERS_RE = (
-    r'(?:(?:const|constexpr|consteval|constinit|static|inline|extern|mutable|'
-    r'volatile|unsigned|signed|short|long|thread_local)\s+)*'
+    r"(?:(?:const|constexpr|consteval|constinit|static|inline|extern|mutable|"
+    r"volatile|unsigned|signed|short|long|thread_local)\s+)*"
 )
 
-_DECLARATION_TYPE_NAME_RE = r'[A-Za-z_]\w*(?:\s*::\s*[A-Za-z_]\w*)*'
+_DECLARATION_TYPE_NAME_RE = r"[A-Za-z_]\w*(?:\s*::\s*[A-Za-z_]\w*)*"
 
-_DECLARATION_TEMPLATE_ARGS_RE = r'(?:\s*<(?:[^<>]|<(?:[^<>]|<[^<>]*>)*>)*>\s*)?'
+_DECLARATION_TEMPLATE_ARGS_RE = r"(?:\s*<(?:[^<>]|<(?:[^<>]|<[^<>]*>)*>)*>\s*)?"
 
-_DECLARATION_POINTER_REFS_RE = r'(?:\s*[*&]\s*)*'
+_DECLARATION_POINTER_REFS_RE = r"(?:\s*[*&]\s*)*"
 
 _SIMPLE_UNINITIALIZED_DECL_RE = re.compile(
-    rf'^{_DECLARATION_QUALIFIERS_RE}'
-    rf'{_DECLARATION_TYPE_NAME_RE}'
-    rf'{_DECLARATION_TEMPLATE_ARGS_RE}'
-    rf'{_DECLARATION_POINTER_REFS_RE}'
-    rf'\s*(?P<name>[A-Za-z_]\w*)$'
+    rf"^{_DECLARATION_QUALIFIERS_RE}"
+    rf"{_DECLARATION_TYPE_NAME_RE}"
+    rf"{_DECLARATION_TEMPLATE_ARGS_RE}"
+    rf"{_DECLARATION_POINTER_REFS_RE}"
+    rf"\s*(?P<name>[A-Za-z_]\w*)$"
 )
 
-_MEMBER_ASSIGNMENT_RE = re.compile(r'^(?P<name>[A-Za-z_]\w*)\s*\.\s*[A-Za-z_]\w*\s*=(?!=)')
+_MEMBER_ASSIGNMENT_RE = re.compile(r"^(?P<name>[A-Za-z_]\w*)\s*\.\s*[A-Za-z_]\w*\s*=(?!=)")
 
 
 def format_uninitialized_decl_message(variable_name: str) -> str:
@@ -54,7 +54,7 @@ def _parse_uninitialized_declaration(stripped_masked: str) -> str | None:
     Brace/parenthesized/copy initializations, prototypes, multiple
     declarators and multi-statement lines are rejected.
     """
-    if not stripped_masked.endswith(';'):
+    if not stripped_masked.endswith(";"):
         return None
 
     if _NON_DECLARATION_KEYWORD_RE.match(stripped_masked):
@@ -68,13 +68,13 @@ def _parse_uninitialized_declaration(stripped_masked: str) -> str | None:
     if match is None:
         return None
 
-    return match.group('name')
+    return match.group("name")
 
 
 def _matches_pending_assignment(stripped: str, pending_name: str | None) -> bool:
     """Tell whether the line assigns a member of the pending variable."""
     member_match = _MEMBER_ASSIGNMENT_RE.match(stripped)
-    return member_match is not None and member_match.group('name') == pending_name
+    return member_match is not None and member_match.group("name") == pending_name
 
 
 def check_uninitialized_declarations(code: str) -> list[tuple[int, str]]:
@@ -94,7 +94,7 @@ def check_uninitialized_declarations(code: str) -> list[tuple[int, str]]:
     for line_index, raw_line in enumerate(lines):
         masked_line, in_block_comment = _mask_strings_and_comments(raw_line, in_block_comment)
         stripped = masked_line.strip()
-        if not stripped or stripped.startswith('#'):
+        if not stripped or stripped.startswith("#"):
             continue
 
         if pending_name is None:

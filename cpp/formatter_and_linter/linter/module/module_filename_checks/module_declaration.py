@@ -27,7 +27,7 @@ def declared_module(file_path: str) -> str | None:
                     end_index = stripped.find("*/")
                     if end_index == -1:
                         continue
-                    stripped = stripped[end_index + len("*/"):]
+                    stripped = stripped[end_index + len("*/") :]
                     in_block_comment = False
                 start_index = stripped.find("/*")
                 if start_index != -1:
@@ -39,7 +39,7 @@ def declared_module(file_path: str) -> str | None:
                     if end_index == -1:
                         in_block_comment = True
                         continue
-                    stripped = stripped[end_index + len("*/"):]
+                    stripped = stripped[end_index + len("*/") :]
                 name = _match_declaration(stripped)
                 if name:
                     return name

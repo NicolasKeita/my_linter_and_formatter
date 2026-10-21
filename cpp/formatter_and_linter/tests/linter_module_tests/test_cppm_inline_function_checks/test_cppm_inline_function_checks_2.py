@@ -29,7 +29,6 @@ import std;
 
 
 class TestCheckCppmInlineFunctions(unittest.TestCase):
-
     def setUp(self):
         self.temp_dir = tempfile.TemporaryDirectory()
         self.root = Path(self.temp_dir.name)
@@ -47,15 +46,7 @@ class TestCheckCppmInlineFunctions(unittest.TestCase):
 
     def test_multi_line_method_inside_class_is_reported(self):
         file_path = self.write_cppm(
-            "export class Sample\n"
-            "{\n"
-            "public:\n"
-            "    void reset()\n"
-            "    {\n"
-            "        stop();\n"
-            "        clear();\n"
-            "    }\n"
-            "};\n"
+            "export class Sample\n{\npublic:\n    void reset()\n    {\n        stop();\n        clear();\n    }\n};\n"
         )
         warnings = check_cppm_inline_functions(file_path)
         self.assertEqual(len(warnings), 1)
@@ -92,12 +83,7 @@ class TestCheckCppmInlineFunctions(unittest.TestCase):
 
     def test_multi_line_enum_class_is_not_reported(self):
         file_path = self.write_cppm(
-            "export enum class FaultDomain\n"
-            "{\n"
-            "    None,\n"
-            "    FC1Heartbeat,\n"
-            "    CommsLink,\n"
-            "};\n"
+            "export enum class FaultDomain\n{\n    None,\n    FC1Heartbeat,\n    CommsLink,\n};\n"
         )
         self.assertEqual(check_cppm_inline_functions(file_path), [])
 

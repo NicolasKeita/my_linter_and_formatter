@@ -35,15 +35,15 @@ class _ParameterScan:
         length = len(self.sanitized)
         while index < length:
             char = self.sanitized[index]
-            if char == '(':
+            if char == "(":
                 self.paren_depth += 1
-            elif char == ')':
+            elif char == ")":
                 self.paren_depth = max(0, self.paren_depth - 1)
-            elif char == '{' and self.paren_depth == 0:
+            elif char == "{" and self.paren_depth == 0:
                 self._open_block(index)
-            elif char == '}' and self.paren_depth == 0:
+            elif char == "}" and self.paren_depth == 0:
                 self._close_block(index)
-            elif char == ';' and self.paren_depth == 0:
+            elif char == ";" and self.paren_depth == 0:
                 self.segment_start = index + 1
             index += 1
         self.violations.sort(key=lambda violation: violation[1])
@@ -60,9 +60,9 @@ class _ParameterScan:
         """Classify the '{' at ``index`` as a braced initializer or as the
         opening brace of a classified block."""
         if _is_braced_initializer(self.sanitized, self.segment_start, index):
-            self.blocks.append(_Block(_BlockKind.OTHER, '', index, index, True))
+            self.blocks.append(_Block(_BlockKind.OTHER, "", index, index, True))
             return
-        header = self.sanitized[self.segment_start:index]
+        header = self.sanitized[self.segment_start : index]
         significant_header, offset = _split_header(header)
         kind, name = _classify_header(significant_header)
         header_start = self.segment_start + offset

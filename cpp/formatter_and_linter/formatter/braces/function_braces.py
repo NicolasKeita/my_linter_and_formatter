@@ -29,13 +29,13 @@ def _emit_inline_body(brace_indent: str, after_brace: str, result_lines: list[st
     if not after_brace.strip():
         return
     content = after_brace.strip()
-    if content.endswith('}'):
-        body_content = content[:-1].rstrip().rstrip(';')
+    if content.endswith("}"):
+        body_content = content[:-1].rstrip().rstrip(";")
         if body_content:
-            result_lines.append(brace_indent + '    ' + body_content + ';')
-        result_lines.append(brace_indent + '}')
+            result_lines.append(brace_indent + "    " + body_content + ";")
+        result_lines.append(brace_indent + "}")
     else:
-        result_lines.append(brace_indent + '    ' + content)
+        result_lines.append(brace_indent + "    " + content)
 
 
 def _split_function_brace(
@@ -50,12 +50,12 @@ def _split_function_brace(
     if extract_function_name(before_brace) is None:
         return False
 
-    after_brace = line[pos + 1:]
+    after_brace = line[pos + 1 :]
     func_decl = before_brace.rstrip()
-    brace_indent = ' ' * _declaration_indent(before_brace, lines, line_idx)
+    brace_indent = " " * _declaration_indent(before_brace, lines, line_idx)
 
     result_lines.append(func_decl)
-    result_lines.append(brace_indent + '{')
+    result_lines.append(brace_indent + "{")
     _emit_inline_body(brace_indent, after_brace, result_lines)
     return True
 
@@ -63,14 +63,14 @@ def _split_function_brace(
 def _align_lone_brace(line: str, result_lines: list[str]) -> bool:
     """Align a lone '{' line with the function signature above it; returns
     True when the aligned brace was appended."""
-    if line.strip() != '{':
+    if line.strip() != "{":
         return False
     func_start_idx = find_function_start_for_brace(result_lines, len(result_lines))
     if func_start_idx is None:
         return False
     func_line = result_lines[func_start_idx] if func_start_idx < len(result_lines) else ""
     base_indent = len(func_line) - len(func_line.lstrip())
-    result_lines.append(' ' * base_indent + '{')
+    result_lines.append(" " * base_indent + "{")
     return True
 
 
@@ -82,7 +82,7 @@ def _process_brace_line(
 ) -> bool:
     """Process every brace of ``line``; True when the line was fully handled."""
     for pos, brace_type in find_brace_positions(line):
-        if brace_type != '{':
+        if brace_type != "{":
             continue
 
         if is_lambda_capture(line, pos) or is_initializer_list(line, pos):
@@ -90,8 +90,8 @@ def _process_brace_line(
             return True
 
         before_brace = line[:pos]
-        local_paren_depth = before_brace.count('(') - before_brace.count(')')
-        if local_paren_depth == 0 and '(' in before_brace:
+        local_paren_depth = before_brace.count("(") - before_brace.count(")")
+        if local_paren_depth == 0 and "(" in before_brace:
             if _split_function_brace(line, pos, lines, line_idx, result_lines):
                 return True
     return False
@@ -114,5 +114,4 @@ def format_function_braces(code: str) -> str:
         if not processed:
             result_lines.append(line)
 
-    return '\n'.join(result_lines) + ('\n' if code.endswith('\n') else '')
-
+    return "\n".join(result_lines) + ("\n" if code.endswith("\n") else "")

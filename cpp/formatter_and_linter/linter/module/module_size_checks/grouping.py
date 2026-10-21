@@ -6,12 +6,10 @@ import re
 
 from linter.style.style_checks import _mask_strings_and_comments
 
-SOURCE_EXTENSIONS = ('.cpp', '.cppm')
-IMPLEMENTATION_EXTENSION = '.cpp'
+SOURCE_EXTENSIONS = (".cpp", ".cppm")
+IMPLEMENTATION_EXTENSION = ".cpp"
 
-_MODULE_DECLARATION_RE = re.compile(
-    r"^\s*(?:export\s+)?module\s+([A-Za-z_]\w*(?::[A-Za-z_]\w*)*)\s*;"
-)
+_MODULE_DECLARATION_RE = re.compile(r"^\s*(?:export\s+)?module\s+([A-Za-z_]\w*(?::[A-Za-z_]\w*)*)\s*;")
 
 
 def _read_file_text(file_path: str) -> str:

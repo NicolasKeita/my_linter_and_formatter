@@ -25,9 +25,7 @@ ATTRIBUTE_SPECIFIER = r"(?:[ \t]*\[\[[^\]]*\]\])*[ \t]*"
 
 QUALIFIER_PREFIX = r"^[ \t]*(?:static\s+|inline\s+|virtual\s+|explicit\s+|constexpr\s+|const\s+)*"
 
-STORAGE_CLASS_PREFIX = (
-    r"^[ \t]*(?:static[ \t]+|inline[ \t]+|constexpr[ \t]+|const[ \t]+|extern[ \t]+|mutable[ \t]+)*"
-)
+STORAGE_CLASS_PREFIX = r"^[ \t]*(?:static[ \t]+|inline[ \t]+|constexpr[ \t]+|const[ \t]+|extern[ \t]+|mutable[ \t]+)*"
 
 _OPTIONAL_POINTER_TYPE = r"(?:" + TEMPLATE_TYPE + r"[ \t]*[*&]?[ \t]+)+"
 

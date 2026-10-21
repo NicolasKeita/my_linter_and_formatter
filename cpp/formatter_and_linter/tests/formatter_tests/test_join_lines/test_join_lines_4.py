@@ -36,20 +36,15 @@ def test_braced_array_statement_over_limit_is_kept_whole():
 def test_braced_statement_whose_whole_join_exceeds_limit_is_kept():
     code = (
         "std::vector<std::string> labels = {\n"
-        "    \"alpha beta gamma delta epsilon zeta eta theta iota kappa lambda\",\n"
-        "    \"one two three four five six seven eight nine ten eleven twelve\",\n"
+        '    "alpha beta gamma delta epsilon zeta eta theta iota kappa lambda",\n'
+        '    "one two three four five six seven eight nine ten eleven twelve",\n'
         '    "final entry with some extra padding to be sure OK"};\n'
     )
     assert join_lines(code) == code
 
 
 def test_braced_statement_within_limit_is_joined():
-    code = (
-        "const std::array<int, 3> values = {\n"
-        "    10,\n"
-        "    20,\n"
-        "    30};\n"
-    )
+    code = "const std::array<int, 3> values = {\n    10,\n    20,\n    30};\n"
     expected = "const std::array<int, 3> values = { 10, 20, 30};\n"
     assert join_lines(code) == expected
 
@@ -64,14 +59,7 @@ def test_braced_call_with_inner_braced_init_above_limit_is_kept():
 
 
 def test_plain_enum_after_code_is_preserved():
-    code = (
-        "    int value = 5;\n"
-        "    enum Color {\n"
-        "        RED,\n"
-        "        GREEN,\n"
-        "        BLUE\n"
-        "    };\n"
-    )
+    code = "    int value = 5;\n    enum Color {\n        RED,\n        GREEN,\n        BLUE\n    };\n"
     assert join_lines(code) == code
 
 
@@ -91,10 +79,7 @@ def test_single_logical_condition_in_if_is_joined():
 
 
 def test_single_logical_condition_in_return_is_joined():
-    code = (
-        "    return last_received >= 0.0\n"
-        "        && current_time - last_received > timeout;\n"
-    )
+    code = "    return last_received >= 0.0\n        && current_time - last_received > timeout;\n"
     expected = "    return last_received >= 0.0 && current_time - last_received > timeout;\n"
     assert join_lines(code) == expected
 
@@ -106,9 +91,5 @@ def test_single_logical_or_condition_is_joined():
         "        proceed();\n"
         "    }\n"
     )
-    expected = (
-        "    if (state == MissionState::COMPLETE || state == MissionState::CLIMB) {\n"
-        "        proceed();\n"
-        "    }\n"
-    )
+    expected = "    if (state == MissionState::COMPLETE || state == MissionState::CLIMB) {\n        proceed();\n    }\n"
     assert join_lines(code) == expected

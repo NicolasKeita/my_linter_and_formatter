@@ -23,11 +23,7 @@ def _last_param_line(ptype: str, pname: str, indent: str, max_type_len: int) -> 
     return f"{indent}{formatted_type}{separator}{pname})"
 
 
-def format_parameters_list(
-    parsed_params: list[tuple[str, str]],
-    indent: str,
-    max_type_len: int
-) -> str:
+def format_parameters_list(parsed_params: list[tuple[str, str]], indent: str, max_type_len: int) -> str:
     """
     Format a list of parameters with proper alignment.
 
@@ -51,4 +47,4 @@ def format_parameters_list(
 
         lines.append(line)
 
-    return '\n'.join(lines)
+    return "\n".join(lines)

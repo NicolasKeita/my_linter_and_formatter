@@ -49,6 +49,7 @@ Le tableau ci-dessous détaille les règles et transformations **activées par l
 | Formatage | Instructions réparties sur plusieurs lignes | **F** : les fusionne si le résultat tient sur 120 caractères, dans les `.cpp` et `.cppm` | — |
 | Formatage | Initialiseurs désignés C++20 trop longs | **F** : répartit leurs champs sur plusieurs lignes au-delà de 120 caractères, dans les `.cpp` et `.cppm` | — |
 | Structure | Dossiers contenant trop de fichiers directs | **L** : plus de 8 fichiers `.cpp`/`.cppm` dans `Src`, `Tests` ou `apps` | **L** : plus de 10 fichiers de tout type ; seuil configurable avec `--max-files` |
+| Structure | Nombre de sous-dossiers directs | **L** : 8 maximum par dossier dans `Src`, `Tests` ou `apps` | **L** : 8 maximum par dossier parcouru, après exclusions |
 | Structure | Dossiers vides | — | **L** : `nk-lint-structure` les signale, après exclusion des noms ignorés |
 | Structure | Nom des fichiers d'implémentation de module | **L** : `<Module>.cpp` pour une seule implémentation ; `<Module>-<Suffix>.cpp` s'il y en a plusieurs | — |
 | Structure | Taille d'un module C++20 | **L** : avertit au-delà de 8 fichiers `.cpp` d'implémentation | — |
@@ -64,6 +65,8 @@ Côté JavaScript et TypeScript, `eslint <dossier>` signale les règles et `esli
 ## Versions Python et C#
 
 Les deux versions reprennent les contrôles généraux du C++ (taille du code, nombre de paramètres, commentaires et structure des dossiers), avec des seuils et des exceptions adaptés à chaque langage. Leurs `check` vérifient aussi le formatage **sans modifier les fichiers** ; leurs commandes `format` écrivent les corrections disponibles.
+
+Les quatre outils limitent chaque dossier parcouru à **8 sous-dossiers directs**, y compris les sous-dossiers vides, après application de leurs exclusions habituelles. Les descendants ne sont pas additionnés au parent : chaque niveau est contrôlé séparément. En C#, ce contrôle part du dossier analysé ou de la racine du projet ou de la solution ; un fichier source isolé ne déclenche pas les contrôles de structure.
 
 | Langage | Installation et commandes principales | Règles principales |
 | --- | --- | --- |

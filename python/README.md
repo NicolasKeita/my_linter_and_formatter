@@ -25,8 +25,11 @@ nk-python check . --max-files 10       # seuil de dossier personnalisé
 
 Sans chemin, la commande traite le dossier courant. Les sous-dossiers de cache, d'environnement virtuel et de construction sont ignorés. Cela inclut tous les dossiers dont le nom commence par `.venv`, comme `.venv-cardd` et `.venv-vision`. `check` contrôle **aussi** le formatage Ruff et retourne un code non nul si une règle échoue. `format` applique le tri des imports Ruff et `ruff format`; relancer `check` pour les diagnostics qui ne se corrigent pas automatiquement.
 
+Les sorties de compilation et rapports `bin`, `obj`, `build`, `cmake-build-*`, `dist`, `coverage` et `htmlcov`, les caches et dossiers IDE `.cache`, `.vs`, `.idea`, ainsi que les métadonnées `*.egg-info`, sont exclus à chaque niveau. Ils ne sont ni parcourus ni comptés dans les limites de structure. Les dossiers sources voisins comme `binary`, `objects` ou `build_tools` restent analysés.
+
 Les diagnostics s'affichent sans extraits de code, avec des chemins relatifs au dossier courant.
 La sortie de `check` commence par un résumé : fichiers analysés, nombre de warnings du linter (Ruff et règles `PY…`), problèmes d'ordre des imports et fichiers à reformater. Elle présente ensuite les diagnostics du linter, puis une section formatter à la fin : ordre des imports et fichiers à reformater. Cette dernière correspond aux corrections appliquées par `format`. Les autres corrections automatiques proposées par Ruff ne sont pas appliquées par cette commande.
+Dans `check` et `format`, le bilan du formatage affiche les totaux sur l'ensemble des fichiers en une seule ligne, même lorsque le traitement se fait par lots de 50.
 
 ## Règles
 
@@ -40,6 +43,7 @@ La sortie de `check` commence par un résumé : fichiers analysés, nombre de wa
 | `PY006` | Commentaire dans une fonction interdit, sauf directive d'outil ; utiliser une docstring ou clarifier le code. |
 | `PY007` | Commentaire qui semble non anglais. Les textes trop courts ou ambigus sont ignorés. |
 | `PY008` | Huit fichiers `.py`/`.pyi` directs maximum dans un dossier parcouru. |
+| `PY009` | Huit sous-dossiers directs maximum dans chaque dossier parcouru, y compris les sous-dossiers vides, après exclusions. |
 
 Ruff vérifie en plus les erreurs Python (`E4`, `E7`, `E9`, `F`), l'ordre des imports (`I`), les erreurs fréquentes (`B`), certaines modernisations sûres (`UP`) et la variable créée uniquement pour être retournée (`RET504`). Sa configuration est fournie par l'outil, donc les mêmes règles s'appliquent depuis un autre projet. Le formatter impose une indentation de quatre espaces, des guillemets doubles et des fins de ligne LF. Les règles C++ propres aux accolades, `#include`, modules et initialiseurs désignés ne s'appliquent pas à Python.
 

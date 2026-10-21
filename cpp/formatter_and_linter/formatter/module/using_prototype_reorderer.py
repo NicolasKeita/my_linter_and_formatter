@@ -24,9 +24,9 @@ def _compute_brace_depths(lines: list[str]) -> list[int]:
     for line in lines:
         brace_depths.append(current_depth)
         for char in line:
-            if char == '{':
+            if char == "{":
                 current_depth += 1
-            elif char == '}':
+            elif char == "}":
                 current_depth -= 1
                 if current_depth < 0:
                     current_depth = 0
@@ -39,9 +39,9 @@ def _scan_multiline_prototype(lines: list[str], brace_depths: list[int], i: int)
     j = i + 1
     while j < len(lines) and brace_depths[j] == 0:
         next_stripped = lines[j].strip()
-        if next_stripped.endswith(';') and '{' not in next_stripped:
+        if next_stripped.endswith(";") and "{" not in next_stripped:
             return j
-        if next_stripped.endswith('{') or '{' in next_stripped:
+        if next_stripped.endswith("{") or "{" in next_stripped:
             return None
         j += 1
     return None
@@ -111,9 +111,9 @@ def reorder_using_after_prototypes(code: str) -> str:
             continue
         new_lines.append(line)
         if i == insertion_pos and not usings_inserted:
-            new_lines.append('')
+            new_lines.append("")
             for _, using_line in collector.usings:
                 new_lines.append(using_line)
             usings_inserted = True
 
-    return '\n'.join(new_lines)
+    return "\n".join(new_lines)

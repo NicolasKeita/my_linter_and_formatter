@@ -55,13 +55,7 @@ class TestMemberAlignment(unittest.TestCase):
         self.assertEqual(result, "\n".join(code) + "\n")
 
     def test_pass_is_idempotent(self):
-        code = (
-            "struct S {\n"
-            "    double alpha = 1.0;\n"
-            "    int beta = 2;\n"
-            "    std::uint64_t count = 0;\n"
-            "};\n"
-        )
+        code = "struct S {\n    double alpha = 1.0;\n    int beta = 2;\n    std::uint64_t count = 0;\n};\n"
         once = align_member_variables(code)
         self.assertEqual(align_member_variables(once), once)
 

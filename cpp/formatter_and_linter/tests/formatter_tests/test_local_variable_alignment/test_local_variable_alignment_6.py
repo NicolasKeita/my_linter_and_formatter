@@ -31,6 +31,26 @@ class TestLocalVariableAlignment(unittest.TestCase):
         )
         self.assertEqual(align_first_declaration_blocks(code), expected)
 
+    def test_first_block_only_second_block_left_alone(self):
+        code = [
+            "void f() {",
+            "    int a = 1;",
+            "    long_name b = 2;",
+            "",
+            "    do_something();",
+            "",
+            "    int c = 3;",
+            "    long_name d = 4;",
+            "}",
+        ]
+        result = align(code).splitlines()
+        target = len("long_name") + 1
+        self.assertEqual(result[1], aligned_line("    ", "int", "a", " = 1;", target))
+        self.assertEqual(result[2], aligned_line("    ", "long_name", "b", " = 2;", target))
+        self.assertEqual(result[4], "    do_something();")
+        self.assertEqual(result[6], "    int c = 3;")
+        self.assertEqual(result[7], "    long_name d = 4;")
+
 
 if __name__ == "__main__":
     unittest.main()

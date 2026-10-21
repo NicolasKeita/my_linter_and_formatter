@@ -25,11 +25,7 @@ def _logical_chain_mask(lines: list[str]) -> list[bool]:
             continue
         j = i
         chain_sum = 0
-        while j < total and (
-            j == i
-            or _starts_logical_chain(lines[j])
-            or _ends_logical_chain(lines[j - 1])
-        ):
+        while j < total and (j == i or _starts_logical_chain(lines[j]) or _ends_logical_chain(lines[j - 1])):
             chain_sum += counts[j]
             j += 1
         if chain_sum > 1:

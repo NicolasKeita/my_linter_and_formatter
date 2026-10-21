@@ -7,7 +7,7 @@ from formatter.declarations.initialization_block_formatter import DECLARATION_PA
 
 
 def _statement_end(stripped: str, depth: int) -> bool:
-    return depth <= 1 and (stripped.endswith(';') or stripped.endswith('}'))
+    return depth <= 1 and (stripped.endswith(";") or stripped.endswith("}"))
 
 
 def _flush_and_stop(lines: list[str], i: int, pending: list[str], result: list[str]) -> int:
@@ -23,7 +23,7 @@ def _copy_block_comment(lines: list[str], i: int, result: list[str]) -> int:
     returns the index at which normal scanning resumes."""
     n = len(lines)
     j = i
-    while j + 1 < n and '*/' not in lines[j]:
+    while j + 1 < n and "*/" not in lines[j]:
         j += 1
         result.append(lines[j])
     return j + 1
@@ -88,11 +88,11 @@ def _process_declaration_zone(lines: list[str], start: int, result: list[str]) -
             i += 1
             continue
 
-        if stripped.startswith('/*'):
+        if stripped.startswith("/*"):
             _flush_and_stop(lines, i, pending, result)
             return _copy_block_comment(lines, i, result)
 
-        if stripped.startswith('//') or not DECLARATION_PATTERN.match(stripped):
+        if stripped.startswith("//") or not DECLARATION_PATTERN.match(stripped):
             return _flush_and_stop(lines, i, pending, result)
 
         if not has_seen_declaration:

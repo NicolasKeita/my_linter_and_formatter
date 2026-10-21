@@ -16,21 +16,12 @@ def _merged_pair(total):
 
 
 def test_else_header_does_not_swallow_its_body():
-    code = (
-        "    } else {\n"
-        "        other();\n"
-        "    }\n"
-    )
+    code = "    } else {\n        other();\n    }\n"
     assert join_lines(code) == code
 
 
 def test_braced_initializer_list_is_joined():
-    code = (
-        "std::vector<std::string> names = {\n"
-        '    "alice",\n'
-        '    "bob",\n'
-        '    "carol"};\n'
-    )
+    code = 'std::vector<std::string> names = {\n    "alice",\n    "bob",\n    "carol"};\n'
     expected = 'std::vector<std::string> names = { "alice", "bob", "carol"};\n'
     assert join_lines(code) == expected
 
@@ -60,10 +51,7 @@ def test_wrapped_call_above_limit_stays_split():
 
 
 def test_semicolon_only_on_next_line_is_joined():
-    code = (
-        "    int value = compute(a)\n"
-        "        ;\n"
-    )
+    code = "    int value = compute(a)\n        ;\n"
     expected = "    int value = compute(a) ;\n"
     assert join_lines(code) == expected
 
@@ -81,10 +69,5 @@ def test_empty_or_blank_input_is_left_untouched():
 
 
 def test_join_lines_is_idempotent():
-    source = (
-        "    const double total = value * 2.0;\n"
-        "    if (condition) {\n"
-        "        return x;\n"
-        "    }\n"
-    )
+    source = "    const double total = value * 2.0;\n    if (condition) {\n        return x;\n    }\n"
     assert join_lines(join_lines(source)) == join_lines(source)

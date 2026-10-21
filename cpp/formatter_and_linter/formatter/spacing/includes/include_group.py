@@ -39,9 +39,9 @@ def separate_system_local(includes: list[str]) -> tuple[list[str], list[str]]:
 
     for inc in includes:
         content = re.match(INCLUDE_REGEX, inc).group(1)
-        if content == '<windows.h>':
+        if content == "<windows.h>":
             windows_h_include = inc
-        elif content.startswith('<'):
+        elif content.startswith("<"):
             system_includes.append(inc)
         else:
             local_includes.append(inc)
@@ -59,6 +59,6 @@ def format_include_group(include_lines: list[str]) -> list[str]:
     local_includes.sort()
     formatted_includes = system_includes.copy()
     if system_includes and local_includes:
-        formatted_includes.append('')
+        formatted_includes.append("")
     formatted_includes.extend(local_includes)
     return formatted_includes

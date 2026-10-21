@@ -46,8 +46,6 @@ def check_function_length(code: str, max_lines: int = MAX_FUNCTION_LENGTH) -> li
         else:
             if scanner.scope_depth > 0:
                 scanner.scope_depth -= 1
-            _close_functions_at_scope(
-                open_functions, scanner.scope_depth, line_index, max_lines, long_functions
-            )
+            _close_functions_at_scope(open_functions, scanner.scope_depth, line_index, max_lines, long_functions)
 
     return long_functions

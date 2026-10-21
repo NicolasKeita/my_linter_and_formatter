@@ -1,4 +1,4 @@
-"""Collect Python files and check direct file counts in each directory."""
+"""Collect Python files and check direct file and subdirectory counts."""
 
 import os
 from fnmatch import fnmatchcase
@@ -9,18 +9,28 @@ from .model import Issue
 IGNORED_DIRECTORIES = {
     ".git",
     ".hg",
+    ".cache",
+    ".idea",
     ".mypy_cache",
     ".pytest_cache",
     ".ruff_cache",
     ".tox",
     ".venv*",
+    ".vs",
+    "*.egg-info",
     "venv",
     "__pycache__",
+    "bin",
     "build",
+    "cmake-build-*",
+    "coverage",
     "dist",
+    "htmlcov",
     "node_modules",
+    "obj",
 }
 SUFFIXES = {".py", ".pyi"}
+MAX_SUBDIRECTORIES = 8
 
 
 def discover(paths: list[Path], max_files: int = 8) -> tuple[list[Path], list[Issue]]:
@@ -48,6 +58,15 @@ def discover(paths: list[Path], max_files: int = 8) -> tuple[list[Path], list[Is
             if directory not in seen_directories and len(source_names) > max_files:
                 issues.append(
                     Issue(directory, 1, "PY008", f"Directory has {len(source_names)} Python files (max {max_files}).")
+                )
+            if directory not in seen_directories and len(directory_names) > MAX_SUBDIRECTORIES:
+                issues.append(
+                    Issue(
+                        directory,
+                        1,
+                        "PY009",
+                        f"Directory has {len(directory_names)} direct subdirectories (max {MAX_SUBDIRECTORIES}).",
+                    )
                 )
             seen_directories.add(directory)
     return sorted(files), sorted(issues)

@@ -12,7 +12,7 @@ def to_pascal_case(name: str) -> str:
         result = ""
         capitalize_next = False
         for char in name:
-            if char == '_':
+            if char == "_":
                 capitalize_next = True
             else:
                 if capitalize_next:
@@ -22,15 +22,15 @@ def to_pascal_case(name: str) -> str:
                     result += char
         return result
 
-    parts = name.split('_')
+    parts = name.split("_")
     pascal_parts = [part.capitalize() for part in parts]
-    return ''.join(pascal_parts)
+    return "".join(pascal_parts)
 
 
 def rename_files_to_pascal_case(directory: str) -> None:
     for root, _dirs, files in os.walk(directory):
         for file in files:
-            if file.endswith(('.cpp', '.hpp', '.h')):
+            if file.endswith((".cpp", ".hpp", ".h")):
                 name, ext = os.path.splitext(file)
                 if name != "main":
                     pascal_name = to_pascal_case(name)

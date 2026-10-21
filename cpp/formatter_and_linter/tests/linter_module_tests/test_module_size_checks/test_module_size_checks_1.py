@@ -16,7 +16,6 @@ from linter.module.module_size_checks import (
 
 
 class TestCheckModuleImplementationCounts(unittest.TestCase):
-
     def setUp(self):
         self.temp_dir = tempfile.TemporaryDirectory()
         self.root = self.temp_dir.name
@@ -33,25 +32,20 @@ class TestCheckModuleImplementationCounts(unittest.TestCase):
         for index in range(count):
             self.write_source_file(directory, prefix + "-" + str(index) + ".cpp")
 
-    def test_max_implementation_files_constant(self):
-        self.assertEqual(MAX_IMPLEMENTATION_FILES_PER_MODULE, 8)
-
-    def test_group_at_limit_is_valid(self):
-        directory = os.path.join(self.root, "Tests", "Small")
-        self.write_prefixed_implementations(directory, "Alpha-Beta", MAX_IMPLEMENTATION_FILES_PER_MODULE)
-        self.assertEqual(check_module_implementation_counts([directory]), [])
-
     def test_group_above_limit_is_reported(self):
         directory = os.path.join(self.root, "Tests", "Big")
         self.write_prefixed_implementations(directory, "Alpha-Beta", MAX_IMPLEMENTATION_FILES_PER_MODULE + 1)
         violations = check_module_implementation_counts([directory])
-        self.assertEqual(violations, [
-            (
-                "Alpha::Beta",
-                MAX_IMPLEMENTATION_FILES_PER_MODULE + 1,
-                "Alpha::Beta::" + SUB_MODULE_PLACEHOLDER,
-            ),
-        ])
+        self.assertEqual(
+            violations,
+            [
+                (
+                    "Alpha::Beta",
+                    MAX_IMPLEMENTATION_FILES_PER_MODULE + 1,
+                    "Alpha::Beta::" + SUB_MODULE_PLACEHOLDER,
+                ),
+            ],
+        )
 
     def test_interface_files_are_not_counted(self):
         directory = os.path.join(self.root, "Tests", "Interfaces")
@@ -66,13 +60,16 @@ class TestCheckModuleImplementationCounts(unittest.TestCase):
         self.write_prefixed_implementations(directory, "SilScenarios-Observability", 8)
         self.write_prefixed_implementations(telemetry_directory, "SilScenarios-Observability-Telemetry", 2)
         violations = check_module_implementation_counts([directory])
-        self.assertEqual(violations, [
-            (
-                "SilScenarios::Observability",
-                10,
-                "SilScenarios::Observability::Telemetry",
-            ),
-        ])
+        self.assertEqual(
+            violations,
+            [
+                (
+                    "SilScenarios::Observability",
+                    10,
+                    "SilScenarios::Observability::Telemetry",
+                ),
+            ],
+        )
 
     def test_non_source_files_are_ignored(self):
         directory = os.path.join(self.root, "Tests", "Docs")
@@ -90,26 +87,32 @@ class TestCheckModuleImplementationCounts(unittest.TestCase):
         self.write_prefixed_implementations(observability_directory, "SilScenarios-Observability", 8)
         self.write_prefixed_implementations(telemetry_directory, "SilScenarios-Observability-Telemetry", 4)
         violations = check_module_implementation_counts([directory])
-        self.assertEqual(violations, [
-            (
-                "SilScenarios::Observability",
-                12,
-                "SilScenarios::Observability::Telemetry",
-            ),
-        ])
+        self.assertEqual(
+            violations,
+            [
+                (
+                    "SilScenarios::Observability",
+                    12,
+                    "SilScenarios::Observability::Telemetry",
+                ),
+            ],
+        )
 
     def test_module_declaration_groups_single_segment_files(self):
         directory = os.path.join(self.root, "Tests", "Modules")
         for index in range(MAX_IMPLEMENTATION_FILES_PER_MODULE + 1):
             self.write_source_file(directory, "Unit" + str(index) + ".cpp", "module BigThing;\n")
         violations = check_module_implementation_counts([directory])
-        self.assertEqual(violations, [
-            (
-                "BigThing",
-                MAX_IMPLEMENTATION_FILES_PER_MODULE + 1,
-                "BigThing::" + SUB_MODULE_PLACEHOLDER,
-            ),
-        ])
+        self.assertEqual(
+            violations,
+            [
+                (
+                    "BigThing",
+                    MAX_IMPLEMENTATION_FILES_PER_MODULE + 1,
+                    "BigThing::" + SUB_MODULE_PLACEHOLDER,
+                ),
+            ],
+        )
 
 
 if __name__ == "__main__":

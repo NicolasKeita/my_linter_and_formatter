@@ -25,7 +25,7 @@ RAW_INPUT = (
     "\t\n"
     "void sensor_fault_scenario(TestHarness& runner, std::vector<ScenarioRecord>& records)\n"
     "{\n"
-    "    std::cout << \"\\n=== SIL-004 ===\" << std::endl;\n"
+    '    std::cout << "\\n=== SIL-004 ===" << std::endl;\n'
     "\n"
     "\n"
     "    FaultDomain domain;\n"
@@ -48,7 +48,7 @@ EXPECTED_OUTPUT = (
     "\n"
     "void sensor_fault_scenario(TestHarness& runner, std::vector<ScenarioRecord>& records)\n"
     "{\n"
-    "    std::cout << \"\\n=== SIL-004 ===\" << std::endl;\n"
+    '    std::cout << "\\n=== SIL-004 ===" << std::endl;\n'
     "\n"
     "\n"
     "    FaultDomain domain;\n"
@@ -62,46 +62,19 @@ EXPECTED_OUTPUT = (
 
 class TestPrototypeSpacing(unittest.TestCase):
     def test_blank_kept_between_prototype_and_using_block(self):
-        code = (
-            "void first(int value);\n"
-            "\n"
-            "using sim::sil::FaultScenario;\n"
-            "\n"
-            "void second(int value);\n"
-        )
+        code = "void first(int value);\n\nusing sim::sil::FaultScenario;\n\nvoid second(int value);\n"
         self.assertEqual(clean_code(code), code)
 
     def test_blank_lines_inside_function_body_preserved(self):
-        code = (
-            "void run(int value)\n"
-            "{\n"
-            "    int a = 1;\n"
-            "\n"
-            "    int b = 2;\n"
-            "\n"
-            "\n"
-            "    int c = 3;\n"
-            "}\n"
-        )
+        code = "void run(int value)\n{\n    int a = 1;\n\n    int b = 2;\n\n\n    int c = 3;\n}\n"
         self.assertEqual(clean_code(code), code)
 
     def test_comments_prototypes_and_block_comment(self):
         code = (
-            "/*\n"
-            "Filename: Src/Test.cpp\n"
-            "*/\n"
-            "\n"
-            "void first(int value); // trailing comment\n"
-            "\n"
-            "void second(int value);\n"
+            "/*\nFilename: Src/Test.cpp\n*/\n\nvoid first(int value); // trailing comment\n\nvoid second(int value);\n"
         )
         expected = (
-            "/*\n"
-            "Filename: Src/Test.cpp\n"
-            "*/\n"
-            "\n"
-            "void first(int value); // trailing comment\n"
-            "void second(int value);\n"
+            "/*\nFilename: Src/Test.cpp\n*/\n\nvoid first(int value); // trailing comment\nvoid second(int value);\n"
         )
         self.assertEqual(clean_code(code), expected)
 

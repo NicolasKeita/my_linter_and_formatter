@@ -16,6 +16,7 @@ def _is_natural_language_word(token: str) -> bool:
         _CAMEL_CASE_WORD_PATTERN,
         _DIGIT_PATTERN,
     )
+
     return (
         not _DIGIT_PATTERN.search(token)
         and not _ACRONYM_PATTERN.match(token)
@@ -31,20 +32,17 @@ def clean_comment_text(comment_text: str) -> str:
         _SEPARATOR_CHARS_PATTERN,
         _WHITESPACE_PATTERN,
     )
-    text = _COMMENT_SYNTAX_PATTERN.sub(' ', comment_text)
-    text = _DOC_KEYWORD_PATTERN.sub(' ', text)
-    text = _SEPARATOR_CHARS_PATTERN.sub(' ', text)
-    text = _NON_WORD_PATTERN.sub(' ', text)
+
+    text = _COMMENT_SYNTAX_PATTERN.sub(" ", comment_text)
+    text = _DOC_KEYWORD_PATTERN.sub(" ", text)
+    text = _SEPARATOR_CHARS_PATTERN.sub(" ", text)
+    text = _NON_WORD_PATTERN.sub(" ", text)
     tokens = [token for token in text.split() if _is_natural_language_word(token)]
-    return _WHITESPACE_PATTERN.sub(' ', ' '.join(tokens)).strip()
+    return _WHITESPACE_PATTERN.sub(" ", " ".join(tokens)).strip()
 
 
 def count_significant_words(cleaned_text: str) -> int:
-    return sum(
-        1
-        for word in cleaned_text.split()
-        if sum(1 for char in word if char.isalpha()) >= 2
-    )
+    return sum(1 for word in cleaned_text.split() if sum(1 for char in word if char.isalpha()) >= 2)
 
 
 def _compute_confidences(cleaned_text: str):
@@ -68,10 +66,7 @@ def _evaluate_confidence(cleaned_text: str, word_count: int) -> tuple[bool, str]
         (entry.value for entry in confidences if entry.language == Language.ENGLISH),
         0.0,
     )
-    is_valid = (
-        top_language == Language.ENGLISH
-        or (top_score - english_score) < margin
-    )
+    is_valid = top_language == Language.ENGLISH or (top_score - english_score) < margin
     return is_valid, top_language.name.title()
 
 

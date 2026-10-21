@@ -16,7 +16,7 @@ from shared.regex_patterns import (
 
 
 def is_import_or_include_or_module(line: str) -> bool:
-    if re.match(r'^\s*#\s*include\s+', line):
+    if re.match(r"^\s*#\s*include\s+", line):
         return True
     if re.match(MODULE_DECL_REGEX, line) or re.match(MODULE_PARTITION_REGEX, line):
         return True
@@ -27,47 +27,47 @@ def is_import_or_include_or_module(line: str) -> bool:
 
 def is_function_prototype(line: str) -> bool:
     stripped = line.strip()
-    if not stripped.endswith(';'):
+    if not stripped.endswith(";"):
         return False
-    if '(' not in stripped or ')' not in stripped:
+    if "(" not in stripped or ")" not in stripped:
         return False
-    if '{' in stripped:
+    if "{" in stripped:
         return False
-    if stripped.startswith('#'):
+    if stripped.startswith("#"):
         return False
-    if stripped.startswith('//') or stripped.startswith('/*'):
+    if stripped.startswith("//") or stripped.startswith("/*"):
         return False
-    if re.match(r'^\s*typedef\s+', stripped):
+    if re.match(r"^\s*typedef\s+", stripped):
         return False
-    if re.match(r'^\s*using\s+', stripped):
+    if re.match(r"^\s*using\s+", stripped):
         return False
-    if re.match(r'^\s*(static_assert|noexcept|throw)\s*\(', stripped):
+    if re.match(r"^\s*(static_assert|noexcept|throw)\s*\(", stripped):
         return False
-    if re.search(r'\)\s*=\s*(delete|default)\s*;', stripped):
+    if re.search(r"\)\s*=\s*(delete|default)\s*;", stripped):
         return False
-    if not re.search(r'\w\s*\(', stripped):
+    if not re.search(r"\w\s*\(", stripped):
         return False
     return True
 
 
 def is_function_prototype_start(line: str) -> bool:
     stripped = line.strip()
-    if '(' not in stripped:
+    if "(" not in stripped:
         return False
-    if '{' in stripped:
+    if "{" in stripped:
         return False
-    if stripped.startswith('#'):
+    if stripped.startswith("#"):
         return False
-    if stripped.startswith('//') or stripped.startswith('/*'):
+    if stripped.startswith("//") or stripped.startswith("/*"):
         return False
-    if re.match(r'^\s*typedef\s+', stripped):
+    if re.match(r"^\s*typedef\s+", stripped):
         return False
-    if re.match(r'^\s*using\s+', stripped):
+    if re.match(r"^\s*using\s+", stripped):
         return False
-    if re.match(r'^\s*(static_assert|noexcept|throw)\s*\(', stripped):
+    if re.match(r"^\s*(static_assert|noexcept|throw)\s*\(", stripped):
         return False
-    if not re.search(r'\w\s*\(', stripped):
+    if not re.search(r"\w\s*\(", stripped):
         return False
-    if stripped.endswith(';'):
+    if stripped.endswith(";"):
         return False
     return True

@@ -75,13 +75,13 @@ def _split_statement_line(line: str) -> list[str]:
     if found is None:
         return [line]
     open_index, close_index, name_column, semicolon_index = found
-    segments = _split_top_level_commas(line[open_index + 1:close_index])
+    segments = _split_top_level_commas(line[open_index + 1 : close_index])
     if not _has_designated_initializer(segments):
         return [line]
     field_indent = " " * (name_column + FIELD_INDENT)
     closing_indent = " " * name_column
-    trailing = line[semicolon_index + 1:]
-    lines = [line[:open_index + 1]]
+    trailing = line[semicolon_index + 1 :]
+    lines = [line[: open_index + 1]]
     for segment in segments:
         stripped = segment.strip()
         if stripped:

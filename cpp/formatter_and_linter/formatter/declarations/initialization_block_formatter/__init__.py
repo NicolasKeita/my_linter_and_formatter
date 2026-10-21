@@ -38,9 +38,7 @@ def _handle_init_zone(state: FormatterState, lines: list[str], i: int, stripped:
         state.has_declarations = True
         state.flush_comments()
         state.result.append(line)
-        next_index, state.brace_depth = append_statement_tail(
-            lines, i, state.brace_depth, state.result
-        )
+        next_index, state.brace_depth = append_statement_tail(lines, i, state.brace_depth, state.result)
         return next_index
 
     if state.has_declarations:
@@ -98,7 +96,7 @@ def format_initialization_blocks(code: str) -> str:
             i = _handle_outside_function(state, lines, i)
 
     state.flush_comments()
-    return '\n'.join(state.result) + ('\n' if code.endswith('\n') else '')
+    return "\n".join(state.result) + ("\n" if code.endswith("\n") else "")
 
 
 __all__ = ["format_initialization_blocks", "DECLARATION_PATTERN"]

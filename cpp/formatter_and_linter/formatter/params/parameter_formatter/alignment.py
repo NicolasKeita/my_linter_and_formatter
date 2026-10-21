@@ -34,4 +34,4 @@ def calculate_indentation(prefix: str, func_name: str, max_type_len: int, leadin
         The indentation string
     """
     first_param_type_start = len(leading_indent) + len(prefix) + 1 + len(func_name) + 1
-    return ' ' * first_param_type_start
+    return " " * first_param_type_start

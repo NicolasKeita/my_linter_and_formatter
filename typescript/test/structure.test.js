@@ -55,3 +55,52 @@ test('the CLI warns by default and can fail in strict mode', () => {
     assert.equal(strict.status, 1);
   });
 });
+
+test('allows eight direct subdirectories and ignores excluded directories at every depth', () => {
+  withTemporaryDirectory((root) => {
+    fs.writeFileSync(path.join(root, 'root.ts'), 'export {};');
+
+    for (let index = 0; index < 8; index += 1) {
+      const nested = path.join(root, `part_${index}`, 'nested');
+
+      fs.mkdirSync(nested, { recursive: true });
+      fs.writeFileSync(path.join(nested, 'file.ts'), 'export {};');
+    }
+
+    for (const ignored of ['.git', '.next', 'node_modules', 'dist', 'build', 'coverage', 'custom']) {
+      fs.mkdirSync(path.join(root, ignored));
+    }
+
+    const ignore = ['.git', '.next', 'node_modules', 'dist', 'build', 'coverage', 'custom'];
+
+    assert.equal(scanStructure(root, { ignore }).length, 0);
+    fs.mkdirSync(path.join(root, 'part_0', 'node_modules'));
+    fs.rmdirSync(path.join(root, 'custom'));
+    fs.mkdirSync(path.join(root, 'ninth'));
+    const diagnostics = scanStructure(root).filter(({ kind }) => kind === 'too-many-subdirectories');
+
+    assert.deepEqual(diagnostics, [
+      { directory: root, kind: 'too-many-subdirectories', directoryCount: 9, maxSubdirectories: 8 },
+    ]);
+    const warning = spawnSync(process.execPath, [cliPath, root], { encoding: 'utf8' });
+    const strict = spawnSync(process.execPath, [cliPath, root, '--strict'], { encoding: 'utf8' });
+
+    assert.equal(warning.status, 0);
+    assert.match(warning.stdout, /9 direct subdirectories \(maximum 8\)/);
+    assert.equal(strict.status, 1);
+  });
+});
+
+test('reports nested subdirectory violations without counting descendants in the parent', () => {
+  withTemporaryDirectory((root) => {
+    const nested = path.join(root, 'src');
+
+    for (let index = 0; index < 9; index += 1) {
+      fs.mkdirSync(path.join(nested, `part_${index}`), { recursive: true });
+    }
+
+    const diagnostics = scanStructure(root).filter(({ kind }) => kind === 'too-many-subdirectories');
+
+    assert.deepEqual(diagnostics.map(({ directory }) => directory), [nested]);
+  });
+});

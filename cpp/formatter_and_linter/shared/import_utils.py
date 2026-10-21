@@ -16,9 +16,9 @@ def is_system_import(import_line: str) -> bool:
     if not match:
         return False
     module_name = match.group(1).strip()
-    if module_name.startswith('<') and module_name.endswith('>'):
+    if module_name.startswith("<") and module_name.endswith(">"):
         return True
-    first_identifier = module_name.split('.')[0].strip()
+    first_identifier = module_name.split(".")[0].strip()
     if not first_identifier:
         return True
     if first_identifier[0].islower():
@@ -34,9 +34,9 @@ def extract_import_module(import_line: str) -> str:
 
 
 def _hierarchical_sort_key(module_name: str) -> list[str]:
-    if module_name.startswith('<') and module_name.endswith('>'):
+    if module_name.startswith("<") and module_name.endswith(">"):
         return [module_name.casefold()]
-    return [segment.casefold() for segment in module_name.split('.')]
+    return [segment.casefold() for segment in module_name.split(".")]
 
 
 def sort_imports(imports: list[str]) -> tuple[list[str], list[str]]:

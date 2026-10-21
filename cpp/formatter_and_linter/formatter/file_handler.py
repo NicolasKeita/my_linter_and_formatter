@@ -24,10 +24,10 @@ def find_source_files(directory: str, include_hpp: bool = True, include_cppm: bo
     Returns:
         List of paths to source files
     """
-    cpp_files = glob.glob(os.path.join(directory, '**', '*.cpp'), recursive=True)
-    cppm_files = glob.glob(os.path.join(directory, '**', '*.cppm'), recursive=True) if include_cppm else []
+    cpp_files = glob.glob(os.path.join(directory, "**", "*.cpp"), recursive=True)
+    cppm_files = glob.glob(os.path.join(directory, "**", "*.cppm"), recursive=True) if include_cppm else []
     if include_hpp:
-        hpp_files = glob.glob(os.path.join(directory, '**', '*.hpp'), recursive=True)
+        hpp_files = glob.glob(os.path.join(directory, "**", "*.hpp"), recursive=True)
         return sorted(cpp_files + hpp_files + cppm_files)
     else:
         return sorted(cpp_files + cppm_files)
@@ -36,18 +36,18 @@ def find_source_files(directory: str, include_hpp: bool = True, include_cppm: bo
 def read_input_file(filepath: str) -> str:
     """
     Read the content of an input file.
-    
+
     Args:
         filepath: Path to the file to read
-        
+
     Returns:
         The content of the file as a string
-        
+
     Raises:
         SystemExit: If the file cannot be read
     """
     try:
-        with open(filepath, encoding='utf-8') as f:
+        with open(filepath, encoding="utf-8") as f:
             return f.read()
     except FileNotFoundError:
         print(f"Error: File '{filepath}' does not exist.", file=sys.stderr)
@@ -60,19 +60,19 @@ def read_input_file(filepath: str) -> str:
 def write_output_file(filepath: str, content: str) -> None:
     """
     Write content to an output file.
-    
+
     Args:
         filepath: Path to the file to write
         content: Content to write to the file
-        
+
     Raises:
         SystemExit: If the file cannot be written
     """
     try:
-        with open(filepath, 'w', encoding='utf-8') as f:
+        with open(filepath, "w", encoding="utf-8") as f:
             f.write(content)
-            if not content.endswith('\n'):
-                f.write('\n')
+            if not content.endswith("\n"):
+                f.write("\n")
     except Exception as e:
         print(f"Error writing file: {e}", file=sys.stderr)
         sys.exit(1)
@@ -98,13 +98,13 @@ def parse_arguments() -> tuple[bool, bool, bool, list[str]]:
 
     i = 0
     while i < len(args):
-        if args[i] == '-i':
+        if args[i] == "-i":
             in_place = True
             i += 1
-        elif args[i] == '--check':
+        elif args[i] == "--check":
             check_only = True
             i += 1
-        elif args[i] == '--recursive' or args[i] == '-r':
+        elif args[i] == "--recursive" or args[i] == "-r":
             recursive = True
             i += 1
         else:

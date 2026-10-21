@@ -22,10 +22,10 @@ def handle_module_declaration(lines: list[str], i: int, new_lines: list[str]) ->
     """Emit a module declaration, collapse following blanks, then aerate the body."""
     new_lines.append(lines[i])
     i += 1
-    while i < len(lines) and lines[i].strip() == '':
+    while i < len(lines) and lines[i].strip() == "":
         i += 1
-    if i < len(lines) and lines[i].strip() != '':
-        new_lines.append('')
+    if i < len(lines) and lines[i].strip() != "":
+        new_lines.append("")
     return i
 
 
@@ -43,7 +43,7 @@ def needs_blank_before_import(new_lines: list[str]) -> bool:
     last_line = new_lines[-1]
     if is_module_boundary(last_line):
         return False
-    return last_line.strip() != ''
+    return last_line.strip() != ""
 
 
 def handle_import_block(lines: list[str], i: int, new_lines: list[str]) -> int:
@@ -51,14 +51,14 @@ def handle_import_block(lines: list[str], i: int, new_lines: list[str]) -> int:
     imports, i = collect_import_block(lines, i)
 
     if needs_blank_before_import(new_lines):
-        new_lines.append('')
+        new_lines.append("")
     new_lines.extend(imports)
 
-    while i < len(lines) and lines[i].strip() == '':
+    while i < len(lines) and lines[i].strip() == "":
         i += 1
 
-    if i < len(lines) and lines[i].strip() != '':
+    if i < len(lines) and lines[i].strip() != "":
         next_line = lines[i]
         if not re.match(IMPORT_REGEX, next_line) and not is_module_boundary(next_line):
-            new_lines.append('')
+            new_lines.append("")
     return i

@@ -38,8 +38,13 @@ def _classify_multiline(code: str, state: dict) -> tuple[bool, bool]:
     return flush_as_prototype, ends_prototype
 
 
-def _flush_pending_blanks(output: list[str], pending_blanks: int, at_namespace_level: bool,
-                          prev_ends_prototype: bool, flush_as_prototype: bool) -> None:
+def _flush_pending_blanks(
+    output: list[str],
+    pending_blanks: int,
+    at_namespace_level: bool,
+    prev_ends_prototype: bool,
+    flush_as_prototype: bool,
+) -> None:
     if not (pending_blanks and output):
         return
     if at_namespace_level:
@@ -71,8 +76,7 @@ def collapse_prototype_blank_lines(lines: list[str]) -> list[str]:
         else:
             flush_as_prototype, ends_prototype = _classify_single_line(code, state)
 
-        _flush_pending_blanks(output, pending_blanks, at_namespace_level,
-                              prev_ends_prototype, flush_as_prototype)
+        _flush_pending_blanks(output, pending_blanks, at_namespace_level, prev_ends_prototype, flush_as_prototype)
         pending_blanks = 0
 
         output.append(raw)

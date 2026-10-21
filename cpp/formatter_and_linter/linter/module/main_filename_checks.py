@@ -15,7 +15,7 @@ from linter.style.style_checks import _mask_strings_and_comments
 
 MAIN_FILENAME_MESSAGE = "[MAIN_FILENAME] A file defining main() must be named 'main.cpp'."
 
-_MAIN_FUNCTION_DEFINITION_RE = re.compile(r'^[A-Za-z_][\w:<>,&*\s]*?[\s*&]main\s*\(')
+_MAIN_FUNCTION_DEFINITION_RE = re.compile(r"^[A-Za-z_][\w:<>,&*\s]*?[\s*&]main\s*\(")
 
 
 def _defines_main_function(code: str) -> list[int]:
@@ -31,7 +31,7 @@ def _defines_main_function(code: str) -> list[int]:
     for line_index, raw_line in enumerate(lines):
         masked_line, in_block_comment = _mask_strings_and_comments(raw_line, in_block_comment)
         stripped = masked_line.strip()
-        if not stripped or stripped.startswith('#'):
+        if not stripped or stripped.startswith("#"):
             continue
         if _MAIN_FUNCTION_DEFINITION_RE.match(stripped):
             main_lines.append(line_index + 1)

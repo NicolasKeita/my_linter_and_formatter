@@ -9,6 +9,7 @@ export const defaultIgnoredNames = [
   'build',
   'coverage',
 ];
+export const maxSubdirectories = 8;
 
 export function scanStructure(rootDirectory, { maxFiles = 10, ignore = defaultIgnoredNames } = {}) {
   if (!Number.isInteger(maxFiles) || maxFiles < 0) {
@@ -33,6 +34,12 @@ export function scanStructure(rootDirectory, { maxFiles = 10, ignore = defaultIg
 
     if (fileCount > maxFiles) {
       diagnostics.push({ directory, kind: 'too-many-files', fileCount, maxFiles });
+    }
+
+    const directoryCount = entries.filter((entry) => entry.isDirectory()).length;
+
+    if (directoryCount > maxSubdirectories) {
+      diagnostics.push({ directory, kind: 'too-many-subdirectories', directoryCount, maxSubdirectories });
     }
 
     for (const entry of entries) {

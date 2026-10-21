@@ -31,7 +31,6 @@ import std;
 
 
 class TestCheckCppmInlineFunctions(unittest.TestCase):
-
     def setUp(self):
         self.temp_dir = tempfile.TemporaryDirectory()
         self.root = Path(self.temp_dir.name)
@@ -71,13 +70,7 @@ class TestCheckCppmInlineFunctions(unittest.TestCase):
         self.assertIn("'first'", warnings[1])
 
     def test_code_based_entry_point_matches_file_based_one(self):
-        body = (
-            "export int compute()\n"
-            "{\n"
-            "    int a = 1;\n"
-            "    return a;\n"
-            "}\n"
-        )
+        body = "export int compute()\n{\n    int a = 1;\n    return a;\n}\n"
         file_path = self.write_cppm(body)
         violations = check_cppm_inline_function_bodies(FILE_HEADER + body)
         self.assertEqual(len(violations), 1)

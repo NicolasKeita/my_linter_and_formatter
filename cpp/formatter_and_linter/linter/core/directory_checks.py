@@ -2,14 +2,14 @@
 """
 Directory Checks
 
-Checks the number of source files (.cpp/.cppm) per directory and reports
-directories that hold too many files and should be split.
+Checks direct source file (.cpp/.cppm) and subdirectory counts.
 """
 
 import os
 
 MAX_FILES_PER_DIRECTORY = 8
-SOURCE_EXTENSIONS = ('.cpp', '.cppm')
+MAX_SUBDIRECTORIES_PER_DIRECTORY = 8
+SOURCE_EXTENSIONS = (".cpp", ".cppm")
 
 
 def count_source_files_per_directory(directories: list[str]) -> dict[str, int]:
@@ -27,6 +27,16 @@ def check_directory_file_counts(
     max_files: int = MAX_FILES_PER_DIRECTORY,
 ) -> list[tuple[str, int]]:
     counts = count_source_files_per_directory(directories)
-    return sorted(
-        (directory, count) for directory, count in counts.items() if count > max_files
-    )
+    return sorted((directory, count) for directory, count in counts.items() if count > max_files)
+
+
+def check_directory_subdirectory_counts(
+    directories: list[str],
+    max_subdirectories: int = MAX_SUBDIRECTORIES_PER_DIRECTORY,
+) -> list[tuple[str, int]]:
+    counts = {}
+    for directory in directories:
+        for root, subdirectories, _ in os.walk(directory):
+            if len(subdirectories) > max_subdirectories:
+                counts[root] = len(subdirectories)
+    return sorted(counts.items())

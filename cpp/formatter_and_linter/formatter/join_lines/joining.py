@@ -29,10 +29,7 @@ def _protected_masks(lines: list[str], max_length: int) -> list[bool]:
     ]
     stream_mask = [has_stream_operators(line) for line in lines]
     oversized_mask = _oversized_statement_mask(lines, max_length, protected_base_mask, stream_mask)
-    return [
-        protected_base_mask[i] or stream_mask[i] or oversized_mask[i]
-        for i in range(len(lines))
-    ]
+    return [protected_base_mask[i] or stream_mask[i] or oversized_mask[i] for i in range(len(lines))]
 
 
 def _join_lines_pass(lines: list[str], max_length: int) -> list[str]:
@@ -43,10 +40,7 @@ def _join_lines_pass(lines: list[str], max_length: int) -> list[str]:
     while i < total:
         n_protected = protected[i]
         m_protected = i + 1 < total and protected[i + 1]
-        if (
-            i + 1 < total
-            and _can_join_line(lines[i], lines[i + 1], n_protected, m_protected, max_length)
-        ):
+        if i + 1 < total and _can_join_line(lines[i], lines[i + 1], n_protected, m_protected, max_length):
             result.append(lines[i].rstrip() + " " + lines[i + 1].strip())
             i += 2
         else:
@@ -74,4 +68,3 @@ def join_lines(code: str, max_length: int = 120) -> str:
 
 
 __all__ = ["join_lines"]
-

@@ -14,6 +14,12 @@ def check_directory_structure() -> bool:
         linter.MAX_FILES_PER_DIRECTORY,
     )
 
+    subdirectory_violations = linter.check_directory_subdirectory_counts(["Src", "Tests", "apps"])
+    linter.print_directory_subdirectory_count_warnings(
+        subdirectory_violations,
+        linter.MAX_SUBDIRECTORIES_PER_DIRECTORY,
+    )
+
     module_filename_violations = linter.check_module_filename_convention(["Src", "Tests", "apps"])
     linter.print_module_filename_warnings(module_filename_violations)
 
@@ -28,6 +34,7 @@ def check_directory_structure() -> bool:
 
     return (
         len(directory_violations) > 0
+        or len(subdirectory_violations) > 0
         or len(module_filename_violations) > 0
         or len(module_size_violations) > 0
         or len(cmake_length_violations) > 0

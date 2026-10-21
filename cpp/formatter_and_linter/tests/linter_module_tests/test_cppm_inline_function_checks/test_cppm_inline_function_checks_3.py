@@ -29,7 +29,6 @@ import std;
 
 
 class TestCheckCppmInlineFunctions(unittest.TestCase):
-
     def setUp(self):
         self.temp_dir = tempfile.TemporaryDirectory()
         self.root = Path(self.temp_dir.name)
@@ -46,14 +45,7 @@ class TestCheckCppmInlineFunctions(unittest.TestCase):
         return self.write_file("Sample.cppm", FILE_HEADER + body)
 
     def test_multi_line_aggregate_initialization_is_not_reported(self):
-        file_path = self.write_cppm(
-            "export constexpr std::int32_t kTable[4] = {\n"
-            "    1,\n"
-            "    2,\n"
-            "    3,\n"
-            "    4,\n"
-            "};\n"
-        )
+        file_path = self.write_cppm("export constexpr std::int32_t kTable[4] = {\n    1,\n    2,\n    3,\n    4,\n};\n")
         self.assertEqual(check_cppm_inline_functions(file_path), [])
 
     def test_braces_inside_line_comment_are_ignored(self):
@@ -90,8 +82,8 @@ class TestCheckCppmInlineFunctions(unittest.TestCase):
             "export class Sample\n"
             "{\n"
             "public:\n"
-            "    std::string_view text() const { return \"{ not a block }\"; }\n"
-            "    std::string_view escaped() const { return \"quote \\\" } here\"; }\n"
+            '    std::string_view text() const { return "{ not a block }"; }\n'
+            '    std::string_view escaped() const { return "quote \\" } here"; }\n'
             "};\n"
         )
         self.assertEqual(check_cppm_inline_functions(file_path), [])

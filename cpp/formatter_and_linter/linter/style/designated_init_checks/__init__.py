@@ -33,7 +33,7 @@ def format_designated_init_message(
     member assignments. The suggestion lists every assigned field as a C++20
     designated initializer with '...' standing for the assigned value.
     """
-    designators = ', '.join(f'.{field} = ...' for field in field_chains)
+    designators = ", ".join(f".{field} = ..." for field in field_chains)
     suggestion = f"{type_name.strip()} {variable_name}{{{designators}}};"
     return DESIGNATED_INIT_MESSAGE.format(suggestion=suggestion)
 

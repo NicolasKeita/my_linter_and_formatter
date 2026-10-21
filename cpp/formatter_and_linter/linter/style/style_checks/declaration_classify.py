@@ -16,23 +16,23 @@ def _find_head(line: str) -> str:
     length = len(line)
     while i < length:
         char = line[i]
-        if char == '(':
+        if char == "(":
             depth += 1
-        elif char == ')':
+        elif char == ")":
             if depth > 0:
                 depth -= 1
         elif depth == 0:
-            if char == '=':
-                if i + 1 < length and line[i + 1] == '=':
+            if char == "=":
+                if i + 1 < length and line[i + 1] == "=":
                     i += 2
                     continue
-                if i > 0 and line[i - 1] in '!<>':
+                if i > 0 and line[i - 1] in "!<>":
                     i += 1
                     continue
                 return line[:i].strip()
-            if char == '{':
+            if char == "{":
                 return line[:i].strip()
-            if char == ';':
+            if char == ";":
                 return line[:i].strip()
         i += 1
     return line.strip()
@@ -46,7 +46,7 @@ def _is_declaration_line(masked_stripped: str) -> bool:
     if _NON_DECLARATION_KEYWORD_RE.match(masked_stripped):
         return False
 
-    if '<<' in masked_stripped or '>>' in masked_stripped:
+    if "<<" in masked_stripped or ">>" in masked_stripped:
         return False
 
     if _COMPOUND_ASSIGN_RE.search(masked_stripped):
@@ -58,7 +58,7 @@ def _is_declaration_line(masked_stripped: str) -> bool:
         return False
 
     first_token = tokens[0]
-    if '.' in first_token or '[' in first_token or '(' in first_token:
+    if "." in first_token or "[" in first_token or "(" in first_token:
         return False
 
     return True
