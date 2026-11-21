@@ -20,6 +20,17 @@ class FilenameTests(CliTestCase):
                 self.assertEqual(result.returncode, int(case["match"]), result.stdout + result.stderr)
                 self.assertEqual(result.stdout.count(": NK013 "), 2 if case["match"] else 0, result.stdout)
 
+    def test_word_filter_keeps_only_direct_typo_matches(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = pathlib.Path(temporary)
+            for name in ("test_ml_tracking.cs", "test_ml_training.cs", "TestMLTrakcing.cs"):
+                (root / name).write_text("class Sample {}\n", encoding="utf-8")
+            result = self.run_cli("lint", root)
+            self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
+            self.assertEqual(result.stdout.count(": NK013 "), 2, result.stdout)
+            self.assertNotIn("test_ml_training.cs", result.stdout)
+            self.assertEqual(result.stdout.count("differing words >=85%"), 2, result.stdout)
+
     def test_scopes_generated_files_and_single_source(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = pathlib.Path(temporary)

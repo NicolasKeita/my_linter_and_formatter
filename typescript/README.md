@@ -43,7 +43,11 @@ Append another config object after `...config` to override rules for a project. 
 Use `--max-files N` to change the threshold, `--ignore NAME` to skip another directory name, or `--strict` to exit with code 1 when warnings exist.
 
 The structure command also reports `[similar-filename]` on each affected JavaScript/TypeScript
-source file: numeric suffixes, separator variants, or at least 85% normalized name similarity.
+source file: numeric suffixes, separator variants, or at least 85% normalized name similarity
+with at least 85% similarity for every differing word. Words are split on separators and
+camelCase/PascalCase boundaries, including acronyms, and compared in order with equal word
+counts. `test_ml_tracking` / `test_ml_training` is accepted; `test_ml_tracking` /
+`test_ml_trakcing` is still reported. Explicit numeric/separator variants bypass this word filter.
 Each extension and technical role (`.test`, `.spec`, `.stories`, `.d`) is compared separately;
 assets do not participate in this rule. Use `--similarity-scope project` to compare across
 subdirectories, or `--similarity-scope directory` for the default local comparison. For example:

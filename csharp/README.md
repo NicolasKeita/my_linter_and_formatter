@@ -54,13 +54,16 @@ exécutez aussi `dotnet build` sur votre projet.
 | NK010 | Fichier sans code C#. |
 | NK011 | Au plus 10 fichiers `.cs` directs par dossier. |
 | NK012 | Au plus 8 sous-dossiers directs par dossier parcouru, y compris les sous-dossiers vides, après exclusions. |
-| NK013 | Noms de fichiers similaires : variantes numériques/séparateurs ou similarité ≥ 85 %, sans renommage automatique. |
+| NK013 | Variantes numériques/séparateurs ou similarité globale et de chaque mot différent ≥ 85 %, sans renommage automatique. |
 
 `NK013` compare les fichiers `.cs` retenus après sélection MSBuild et exclusions des fichiers
 générés, dans chaque dossier par défaut. `lint` et `check` acceptent
 `--similarity-scope project` pour comparer également entre dossiers. Un fichier `.cs` isolé
 n'a aucun autre fichier à comparer. Chaque fichier concerné reçoit un diagnostic regroupé ;
 les warnings rendent `lint`/`check` non nuls. Voir la [politique commune](../README.md#noms-de-fichiers-similaires).
+Les mots sont découpés selon les séparateurs et le camelCase/PascalCase, puis comparés dans
+l'ordre : `TestMLTracking` / `TestMLTraining` est accepté, mais `TestMLTracking` /
+`TestMLTrakcing` reste signalé. Les variantes numériques et de séparateurs restent détectées.
 
 Le contrôle descend dans les sous-dossiers et ignore `.git`, `.vs`, `bin`, `obj`,
 `node_modules` et `TestResults`, ainsi que les fichiers `*.g.cs`, `*.generated.cs`,

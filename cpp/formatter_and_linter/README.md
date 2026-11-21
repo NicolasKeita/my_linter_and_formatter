@@ -173,7 +173,11 @@ void generate_faults() {
 
 The structure checks also report `[WARN_SIMILAR_FILENAME]` once per affected `.cpp` or `.cppm`
 under `Src`, `Tests` and `apps`: numeric suffixes, separator variants, or at least 85% normalized
-name similarity. Extensions are compared separately. For implementations declaring the same
+name similarity with at least 85% similarity for every differing word. Words are split on
+separators and camelCase/PascalCase boundaries, including acronyms, and compared in order with
+equal word counts. `test_ml_tracking` / `test_ml_training` is accepted, while `test_ml_tracking` /
+`test_ml_trakcing` is still reported. Numeric/separator variants bypass this word filter.
+Extensions are compared separately. For implementations declaring the same
 module, its `<Module>-` prefix does not inflate approximate similarity. No file is renamed by
 this rule. Structure warnings return exit code 1. Use the default directory scope or extend
 comparisons across the project:

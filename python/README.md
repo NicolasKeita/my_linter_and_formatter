@@ -61,9 +61,12 @@ Dans `check` et `format`, le bilan du formatage affiche les totaux sur l'ensembl
 | `PY007` | Commentaire qui semble non anglais. Les textes trop courts ou ambigus sont ignorés. |
 | `PY008` | Huit fichiers `.py`/`.pyi` directs maximum dans un dossier parcouru. |
 | `PY009` | Huit sous-dossiers directs maximum dans chaque dossier parcouru, y compris les sous-dossiers vides, après exclusions. |
-| `PY010` | Noms de fichiers similaires : variantes numériques/séparateurs ou similarité ≥ 85 %, sans renommage automatique. |
+| `PY010` | Variantes numériques/séparateurs ou similarité globale et de chaque mot différent ≥ 85 %, sans renommage automatique. |
 
 `PY010` compare les `.py` entre eux et les `.pyi` entre eux, dans chaque dossier par défaut.
+Les mots sont comparés dans l'ordre après découpage des séparateurs et du camelCase/PascalCase :
+`test_ml_tracking` / `test_ml_training` est accepté, mais `test_ml_tracking` / `test_ml_trakcing`
+reste signalé. Les variantes `_1`, `-2` restent détectées indépendamment de ce filtre.
 `--similarity-scope project` étend les comparaisons à tous les chemins sélectionnés par l'invocation.
 Le warning apparaît sur chaque fichier concerné, avec ses correspondances et motifs ; `check`
 retourne 1 en présence de warnings. `format` ne renomme aucun fichier. Voir la

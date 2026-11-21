@@ -66,3 +66,13 @@ test('direct matches are deduplicated without transitive grouping or cross-direc
   assert.deepEqual(findSimilar([files[0]]), []);
   assert.throws(() => findSimilar([], 'invalid'), /scope/u);
 });
+
+test('matching context does not mask different words but preserves misspellings and technical roles', () => {
+  const root = path.join(os.tmpdir(), 'filename-policy');
+  const files = ['test_ml_tracking.test.ts', 'test_ml_training.test.ts', 'testMLTrakcing.test.ts']
+    .map((name) => path.join(root, name));
+  const matches = findSimilar(files);
+
+  assert.deepEqual(matches.map(({ file }) => path.basename(file)), ['testMLTrakcing.test.ts', 'test_ml_tracking.test.ts']);
+  assert.ok(matches.every(({ message }) => message.includes('differing words >=85%')));
+});

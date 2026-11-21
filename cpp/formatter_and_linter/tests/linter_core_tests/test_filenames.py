@@ -68,3 +68,14 @@ class FilenameTests(unittest.TestCase):
                 for suffix in ("-Read.cpp", "-Write.cpp", ".cppm"):
                     (root / ("VeryLong.Module" + suffix)).write_text(declaration, encoding="utf-8")
                 self.assertEqual(check_similar_filenames([temporary]), [])
+
+    def test_word_filter_preserves_module_typo_detection(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            for suffix in ("Tracking", "Training", "Trakcing"):
+                (root / ("Module-TestML" + suffix + ".cpp")).write_text("module Module;\n", encoding="utf-8")
+            matches = check_similar_filenames([temporary])
+            self.assertEqual(
+                [path.name for path, _ in matches], ["Module-TestMLTracking.cpp", "Module-TestMLTrakcing.cpp"]
+            )
+            self.assertTrue(all("differing words >=85%" in message for _, message in matches))

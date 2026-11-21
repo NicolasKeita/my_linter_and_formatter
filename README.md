@@ -91,6 +91,18 @@ inclusif est de **85 %**, selon `1 - distance / longueur_maximale`. La distance 
 Damerau-Levenshtein tient compte de l'ordre et des inversions adjacentes : `course` / `source`
 obtient 66,7 % et ne déclenche aucun warning. Les décisions utilisent le score non arrondi.
 
+Pour les ressemblances approximatives, chaque mot différent doit aussi atteindre **85 %**.
+Les mots sont délimités par les séparateurs et les transitions camelCase/PascalCase, y compris
+les acronymes (`TestMLTracking` donne `test`, `ml`, `tracking`). Les mots sont comparés dans
+l'ordre, à nombre de mots égal : les mots identiques ne compensent pas un mot trop différent.
+Un mot ajouté, retiré ou déplacé ne suffit donc pas à déclencher ce warning. Ce filtre ne change
+pas la détection des bases identiques après normalisation, notamment les suffixes numériques.
+
+Ainsi, `test_ml_tracking` / `test_ml_training` ne déclenche plus de warning : malgré 85,7 %
+globalement, `tracking` / `training` n'obtient que 75 %. En revanche, `test_ml_tracking` /
+`test_ml_trakcing` reste signalé (87,5 % sur le mot différent), ainsi que `Utility` / `Utiliy`
+(85,7 %) et `Utility_1` / `Utility_2`. Le diagnostic précise que les seuils global et par mot passent.
+
 Par défaut, les comparaisons restent dans chaque dossier. `--similarity-scope project` compare
 tous les fichiers retenus dans une même invocation, y compris entre sous-dossiers. Les chemins
 répétés sont dédoublonnés ; deux noms strictement identiques dans des dossiers différents restent
@@ -105,7 +117,9 @@ implémentations déclarant le même module, son préfixe `<Module>-` ne gonfle 
 En C#, la sélection MSBuild et les exclusions de fichiers générés restent appliquées.
 
 Cette règle est une heuristique de nommage, pas une preuve de duplication ou d'intention.
-Des variantes légitimes comme `Sha256` / `Sha512` ou des noms très longs peuvent être signalées.
+Des variantes légitimes comme `Sha256` / `Sha512` ou des mots très proches peuvent être signalées.
+Un nom tout en minuscules sans séparateur reste un seul mot : ses responsabilités ne sont pas
+déduites d'un dictionnaire ou du contenu du fichier.
 Des fichiers renommés avec des noms différents peuvent lui échapper. Le mode projet est plus
 large et peut produire davantage de faux positifs. Les codes de sortie habituels sont conservés :
 écart bloquant dans les outils C++, Python et C#, warning non bloquant en TypeScript sauf avec `--strict`.

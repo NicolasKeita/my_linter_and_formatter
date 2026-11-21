@@ -20,6 +20,15 @@ class FilenameTests(unittest.TestCase):
             with self.subTest(case=case):
                 self.assertEqual(bool(reason(case["left"] + ".py", case["right"] + ".py")), case["match"])
 
+    def test_discovery_filters_context_and_keeps_typos(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            for name in ("test_ml_tracking.py", "test_ml_training.py", "test_ml_trakcing.py"):
+                (root / name).touch()
+            issues = discover([root])[1]
+            self.assertEqual([issue.path.name for issue in issues], ["test_ml_tracking.py", "test_ml_trakcing.py"])
+            self.assertTrue(all("differing words >=85%" in issue.message for issue in issues))
+
     def test_roles_scopes_exclusions_and_duplicate_roots(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)

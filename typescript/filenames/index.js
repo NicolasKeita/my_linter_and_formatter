@@ -1,6 +1,7 @@
 import path from 'node:path';
 
-import { comparisonReason, nameParts } from './comparison.js';
+import { comparisonReason } from './comparison.js';
+import { nameParts } from './identity.js';
 
 const extensions = new Set(['.ts', '.tsx', '.js', '.jsx', '.mts', '.cts', '.mjs', '.cjs']);
 

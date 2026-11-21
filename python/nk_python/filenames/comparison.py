@@ -2,6 +2,7 @@
 
 from .distance import edit_distance
 from .identity import base_name, name_parts, normalized
+from .words import differing_words_match
 
 
 def reason(left: str, right: str, module: str = "") -> str | None:
@@ -17,13 +18,14 @@ def reason(left: str, right: str, module: str = "") -> str | None:
     if module:
         prefix = normalized(module) + "-"
         if normalized(left_stem).startswith(prefix) and normalized(right_stem).startswith(prefix):
-            first, second = base_name(left_stem[len(module) + 1 :]), base_name(right_stem[len(module) + 1 :])
+            left_stem, right_stem = left_stem[len(module) + 1 :], right_stem[len(module) + 1 :]
+            first, second = base_name(left_stem), base_name(right_stem)
     if min(len(first), len(second)) < 6:
         return None
     length = max(len(first), len(second))
     if abs(len(first) - len(second)) * 100 > length * 15:
         return None
     distance = edit_distance(first, second)
-    if distance * 100 <= length * 15:
-        return f"similarity {100 * (length - distance) / length:.1f}% (threshold 85%)"
+    if distance * 100 <= length * 15 and differing_words_match(left_stem, right_stem):
+        return f"similarity {100 * (length - distance) / length:.1f}% (global and differing words >=85%)"
     return None
